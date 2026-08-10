@@ -1,7 +1,8 @@
-# {{ cookiecutter.project_name }}
+# FDSH Utils
 
-{{ cookiecutter.project_description }}
+FDSH Utils is an early-stage collection of local development tools for teams building integrations with the Federal Data Services Hub (FDSH). The project currently focuses on FDSH education data endpoints, starting with a Dockerized mock server for rapid local iteration. Over time, it aims to grow into language SDKs, unit-testing assertion libraries, and other reusable tools that make FDSH integration development easier to build, test, and maintain.
 
+<!--
 ## About the Project
 
 **{project statement}**
@@ -79,7 +80,7 @@ Thank you for considering contributing to an Open Source project of the US Gover
 
 ## Community
 
-The {{ cookiecutter.project_name }} team is taking a community-first and open source approach to the product development of this tool. We believe government software should be made in the open and be built and licensed such that anyone can download the code, run it themselves without paying money to third parties or using proprietary software, and use it as they will.
+The FDSH Utils team is taking a community-first and open source approach to the product development of this tool. We believe government software should be made in the open and be built and licensed such that anyone can download the code, run it themselves without paying money to third parties or using proprietary software, and use it as they will.
 
 We know that we can learn from a wide variety of communities, including those who will use or will be impacted by the tool, who are experts in technology, or who have experience with similar technologies deployed in other spaces. We are dedicated to creating forums for continuous conversation and feedback to help shape the design and development of the tool.
 
@@ -91,7 +92,7 @@ Principles and guidelines for participating in our open source community are can
 
 <!--
 ## Governance
-Information about how the {{ cookiecutter.project_name }} community is governed may be found in [GOVERNANCE.md](GOVERNANCE.md).
+Information about how the FDSH Utils community is governed may be found in [GOVERNANCE.md](GOVERNANCE.md).
 -->
 
 ## Feedback
