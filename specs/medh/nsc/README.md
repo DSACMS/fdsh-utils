@@ -1,17 +1,16 @@
 # MEDH NSC Service Specifications
 
+**Disclaimer: This project is not official FDSH documentation or part of the official FDSH product; see [DISCLAIMER.md](../../../DISCLAIMER.md).**
+
 ## About the Project
 
 ## Repository Structure
-
 
 ## Development and Software Delivery Lifecycle
 
 ### Local Development
 
-
 ### Coding Style and Linters
-
 
 ## Contributing
 
@@ -24,4 +23,3 @@ When changing this workspace, update the source spec files first. SDKs, validato
 ### Security and Responsible Disclosure Policy
 
 For vulnerability reporting, see the top-level [SECURITY.md](../../../SECURITY.md).
-

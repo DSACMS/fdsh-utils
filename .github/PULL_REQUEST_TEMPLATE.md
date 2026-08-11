@@ -14,10 +14,9 @@ Happy contributing!
 messages along these guidelines. Please keep the line width no greater than 80
 columns (You can use `fmt -n -p -w 80` to accomplish this).
 
-
 -->
 
-## module-name: One line description of your change (less than 72 characters)
+# module-name: One line description of your change (less than 72 characters)
 
 ## Problem
 
@@ -36,11 +35,11 @@ section is unnecessary because it is self-explanatory based on the solution.
 
 Some important notes regarding the summary line:
 
-* Describe what was done; not the result 
-* Use the active voice 
-* Use the present tense 
-* Capitalize properly 
-* Do not end in a period — this is a title/subject 
+* Describe what was done; not the result
+* Use the active voice
+* Use the present tense
+* Capitalize properly
+* Do not end in a period — this is a title/subject
 * Prefix the subject with its scope
 
 ## Test Plan

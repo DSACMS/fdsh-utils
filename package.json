@@ -9,12 +9,19 @@
     "pnpm": ">=11.21.0 <12"
   },
   "scripts": {
-    "lint": "pnpm run lint:specs && pnpm run spellcheck",
+    "lint": "pnpm run lint:disclaimer && pnpm run lint:markdown && pnpm run lint:specs && pnpm run spellcheck",
+    "lint:disclaimer": "node scripts/check-readme-disclaimers.mjs",
+    "lint:markdown": "markdownlint-cli2 \"**/*.{md,mdx}\" \"!**/node_modules/**\" \"!.agent-shell/**\" \"!tmp/**\"",
+    "lint:markdown:fix": "pnpm run lint:markdown --fix",
     "lint:specs": "pnpm --filter @fdsh-utils/spec-medh-nsc lint",
     "spellcheck": "cspell --config cspell.config.yaml .",
     "test": "pnpm run lint"
   },
   "devDependencies": {
-    "cspell": "^9.2.1"
+    "@github/markdownlint-github": "^0.8.3",
+    "cspell": "^9.2.1",
+    "markdown-it": "^15.0.0",
+    "markdownlint-cli2": "^0.23.2",
+    "markdownlint-cli2-formatter-pretty": "^0.0.10"
   }
 }
