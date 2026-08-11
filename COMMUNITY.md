@@ -60,6 +60,33 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more details on the release process.
 ![](https://img.shields.io/github/contributors/{{ cookiecutter.project_org }}/{{ cookiecutter.project_repo_name }}?style=flat-square&label=Contributor%20Count(incl.%20bots)) 
 
 <!-- readme: contributors -start -->
+<table>
+	<tbody>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/j-shilling">
+                    <img src="https://avatars.githubusercontent.com/u/17163542?v=4" width="100;" alt="j-shilling"/>
+                    <br />
+                    <sub><b>Jake Shilling</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/IsaacMilarky">
+                    <img src="https://avatars.githubusercontent.com/u/24639268?v=4" width="100;" alt="IsaacMilarky"/>
+                    <br />
+                    <sub><b>Isaac Milarsky</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/decause-gov">
+                    <img src="https://avatars.githubusercontent.com/u/107957201?v=4" width="100;" alt="decause-gov"/>
+                    <br />
+                    <sub><b>decause-gov</b></sub>
+                </a>
+            </td>
+		</tr>
+	<tbody>
+</table>
 <!-- readme: contributors -end -->
 
 <!--
