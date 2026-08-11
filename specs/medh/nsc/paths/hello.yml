@@ -1,0 +1,21 @@
+get:
+  tags:
+    - health
+  summary: Return a hello-world message.
+  description: Returns a static response that can be used to test OpenAPI tooling.
+  operationId: getHello
+  security: []
+  responses:
+    "200":
+      description: A hello-world response.
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/hello-world-response.schema.json"
+          examples:
+            default:
+              summary: Default hello-world response.
+              value:
+                message: hello world
+    "400":
+      description: Invalid request.

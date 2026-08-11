@@ -1,0 +1,20 @@
+openapi: 3.1.0
+info:
+  title: MEDH NSC Service API
+  summary: Placeholder OpenAPI document for linter development.
+  description: |
+    This is a minimal hello-world OpenAPI document for developing and testing
+    specification linting rules before the full MEDH NSC contract is authored.
+  license:
+    name: CC0-1.0
+    identifier: CC0-1.0
+  version: 0.0.1
+servers:
+  - url: https://example.invalid
+    description: Placeholder server for local specification tooling.
+tags:
+  - name: health
+    description: Placeholder operations for tooling validation.
+paths:
+  /hello:
+    $ref: "./paths/hello.yml"
