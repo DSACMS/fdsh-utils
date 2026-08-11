@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "./schemas/hello-world-response.schema.json",
+  "title": "HelloWorldResponse",
+  "description": "A minimal response schema used to validate local OpenAPI and JSON Schema linting.",
+  "type": "object",
+  "required": [
+    "message"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "message": {
+      "type": "string",
+      "const": "hello world"
+    }
+  }
+}

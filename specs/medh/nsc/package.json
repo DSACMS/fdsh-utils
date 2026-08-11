@@ -1,0 +1,22 @@
+{
+  "name": "@fdsh-utils/spec-medh-nsc",
+  "version": "0.0.0",
+  "private": true,
+  "description": "OpenAPI and JSON Schema source files for the MEDH NSC service.",
+  "type": "module",
+  "scripts": {
+    "lint": "pnpm run lint:openapi && pnpm run validate:schemas",
+    "lint:openapi": "REDOCLY_TELEMETRY=off REDOCLY_SUPPRESS_UPDATE_NOTICE=true redocly lint openapi.yml",
+    "bundle": "REDOCLY_TELEMETRY=off REDOCLY_SUPPRESS_UPDATE_NOTICE=true redocly bundle openapi.yml --output openapi.bundled.yml",
+    "validate": "pnpm run validate:schemas",
+    "validate:schemas": "sh -c 'set -- schemas/*.schema.json; if [ -e \"$1\" ]; then for schema in \"$@\"; do ajv compile --spec=draft2020 -s \"$schema\"; done; else echo \"No JSON Schema files found\"; fi'",
+    "test": "pnpm run lint"
+  },
+  "devDependencies": {
+    "@redocly/cli": "^2.41.1",
+    "ajv-cli": "^5.0.0"
+  },
+  "scarfSettings": {
+    "enabled": false
+  }
+}
