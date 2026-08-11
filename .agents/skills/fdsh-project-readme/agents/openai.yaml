@@ -1,0 +1,4 @@
+interface:
+  display_name: "FDSH Project README"
+  short_description: "Initialize FDSH Utils project READMEs."
+  default_prompt: "Create or update a README for a new FDSH Utils project."
