@@ -1,5 +1,7 @@
 # FDSH Utils
 
+**Disclaimer: This project is not official FDSH documentation or part of the official FDSH product; see [DISCLAIMER.md](DISCLAIMER.md).**
+
 FDSH Utils is an early-stage collection of local development tools for teams building integrations with the Federal Data Services Hub (FDSH). The project currently focuses on FDSH education data endpoints, starting with a Dockerized mock server for rapid local iteration. Over time, it aims to grow into language SDKs, unit-testing assertion libraries, and other reusable tools that make FDSH integration development easier to build, test, and maintain.
 
 <!--
@@ -35,14 +37,13 @@ A list of core team members responsible for the code and documentation in this r
 .
 ```
 
-
-**{list directories and descriptions}**
+{list directories and descriptions}
 
 <!-- TODO: Add a 'table of contents" for your documentation. Tier 0/1 projects with simple README.md files without many sections may or may not need this, but it is still extremely helpful to provide "bookmark" or "anchor" links to specific sections of your file to be referenced in tickets, docs, or other communication channels. -->
 
-**{list of .md at top directory and descriptions}**
+{list of .md at top directory and descriptions}
 
-# Development and Software Delivery Lifecycle
+## Development and Software Delivery Lifecycle
 
 The following guide is for members of the project team who have access to the repository as well as code contributors. The main difference between internal and external contributions is that external contributors will need to fork the project and will not be able to merge their own pull requests. For more information on contributing, see: [CONTRIBUTING.md](./CONTRIBUTING.md).
 
@@ -131,10 +132,11 @@ For more information and resources about SBOMs, visit: https://www.cisa.gov/sbom
 This project is in the public domain within the United States, and copyright and related rights in the work worldwide are waived through the [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/) as indicated in [LICENSE](LICENSE).
 
 All contributions to this project will be released under the CC0 dedication. By submitting a pull request or issue, you are agreeing to comply with this waiver of copyright interest.
- 
- ## Documentation Index 
-<!-- TODO: This is a like a 'table of contents' for your documentation. Tier 0/1 projects with simple README.md files without many sections may or may not need this, but it is still extremely helpful to provide 'bookmark' or 'anchor' links to specific sections of your file to be referenced in tickets, docs, or other communication channels. --> 
- **{list of .md at top directory and descriptions}** 
- 
- ## Codeowners 
- The contents of this repository are managed by {responsible organization(s)}. Those responsible for the code and documentation in this repository can be found in [COMMUNITY.md](COMMUNITY.md). 
+
+## Documentation Index
+<!-- TODO: This is a like a 'table of contents' for your documentation. Tier 0/1 projects with simple README.md files without many sections may or may not need this, but it is still extremely helpful to provide 'bookmark' or 'anchor' links to specific sections of your file to be referenced in tickets, docs, or other communication channels. -->
+{list of .md at top directory and descriptions}
+
+## Codeowners
+
+ The contents of this repository are managed by {responsible organization(s)}. Those responsible for the code and documentation in this repository can be found in [COMMUNITY.md](COMMUNITY.md).

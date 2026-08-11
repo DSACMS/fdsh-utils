@@ -14,33 +14,33 @@ Thank you for helping maintain accurate code.json information for this project! 
 
 <!-- Please check the appropriate box(es) by changing [ ] to [x] -->
 
-- [ ] name
-- [ ] description
-- [ ] longDescription
-- [ ] status
-- [ ] permissions
-- [ ] organization
-- [ ] repositoryURL
-- [ ] vcs
-- [ ] laborHours
-- [ ] platforms
-- [ ] categories
-- [ ] softwareType
-- [ ] languages
-- [ ] maintenance
-- [ ] date
-- [ ] tags
-- [ ] contact information
-- [ ] localisation
-- [ ] repositoryType
-- [ ] userInput
-- [ ] fismaLevel
-- [ ] group
-- [ ] subsetInHealthcare
-- [ ] userType
-- [ ] repositoryHost
-- [ ] maturityModelTier
-- [ ] Other (please specify below)
+* [ ] name
+* [ ] description
+* [ ] longDescription
+* [ ] status
+* [ ] permissions
+* [ ] organization
+* [ ] repositoryURL
+* [ ] vcs
+* [ ] laborHours
+* [ ] platforms
+* [ ] categories
+* [ ] softwareType
+* [ ] languages
+* [ ] maintenance
+* [ ] date
+* [ ] tags
+* [ ] contact information
+* [ ] localisation
+* [ ] repositoryType
+* [ ] userInput
+* [ ] fismaLevel
+* [ ] group
+* [ ] subsetInHealthcare
+* [ ] userType
+* [ ] repositoryHost
+* [ ] maturityModelTier
+* [ ] Other (please specify below)
 
 ---
 
@@ -56,5 +56,5 @@ Thank you for helping maintain accurate code.json information for this project! 
 
 ### Helpful Resources
 
-- [Generate your code.json entry](https://dsacms.github.io/codejson-generator/) - Use this form to generate a valid code.json
-- [code.json Guidance](https://github.com/DSACMS/gov-codejson/tree/main/docs) - Documentation on code.json 
+* [Generate your code.json entry](https://dsacms.github.io/codejson-generator/) - Use this form to generate a valid code.json
+* [code.json Guidance](https://github.com/DSACMS/gov-codejson/tree/main/docs) - Documentation on code.json

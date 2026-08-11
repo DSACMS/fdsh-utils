@@ -1,0 +1,32 @@
+name: README Disclaimer
+
+on:
+  pull_request:
+    paths:
+      - "README.md"
+      - "**/README.md"
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check README disclaimers
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check README disclaimers
+        run: pnpm lint:disclaimer
