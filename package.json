@@ -14,6 +14,8 @@
     "lint:markdown": "markdownlint-cli2 \"**/*.{md,mdx}\" \"!**/node_modules/**\" \"!.agent-shell/**\" \"!tmp/**\"",
     "lint:markdown:fix": "pnpm run lint:markdown --fix",
     "lint:specs": "pnpm --filter @fdsh-utils/spec-medh-nsc lint",
+    "fmt:prettier": "prettier --check .",
+    "fmt:prettier:fix": "prettier --write .",
     "spellcheck": "cspell --config cspell.config.yaml .",
     "test": "pnpm run lint"
   },
@@ -22,6 +24,7 @@
     "cspell": "^9.2.1",
     "markdown-it": "^15.0.0",
     "markdownlint-cli2": "^0.23.2",
-    "markdownlint-cli2-formatter-pretty": "^0.0.10"
+    "markdownlint-cli2-formatter-pretty": "^0.0.10",
+    "prettier": "^3.9.6"
   }
 }

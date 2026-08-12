@@ -1,0 +1,6 @@
+.agents/
+*.md
+*.~*~
+
+pnpm-lock.yaml
+LICENSE
