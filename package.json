@@ -11,7 +11,7 @@
   "scripts": {
     "lint": "pnpm run lint:disclaimer && pnpm run lint:markdown && pnpm run lint:specs && pnpm run spellcheck",
     "lint:disclaimer": "node scripts/check-readme-disclaimers.mjs",
-    "lint:markdown": "markdownlint-cli2 \"**/*.{md,mdx}\" \"!**/node_modules/**\" \"!.agent-shell/**\" \"!tmp/**\"",
+    "lint:markdown": "markdownlint-cli2",
     "lint:markdown:fix": "pnpm run lint:markdown --fix",
     "lint:specs": "pnpm --filter @fdsh-utils/spec-medh-nsc lint",
     "fmt:prettier": "prettier --check .",
