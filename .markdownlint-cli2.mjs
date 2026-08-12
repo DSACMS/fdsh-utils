@@ -4,6 +4,9 @@ import { init } from "@github/markdownlint-github";
 const markdownItFactory = () => markdownIt({ html: true });
 
 const options = {
+  gitignore: true,
+  globs: ["**/*.{md,mdx}"],
+  ignores: [".agents/**", ".github/**"],
   config: init({
     "line-length": false,
   }),

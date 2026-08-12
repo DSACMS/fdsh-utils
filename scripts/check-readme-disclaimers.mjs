@@ -109,4 +109,6 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(`README disclaimer check passed for ${readmeFiles.length} file(s).`);
+console.log(
+  `README disclaimer check passed for ${readmeFiles.length} file(s).`,
+);

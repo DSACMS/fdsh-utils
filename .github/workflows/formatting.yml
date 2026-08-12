@@ -1,17 +1,16 @@
-name: Markdownlint
+name: Formatting
 
 on:
   pull_request:
-    paths:
-      - "*.md"
-      - "**/*.md"
+    branches:
+      - main
 
 permissions:
   contents: read
 
 jobs:
-  lint:
-    name: Lint Markdown
+  formatting:
+    name: Check formatting
     runs-on: ubuntu-latest
 
     steps:
@@ -33,5 +32,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint Markdown
+      - name: Check Markdown formatting
         run: pnpm lint:markdown
+
+      - name: Check Prettier formatting
+        run: pnpm fmt:prettier
