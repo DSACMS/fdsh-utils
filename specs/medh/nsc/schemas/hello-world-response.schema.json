@@ -4,9 +4,7 @@
   "title": "HelloWorldResponse",
   "description": "A minimal response schema used to validate local OpenAPI and JSON Schema linting.",
   "type": "object",
-  "required": [
-    "message"
-  ],
+  "required": ["message"],
   "additionalProperties": false,
   "properties": {
     "message": {
