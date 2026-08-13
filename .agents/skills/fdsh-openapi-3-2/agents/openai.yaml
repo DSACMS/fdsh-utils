@@ -1,0 +1,4 @@
+interface:
+  display_name: "FDSH OpenAPI 3.2"
+  short_description: "Author and review FDSH OpenAPI 3.2 specs."
+  default_prompt: "Author or review an FDSH OpenAPI 3.2 specification."

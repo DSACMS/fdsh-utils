@@ -2,7 +2,7 @@ name: "Repository Hygiene Check"
 on:
   push:
     branches:
-      - 'main'
+      - "main"
   workflow_dispatch:
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
             echo "should_run=true" >> $GITHUB_OUTPUT
             exit 0
           fi
-          
+
           # Check if initialization label exists
           has_label=$(gh label list --json name | jq '.[] | select(.name=="repolinter-initialized")')
 
@@ -42,9 +42,9 @@ jobs:
     needs: check-first-run
     if: needs.check-first-run.outputs.should_run == 'true'
     uses: DSACMS/repo-scaffolder/.github/workflows/extendJSONFile.yml@main
-    with: 
-      url_to_json: 'https://raw.githubusercontent.com/DSACMS/repo-scaffolder/main/tier4/%7B%7Bcookiecutter.project_slug%7D%7D/repolinter.json'
-  
+    with:
+      url_to_json: "https://raw.githubusercontent.com/DSACMS/repo-scaffolder/main/tier4/%7B%7Bcookiecutter.project_slug%7D%7D/repolinter.json"
+
   repolinter-checks:
     name: Tier 4 Checks
     needs: [check-first-run, resolve-repolinter-json]
@@ -60,7 +60,7 @@ jobs:
       - run: echo $RAW_JSON > repolinter.json
       - uses: DSACMS/repolinter-action@main
         with:
-          config_file: 'repolinter.json'
-          output_type: 'pull-request'
-          pull_request_labels: 'repolinter-initialized, cms-oss, cms-gov'
+          config_file: "repolinter.json"
+          output_type: "pull-request"
+          pull_request_labels: "repolinter-initialized, cms-oss, cms-gov"
           token: ${{ secrets.REPOLINTER_AUTO_TOKEN }}
