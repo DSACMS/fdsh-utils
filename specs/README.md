@@ -13,14 +13,14 @@ The current documented service is the MEDH NSC endpoint.
 
 * Hub service specifications are grouped by service area, then by service.
 * Each service directory should include its own README and OpenAPI source files.
-* Shared material that applies across hub services may be added under a future
-  `shared/` directory.
+* Shared material that applies across hub services lives under `shared/`.
 
 ## File Tree
 
 ```text
 .
 ├── README.md
+├── shared/
 └── medh/
     └── nsc/
         ├── README.md
@@ -31,6 +31,9 @@ The current documented service is the MEDH NSC endpoint.
 ```
 
 * `README.md`: This file-tree overview.
+* `shared/`: Cross-service OpenAPI fragments for hub-wide requirements.
+* `shared/security-schemes.yml`: Shared security schemes for FDSH JSON
+  endpoints.
 * `medh/`: MEDH service specifications.
 * `medh/nsc/`: Current MEDH NSC endpoint specification.
 * `medh/nsc/README.md`: Service-level documentation, including local

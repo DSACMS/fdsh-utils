@@ -4,7 +4,6 @@ get:
   summary: Return a hello-world message.
   description: Returns a static response that can be used to test OpenAPI tooling.
   operationId: getHello
-  security: []
   responses:
     "200":
       description: A hello-world response.

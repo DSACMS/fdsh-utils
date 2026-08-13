@@ -10,11 +10,24 @@ info:
     identifier: CC0-1.0
   version: 0.0.1
 servers:
-  - url: https://example.invalid
+  - url: https://{hubHost}
     description: Placeholder server for local specification tooling.
+    variables:
+      hubHost:
+        default: example.invalid
+        description: FDSH Hub gateway host for the target environment.
 tags:
   - name: health
     description: Placeholder operations for tooling validation.
+security:
+  - mutualTLS: []
+    oauth2ClientCredentials: []
 paths:
   /hello:
     $ref: "./paths/hello.yml"
+components:
+  securitySchemes:
+    mutualTLS:
+      $ref: "../../shared/security-schemes.yml#/mutualTLS"
+    oauth2ClientCredentials:
+      $ref: "../../shared/security-schemes.yml#/oauth2ClientCredentials"

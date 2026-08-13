@@ -1,0 +1,16 @@
+mutualTLS:
+  type: mutualTLS
+  description: |
+    Clients must present a valid X.509 certificate signed by a trusted CA.
+    Certificates must use 2048-bit keys and SHA-2 message digest (SHA-256,
+    SHA-384, or SHA-512). TLS 1.2 is required; older versions are rejected
+    by the Hub gateway.
+oauth2ClientCredentials:
+  type: oauth2
+  description: |
+    FDSH JSON endpoints use OAuth 2.0 client credentials in addition to mutual
+    TLS client authentication.
+  flows:
+    clientCredentials:
+      tokenUrl: /auth/oauth/v2/token
+      scopes: {}
