@@ -40,7 +40,8 @@ Current scope:
 * `package.json`: Local package metadata, validation scripts, and tooling
   dependencies.
 * `openapi.yml`: OpenAPI entrypoint for the MEDH NSC service. It is currently a
-  placeholder for linter development.
+  placeholder for linter development, defines service server variables, and
+  references shared FDSH security schemes from `../../shared/`.
 * `paths/`: Operation path fragments referenced by `openapi.yml`.
 * `schemas/`: JSON Schema source files used by the service specification.
 
@@ -108,6 +109,11 @@ Available package scripts:
 * Use stable, descriptive schema names instead of names tied to implementation
   classes.
 * Prefer small, reviewable files over one large bundled OpenAPI document.
+* Define service-specific gateway hosts with OpenAPI Server Variables in
+  `openapi.yml`; keep shared OAuth endpoint URLs relative when they depend on
+  the selected service server.
+* Reference hub-wide security schemes from `../../shared/security-schemes.yml`
+  instead of redefining mTLS or OAuth 2.0 client credentials locally.
 * Keep generated SDK, server, validator, and mock artifacts outside this
   service directory unless the generated-output policy changes.
 
