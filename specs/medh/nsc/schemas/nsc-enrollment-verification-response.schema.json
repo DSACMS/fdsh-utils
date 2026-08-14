@@ -1,0 +1,358 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsacms.github.io/fdsh-utils/schema/medh/nsc/nsc-enrollment-verification-response.schema.json",
+  "title": "NscEnrollmentVerificationResponse",
+  "description": "Response payload for the MEDH National Student Clearinghouse enrollment verification service. Responses contain either business details and response metadata, or an error response with response metadata only.",
+  "type": "object",
+  "required": ["nscResponse"],
+  "additionalProperties": false,
+  "properties": {
+    "nscResponse": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/NscBusinessResponse"
+        },
+        {
+          "$ref": "#/$defs/NscErrorResponse"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "NscBusinessResponse": {
+      "description": "Business response from an NSC enrollment verification transaction.",
+      "type": "object",
+      "required": [
+        "transactionDetails",
+        "responseMetadata"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "transactionDetails": {
+          "$ref": "#/$defs/NscTransactionDetails"
+        },
+        "studentInfoProvided": {
+          "$ref": "#/$defs/NscStudentInfoProvided"
+        },
+        "enrollmentDetails": {
+          "description": "Enrollment details returned by NSC when records are available. This array is omitted for no-match responses.",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 99,
+          "items": {
+            "$ref": "#/$defs/NscEnrollmentDetails"
+          }
+        },
+        "responseMetadata": {
+          "$ref": "#/$defs/MeshResponseMetadata"
+        }
+      }
+    },
+    "NscErrorResponse": {
+      "description": "Error response containing MESH response metadata only.",
+      "type": "object",
+      "required": ["responseMetadata"],
+      "additionalProperties": false,
+      "properties": {
+        "responseMetadata": {
+          "$ref": "#/$defs/MeshResponseMetadata"
+        }
+      }
+    },
+    "NscTransactionDetails": {
+      "description": "Transaction metadata returned by NSC and MESH for tracing, status, and cost reporting.",
+      "type": "object",
+      "required": [
+        "transactionId",
+        "orderId",
+        "transactionStatusCode",
+        "transactionFee",
+        "salesTax",
+        "transactionTotal",
+        "requestedByText",
+        "requestedDateTimeText",
+        "nscHitIndicator"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "transactionId": {
+          "description": "Unique NSC transaction identifier.",
+          "type": "string",
+          "pattern": "^[0-9]{9,15}$"
+        },
+        "orderId": {
+          "description": "Unique NSC order identifier.",
+          "type": "string",
+          "pattern": "^[0-9]{9,15}$"
+        },
+        "transactionStatusCode": {
+          "$ref": "#/$defs/NscTransactionStatusCode"
+        },
+        "transactionFee": {
+          "$ref": "#/$defs/NscCurrencyAmount"
+        },
+        "salesTax": {
+          "$ref": "#/$defs/NscCurrencyAmount"
+        },
+        "transactionTotal": {
+          "$ref": "#/$defs/NscCurrencyAmount"
+        },
+        "requestedByText": {
+          "description": "Name associated with the MESH user account that requested the transaction.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "requestedDateTimeText": {
+          "$ref": "#/$defs/NscDateTimeText"
+        },
+        "notifiedDateTimeText": {
+          "$ref": "#/$defs/NscDateTimeText"
+        },
+        "nscHitIndicator": {
+          "description": "Indicates whether NSC found a matching student record. A false value means no matching NSC record was found.",
+          "type": "boolean"
+        }
+      }
+    },
+    "NscStudentInfoProvided": {
+      "description": "Student information echoed from the request when available.",
+      "type": "object",
+      "required": [
+        "personGivenName",
+        "personSurName",
+        "personBirthDate"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "personGivenName": {
+          "$ref": "#/$defs/NscResponsePersonGivenName"
+        },
+        "personMiddleName": {
+          "$ref": "#/$defs/NscResponsePersonMiddleName"
+        },
+        "personSurName": {
+          "$ref": "#/$defs/NscResponsePersonSurName"
+        },
+        "previousNames": {
+          "description": "Previous names used by the individual. If present, the array must contain at least one and no more than five names.",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "items": {
+            "$ref": "#/$defs/NscResponsePreviousName"
+          }
+        },
+        "personBirthDate": {
+          "description": "Birth date of the individual.",
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "NscResponsePreviousName": {
+      "description": "A previous name used by the individual.",
+      "type": "object",
+      "required": [
+        "personGivenName",
+        "personSurName"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "personGivenName": {
+          "$ref": "#/$defs/NscResponsePersonGivenName"
+        },
+        "personMiddleName": {
+          "$ref": "#/$defs/NscResponsePersonMiddleName"
+        },
+        "personSurName": {
+          "$ref": "#/$defs/NscResponsePersonSurName"
+        }
+      }
+    },
+    "NscEnrollmentDetails": {
+      "description": "Enrollment information for one school.",
+      "type": "object",
+      "required": [
+        "officialSchoolName",
+        "schoolCode",
+        "branchCode",
+        "currentEnrollmentStatusCode",
+        "enrollmentData"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "officialSchoolName": {
+          "description": "Official school name.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "schoolCode": {
+          "description": "Six-digit Department of Education school identifier.",
+          "type": "string",
+          "pattern": "^[0-9]{6}$"
+        },
+        "branchCode": {
+          "description": "Two-digit school branch identifier.",
+          "type": "string",
+          "pattern": "^[0-9]{2}$"
+        },
+        "currentEnrollmentStatusCode": {
+          "$ref": "#/$defs/NscCurrentEnrollmentStatusCode"
+        },
+        "enrollmentData": {
+          "description": "Enrollment term details for the school.",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 99,
+          "items": {
+            "$ref": "#/$defs/NscEnrollmentTerm"
+          }
+        }
+      }
+    },
+    "NscEnrollmentTerm": {
+      "description": "Enrollment details for one school term.",
+      "type": "object",
+      "required": [
+        "enrollmentStatusCode",
+        "termBeginDate",
+        "termEndDate",
+        "schoolCertifiedOnDate"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "enrollmentStatusCode": {
+          "$ref": "#/$defs/NscEnrollmentStatusCode"
+        },
+        "termBeginDate": {
+          "description": "Start date of the enrollment term.",
+          "type": "string",
+          "format": "date"
+        },
+        "termEndDate": {
+          "description": "End date of the enrollment term.",
+          "type": "string",
+          "format": "date"
+        },
+        "schoolCertifiedOnDate": {
+          "description": "Date the school certified the enrollment record.",
+          "type": "string",
+          "format": "date"
+        },
+        "anticipatedGraduationDate": {
+          "description": "Anticipated graduation date provided by the school.",
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "MeshResponseMetadata": {
+      "description": "MESH response code and response text for a successful or unsuccessful service response.",
+      "type": "object",
+      "required": [
+        "responseCode",
+        "responseText"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "responseCode": {
+          "$ref": "#/$defs/MeshResponseCode"
+        },
+        "responseText": {
+          "description": "Description of the response code.",
+          "type": "string"
+        },
+        "tdsResponseText": {
+          "description": "Optional response text returned by the trusted data source.",
+          "type": "string"
+        }
+      }
+    },
+    "MeshResponseCode": {
+      "description": "MESH response code. Known NSC codes include success, request validation failures, upstream failures, and unexpected system conditions.",
+      "type": "string",
+      "pattern": "^(ME|MS|MX)[0-9]{6}$",
+      "enum": [
+        "MS000000",
+        "ME110010",
+        "ME100005",
+        "ME110020",
+        "ME110030",
+        "ME110040",
+        "ME110050",
+        "ME110060",
+        "ME110075",
+        "ME120030",
+        "ME120040",
+        "ME120045",
+        "ME007000",
+        "MX005001",
+        "MX009000",
+        "MX009999"
+      ]
+    },
+    "NscTransactionStatusCode": {
+      "description": "NSC transaction status: CNF is confirmed; UCF is unable to respond.",
+      "type": "string",
+      "enum": [
+        "CNF",
+        "UCF"
+      ]
+    },
+    "NscCurrentEnrollmentStatusCode": {
+      "description": "Current enrollment status: CC is currently enrolled; CN is currently not enrolled. CC can be returned when an active enrollment term has an end date within 18 months of the request. CN can be returned when the most recent enrollment term end date is more than 18 months before the request.",
+      "type": "string",
+      "enum": [
+        "CC",
+        "CN"
+      ]
+    },
+    "NscEnrollmentStatusCode": {
+      "description": "Enrollment status code: F full-time, Q three-quarter-time, H half-time, L less-than-half-time, Y status not released by school, A leave of absence, W withdrawn, S Clearinghouse generated withdrawn, G graduated, D deceased. When Y is returned, only the enrollment status classification is withheld; other available enrollment data may still be returned.",
+      "type": "string",
+      "enum": [
+        "F",
+        "Q",
+        "H",
+        "L",
+        "Y",
+        "A",
+        "W",
+        "S",
+        "G",
+        "D"
+      ]
+    },
+    "NscCurrencyAmount": {
+      "description": "Currency amount formatted as X.XX. The value is typically 0.00.",
+      "type": "string",
+      "pattern": "^[0-9]\\.[0-9]{2}$"
+    },
+    "NscDateTimeText": {
+      "description": "Date and time text in YYYY-MM-DD HH:MM:SS.X format without timezone.",
+      "type": "string",
+      "minLength": 21,
+      "maxLength": 24
+    },
+    "NscResponsePersonGivenName": {
+      "description": "First name of the individual.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 30
+    },
+    "NscResponsePersonMiddleName": {
+      "description": "Middle name or middle initial of the individual.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 30
+    },
+    "NscResponsePersonSurName": {
+      "description": "Last name of the individual.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 30
+    }
+  }
+}

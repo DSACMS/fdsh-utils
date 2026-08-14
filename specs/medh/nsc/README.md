@@ -33,16 +33,17 @@ Current scope:
 ├── package.json
 ├── openapi.yml
 ├── paths/
-└── schemas/
+├── schemas/
+└── scripts/
 ```
 
 * `README.md`: Service-level guidance for the MEDH NSC specification workspace.
 * `package.json`: Local package metadata, validation scripts, and tooling
   dependencies.
-* `openapi.yml`: OpenAPI entrypoint for the MEDH NSC service. It is currently a
-  placeholder for linter development.
+* `openapi.yml`: OpenAPI entrypoint for the MEDH NSC service.
 * `paths/`: Operation path fragments referenced by `openapi.yml`.
 * `schemas/`: JSON Schema source files used by the service specification.
+* `scripts/`: Local helper scripts used by service-level validation commands.
 
 ## Source of Truth and Generated Artifacts
 

@@ -9,7 +9,7 @@
     "lint:openapi": "REDOCLY_TELEMETRY=off REDOCLY_SUPPRESS_UPDATE_NOTICE=true redocly lint openapi.yml",
     "bundle": "REDOCLY_TELEMETRY=off REDOCLY_SUPPRESS_UPDATE_NOTICE=true redocly bundle openapi.yml --output openapi.bundled.yml",
     "validate": "pnpm run validate:schemas",
-    "validate:schemas": "sh -c 'set -- schemas/*.schema.json; if [ -e \"$1\" ]; then for schema in \"$@\"; do ajv compile --spec=draft2020 -s \"$schema\"; done; else echo \"No JSON Schema files found\"; fi'",
+    "validate:schemas": "sh -c 'set -- schemas/*.schema.json; if [ -e \"$1\" ]; then for schema in \"$@\"; do ajv compile --spec=draft2020 -c ./scripts/ajv-formats.cjs -s \"$schema\"; done; else echo \"No JSON Schema files found\"; fi'",
     "test": "pnpm run lint"
   },
   "devDependencies": {

@@ -1,0 +1,251 @@
+post:
+  tags:
+    - enrollment-verification
+  summary: Verify postsecondary enrollment with NSC.
+  description: |
+    Submits one synchronous enrollment verification request through MESH to NSC
+    for a single applicant or beneficiary. The request must use either the
+    Name/DOB verification path or the SSN-only verification path.
+
+    The Name/DOB path requires first name, last name, birth date, as-of date,
+    and `termsAcceptedIndicator`. It may include a full SSN, last four SSN
+    digits, middle name, and up to five previous names. The SSN-only path
+    requires a full nine-digit SSN, as-of date, and `termsAcceptedIndicator`,
+    and does not permit other request fields.
+
+    `asOfDate` filters enrollment records as if the request was submitted on
+    that date. The service returns a business response for successful
+    transactions, including no-match results, and an error response containing
+    `responseMetadata` when validation or upstream processing fails.
+  operationId: verifyNscEnrollment
+  security:
+    - MeshClientCredentials: []
+      MeshMutualTLS: []
+  parameters:
+    - name: messageID
+      in: header
+      required: true
+      description: |
+        Unique request tracing identifier. Requesters are expected to send a
+        UUID value that is unique for each request.
+      schema:
+        type: string
+        format: uuid
+        minLength: 36
+        maxLength: 36
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/nsc-enrollment-verification-request.schema.json"
+        examples:
+          minimalNameDob:
+            summary: Minimal Name/DOB verification request.
+            value:
+              nscRequest:
+                personGivenName: Mason
+                personSurName: Brooks
+                personBirthDate: "1984-02-21"
+                asOfDate: "2026-05-22"
+                termsAcceptedIndicator: true
+          nameDobWithPreviousNames:
+            summary: Name/DOB request with optional identifiers.
+            value:
+              nscRequest:
+                personSocialSecurityNumber: "1234"
+                personGivenName: Mason
+                personMiddleName: Lee
+                personSurName: Brooks
+                previousNames:
+                  - personGivenName: John
+                    personMiddleName: Jacob
+                    personSurName: Smith
+                personBirthDate: "1984-02-21"
+                asOfDate: "2026-05-22"
+                termsAcceptedIndicator: true
+          ssnOnly:
+            summary: SSN-only verification request.
+            value:
+              nscRequest:
+                personSocialSecurityNumber: "555551234"
+                asOfDate: "2026-05-22"
+                termsAcceptedIndicator: true
+  responses:
+    "200":
+      description: |
+        Successful NSC transaction. A successful response can contain matched
+        enrollment details or a no-match result with `nscHitIndicator` set to
+        `false`.
+      headers:
+        messageID:
+          description: Request tracing identifier associated with the response.
+          schema:
+            type: string
+            format: uuid
+            minLength: 36
+            maxLength: 36
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/nsc-enrollment-verification-response.schema.json"
+          examples:
+            matched:
+              summary: Successful matched response.
+              value:
+                nscResponse:
+                  transactionDetails:
+                    transactionId: "200000001"
+                    orderId: "100000001"
+                    transactionStatusCode: CNF
+                    transactionFee: "0.00"
+                    salesTax: "0.00"
+                    transactionTotal: "0.00"
+                    requestedByText: MESH TEST USER
+                    requestedDateTimeText: "2026-05-03 09:06:00.0"
+                    notifiedDateTimeText: "2026-05-03 09:11:05.0"
+                    nscHitIndicator: true
+                  studentInfoProvided:
+                    personGivenName: Mason
+                    personMiddleName: Lee
+                    personSurName: Brooks
+                    personBirthDate: "1984-02-21"
+                    previousNames:
+                      - personGivenName: John
+                        personMiddleName: Jacob
+                        personSurName: Smith
+                  enrollmentDetails:
+                    - officialSchoolName: Example School Name
+                      schoolCode: "000001"
+                      branchCode: "00"
+                      currentEnrollmentStatusCode: CC
+                      enrollmentData:
+                        - enrollmentStatusCode: Y
+                          termBeginDate: "2025-01-10"
+                          termEndDate: "2025-05-04"
+                          schoolCertifiedOnDate: "2025-02-04"
+                          anticipatedGraduationDate: "2026-05-04"
+                  responseMetadata:
+                    responseCode: MS000000
+                    responseText: Successful
+            noMatch:
+              summary: Successful no-match response.
+              value:
+                nscResponse:
+                  transactionDetails:
+                    transactionId: "200000002"
+                    orderId: "100000002"
+                    transactionStatusCode: CNF
+                    transactionFee: "0.00"
+                    salesTax: "0.00"
+                    transactionTotal: "0.00"
+                    requestedByText: MESH TEST USER
+                    requestedDateTimeText: "2026-05-03 09:06:00.0"
+                    nscHitIndicator: false
+                  responseMetadata:
+                    responseCode: MS000000
+                    responseText: Successful
+    "400":
+      description: |
+        Request validation, authorization, or submitted-data failure reported by
+        MESH. The response body contains a MESH response code and text.
+      headers:
+        messageID:
+          description: Request tracing identifier associated with the response.
+          schema:
+            type: string
+            format: uuid
+            minLength: 36
+            maxLength: 36
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/nsc-enrollment-verification-response.schema.json"
+          examples:
+            schemaValidationFailure:
+              summary: Schema validation failure.
+              value:
+                nscResponse:
+                  responseMetadata:
+                    responseCode: ME007000
+                    responseText: Schema Validation Failure
+            invalidSsn:
+              summary: Invalid SSN value.
+              value:
+                nscResponse:
+                  responseMetadata:
+                    responseCode: ME110020
+                    responseText: personSocialSecurityNumber is invalid
+    "401":
+      description: Authentication failed before the enrollment verification request could be processed.
+      headers:
+        messageID:
+          description: Request tracing identifier associated with the response.
+          schema:
+            type: string
+            format: uuid
+            minLength: 36
+            maxLength: 36
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/nsc-enrollment-verification-response.schema.json"
+          examples:
+            authenticationFailure:
+              summary: Authentication or authorization failure.
+              value:
+                nscResponse:
+                  responseMetadata:
+                    responseCode: ME110010
+                    responseText: Authentication or authorization failure
+    "429":
+      description: The trusted data source reported a rate-limit condition.
+      headers:
+        messageID:
+          description: Request tracing identifier associated with the response.
+          schema:
+            type: string
+            format: uuid
+            minLength: 36
+            maxLength: 36
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/nsc-enrollment-verification-response.schema.json"
+          examples:
+            trustedDataSourceRateLimit:
+              summary: Trusted data source rate limit.
+              value:
+                nscResponse:
+                  responseMetadata:
+                    responseCode: MX005001
+                    responseText: Unexpected Exception Occurred at Trusted Data Source
+    "500":
+      description: System error or unexpected upstream failure.
+      headers:
+        messageID:
+          description: Request tracing identifier associated with the response.
+          schema:
+            type: string
+            format: uuid
+            minLength: 36
+            maxLength: 36
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/nsc-enrollment-verification-response.schema.json"
+          examples:
+            trustedDataSourceFailure:
+              summary: Trusted data source failure.
+              value:
+                nscResponse:
+                  responseMetadata:
+                    responseCode: MX005001
+                    responseText: Unexpected Exception Occurred at Trusted Data Source
+            unexpectedSystemException:
+              summary: Unexpected system exception.
+              value:
+                nscResponse:
+                  responseMetadata:
+                    responseCode: MX009000
+                    responseText: Unexpected System Exception

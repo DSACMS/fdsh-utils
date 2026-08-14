@@ -1,20 +1,65 @@
 openapi: 3.1.0
 info:
-  title: MEDH NSC Service API
-  summary: Placeholder OpenAPI document for linter development.
+  title: MEDH National Student Clearinghouse Service API
+  summary: Postsecondary enrollment verification through MESH.
   description: |
-    This is a minimal hello-world OpenAPI document for developing and testing
-    specification linting rules before the full MEDH NSC contract is authored.
+    The MEDH National Student Clearinghouse (NSC) service enables authorized
+    requesters to submit a single synchronous JSON request through the Medicaid
+    Eligibility Services Hub (MESH) to verify postsecondary enrollment
+    information reported to NSC.
+
+    The service returns enrollment verification information only. It does not
+    determine Medicaid eligibility, determine whether a person satisfies a
+    community engagement requirement, verify high school enrollment, verify GED
+    or high school equivalency participation, or provide a complete academic
+    history. Requesters remain responsible for applying Medicaid eligibility
+    policy, community engagement policy, and state business rules to the
+    response.
+
+    Requesters must obtain and maintain FERPA-compliant written or electronic
+    consent from the eligible student or another FERPA-authorized individual
+    before submitting a query. MESH does not collect, validate, or retain FERPA
+    consent artifacts in the NSC payload. The `termsAcceptedIndicator` value
+    confirms acceptance of applicable Clearinghouse terms and conditions; it is
+    not a FERPA consent indicator.
   license:
     name: CC0-1.0
     identifier: CC0-1.0
-  version: 0.0.1
+  version: 0.1.0
 servers:
-  - url: https://example.invalid
-    description: Placeholder server for local specification tooling.
+  - url: https://{meshHost}
+    description: MESH requester-facing endpoint assigned during onboarding.
+    variables:
+      meshHost:
+        default: mesh.example.invalid
+        description: Environment-specific MESH host name.
 tags:
-  - name: health
-    description: Placeholder operations for tooling validation.
+  - name: enrollment-verification
+    description: Postsecondary enrollment verification operations.
+x-fdsh:
+  productGroup: medh
+  product: education
+  service: national-student-clearinghouse
+  serviceId: MH1
+  gateway: MESH
+  trustedDataSource: NSC
 paths:
-  /hello:
-    $ref: "./paths/hello.yml"
+  /enrollment-verifications:
+    $ref: "./paths/verify-enrollment.yml"
+components:
+  securitySchemes:
+    MeshClientCredentials:
+      type: oauth2
+      description: |
+        OAuth 2.0 client credentials authentication issued through MESH
+        onboarding. Clients must support JWT-based authentication.
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}
+    MeshMutualTLS:
+      type: mutualTLS
+      description: |
+        Two-way TLS is required for requester-to-MESH connections. Client
+        certificates must be signed by a trusted certificate authority, use
+        2048-bit keys, and use SHA-2 digest strength of 256, 384, or 512.
