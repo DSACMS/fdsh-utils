@@ -35,13 +35,23 @@ A list of core team members responsible for the code and documentation in this r
 
 ```plaintext
 .
+├── mock-service/
+├── scripts/
+└── specs/
 ```
 
-{list directories and descriptions}
+* `mock-service/`: Draft mock-service project for a future Dockerized local
+  FDSH-like test target.
+* `scripts/`: Repository-level validation utilities.
+* `specs/`: OpenAPI and JSON Schema source files for documented FDSH hub
+  service specifications.
 
 <!-- TODO: Add a 'table of contents" for your documentation. Tier 0/1 projects with simple README.md files without many sections may or may not need this, but it is still extremely helpful to provide "bookmark" or "anchor" links to specific sections of your file to be referenced in tickets, docs, or other communication channels. -->
 
-{list of .md at top directory and descriptions}
+* [Mock Service](mock-service/README.md): Draft sub-project guidance for the
+  future Dockerized FDSH-like mock service.
+* [FDSH Hub Service Specifications](specs/README.md): Specification project
+  overview and links to service-level OpenAPI documentation.
 
 ## Development and Software Delivery Lifecycle
 
@@ -135,7 +145,19 @@ All contributions to this project will be released under the CC0 dedication. By 
 
 ## Documentation Index
 <!-- TODO: This is a like a 'table of contents' for your documentation. Tier 0/1 projects with simple README.md files without many sections may or may not need this, but it is still extremely helpful to provide 'bookmark' or 'anchor' links to specific sections of your file to be referenced in tickets, docs, or other communication channels. -->
-{list of .md at top directory and descriptions}
+
+* [Disclaimer](DISCLAIMER.md): Repository disclaimer for non-official FDSH
+  materials.
+* [Contributing](CONTRIBUTING.md): Repository-wide contribution guidance.
+* [Security](SECURITY.md): Security and vulnerability reporting guidance.
+* [Governance](GOVERNANCE.md): Repository governance expectations.
+* [Code of Conduct](CODE_OF_CONDUCT.md): Community behavior expectations.
+* [Community](COMMUNITY.md): Core team and community participation information.
+* [Mock Service](mock-service/README.md): Draft local mock-service project.
+* [Mock Service Specifications](mock-service/specs.md): Expected behavior for
+  the future mock-service Docker image.
+* [FDSH Hub Service Specifications](specs/README.md): Specification project
+  index.
 
 ## Codeowners
 

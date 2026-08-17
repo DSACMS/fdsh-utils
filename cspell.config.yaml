@@ -12,6 +12,7 @@ ignorePaths:
   - "**/*.emf"
 words:
   - ACA
+  - ALPN
   - Ajv
   - BHP
   - BSD
@@ -82,3 +83,4 @@ words:
   - repolinter
   - skillsets
   - sublicensable
+  - tlsv
