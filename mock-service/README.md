@@ -29,24 +29,6 @@ The project is not independently runnable yet. At present, it contains behavior
 requirements only; future implementation work should add local source files,
 container build configuration, fixtures, and executable validation targets here.
 
-## Scope and Non-goals
-
-Current scope:
-
-* Behavior requirements for an FDSH-like local mock service.
-* mTLS expectations, including TLS 1.2-only behavior and client certificate
-  validation.
-* OAuth 2.0 client credentials token endpoint behavior.
-* Synthetic data expectations for future endpoint responses and fixtures.
-
-Non-goals:
-
-* Official FDSH documentation or certification evidence.
-* Production connectivity, production credentials, or production data.
-* A full FDSH replacement for performance, availability, or security testing.
-* Exact behavior for cases marked unknown in [`specs.md`](specs.md) until those
-  cases are verified and documented.
-
 ## Repository Structure
 
 ```text
