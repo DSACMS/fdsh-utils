@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsacms.github.io/fdsh-utils/schema/nsc-request.schema.json",
+  "title": "NscRequest",
+  "description": "Requester-to-MESH NSC request data elements for standard identity-based and SSN-only verification methods.",
+  "type": "object",
+  "required": ["nscRequest"],
+  "additionalProperties": false,
+  "properties": {
+    "nscRequest": {
+      "description": "NSC request data container.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/standardIdentityVerificationRequest"
+        },
+        {
+          "$ref": "#/$defs/ssnOnlyVerificationRequest"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "standardIdentityVerificationRequest": {
+      "description": "NSC request data elements for the standard identity-based verification method.",
+      "type": "object",
+      "required": [
+        "personGivenName",
+        "personSurName",
+        "personBirthDate",
+        "asOfDate",
+        "termsAcceptedIndicator"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "personSocialSecurityNumber": {
+          "description": "Full 9-digit Social Security Number or last 4 digits only.",
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 9,
+              "maxLength": 9,
+              "pattern": "^[0-9]{9}$"
+            },
+            {
+              "type": "string",
+              "minLength": 4,
+              "maxLength": 4,
+              "pattern": "^[0-9]{4}$"
+            }
+          ]
+        },
+        "personGivenName": {
+          "$ref": "#/$defs/personName",
+          "description": "Student's first name sent in request. Use FNU or NFN when no first name is available."
+        },
+        "personMiddleName": {
+          "$ref": "#/$defs/personName",
+          "description": "Student's full middle name or middle initial."
+        },
+        "personSurName": {
+          "$ref": "#/$defs/personName",
+          "description": "Student's last name sent in request."
+        },
+        "previousNames": {
+          "description": "Zero to five sets of prior names.",
+          "type": "array",
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "required": ["personGivenName", "personSurName"],
+            "additionalProperties": false,
+            "properties": {
+              "personGivenName": {
+                "$ref": "#/$defs/personName"
+              },
+              "personMiddleName": {
+                "$ref": "#/$defs/personName"
+              },
+              "personSurName": {
+                "$ref": "#/$defs/personName"
+              }
+            }
+          }
+        },
+        "personBirthDate": {
+          "$ref": "#/$defs/dateString",
+          "description": "Student's birth date in YYYY-MM-DD format."
+        },
+        "asOfDate": {
+          "$ref": "#/$defs/dateString",
+          "description": "Enrollment records are returned as if the request was placed on this date, in YYYY-MM-DD format."
+        },
+        "termsAcceptedIndicator": {
+          "description": "Indicates that the Requester has accepted the applicable Clearinghouse terms and conditions for the NSC query.",
+          "type": "boolean",
+          "const": true
+        }
+      }
+    },
+    "ssnOnlyVerificationRequest": {
+      "description": "NSC request data elements for the SSN-only verification method.",
+      "type": "object",
+      "required": [
+        "personSocialSecurityNumber",
+        "asOfDate",
+        "termsAcceptedIndicator"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "personSocialSecurityNumber": {
+          "$ref": "#/$defs/fullSocialSecurityNumber",
+          "description": "Full 9-digit Social Security Number used as the primary identifier for SSN-only verification."
+        },
+        "asOfDate": {
+          "$ref": "#/$defs/dateString",
+          "description": "Enrollment records are returned as if the request was submitted on this date, in YYYY-MM-DD format."
+        },
+        "termsAcceptedIndicator": {
+          "description": "Indicates that the Requester has accepted the applicable Clearinghouse terms and conditions for the NSC query.",
+          "type": "boolean",
+          "const": true
+        }
+      }
+    },
+    "personName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 30
+    },
+    "dateString": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 10,
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "fullSocialSecurityNumber": {
+      "type": "string",
+      "minLength": 9,
+      "maxLength": 9,
+      "pattern": "^[0-9]{9}$"
+    }
+  }
+}
