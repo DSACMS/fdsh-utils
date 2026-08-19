@@ -1,0 +1,273 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsacms.github.io/fdsh-utils/schema/nsc-response.schema.json",
+  "title": "NscResponse",
+  "description": "MESH-to-Requester NSC response data elements for standard identity-based and SSN-only verification methods.",
+  "type": "object",
+  "required": ["nscResponse"],
+  "additionalProperties": false,
+  "properties": {
+    "nscResponse": {
+      "description": "NSC response data container.",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/standardIdentityBasedVerificationResponse"
+        },
+        {
+          "$ref": "#/$defs/ssnOnlyVerificationResponse"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "standardIdentityBasedVerificationResponse": {
+      "description": "NSC response data elements for the standard identity-based verification method.",
+      "type": "object",
+      "required": ["transactionDetails"],
+      "additionalProperties": false,
+      "properties": {
+        "transactionDetails": {
+          "$ref": "#/$defs/transactionDetails"
+        },
+        "studentInfoProvided": {
+          "$ref": "#/$defs/studentInfoProvided"
+        },
+        "enrollmentDetails": {
+          "$ref": "#/$defs/enrollmentDetails"
+        }
+      }
+    },
+    "ssnOnlyVerificationResponse": {
+      "description": "NSC response data elements for the SSN-only verification method.",
+      "type": "object",
+      "required": ["transactionDetails"],
+      "additionalProperties": false,
+      "properties": {
+        "transactionDetails": {
+          "$ref": "#/$defs/transactionDetails"
+        },
+        "enrollmentDetails": {
+          "$ref": "#/$defs/enrollmentDetails"
+        }
+      }
+    },
+    "transactionDetails": {
+      "description": "Transaction-related information.",
+      "type": "object",
+      "required": [
+        "transactionId",
+        "orderId",
+        "transactionStatusCode",
+        "transactionFee",
+        "salesTax",
+        "transactionTotal",
+        "requestedByText",
+        "requestedDateTimeText",
+        "nscHitIndicator"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "transactionId": {
+          "description": "Unique ID assigned by NSC to identify the order.",
+          "type": "string",
+          "minLength": 9,
+          "maxLength": 15
+        },
+        "orderId": {
+          "description": "Unique order identifier assigned by NSC.",
+          "type": "string",
+          "minLength": 9,
+          "maxLength": 15
+        },
+        "transactionStatusCode": {
+          "description": "Status of the transaction request.",
+          "type": "string",
+          "enum": ["CNF", "UCF"]
+        },
+        "transactionFee": {
+          "$ref": "#/$defs/moneyAmount",
+          "description": "Transaction fee amount."
+        },
+        "salesTax": {
+          "$ref": "#/$defs/moneyAmount",
+          "description": "Sales tax amount."
+        },
+        "transactionTotal": {
+          "$ref": "#/$defs/moneyAmount",
+          "description": "Total of transactionFee and salesTax."
+        },
+        "requestedByText": {
+          "description": "Name associated with the MESH user's account.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "requestedDateTimeText": {
+          "$ref": "#/$defs/nscDateTimeText",
+          "description": "Date and time when the request was made."
+        },
+        "notifiedDateTimeText": {
+          "$ref": "#/$defs/nscDateTimeText",
+          "description": "Date and time when the response was returned."
+        },
+        "nscHitIndicator": {
+          "description": "Indicates whether a match was found.",
+          "type": "boolean"
+        }
+      }
+    },
+    "studentInfoProvided": {
+      "description": "Student data from the request.",
+      "type": "object",
+      "required": ["personSurName", "personGivenName", "personBirthDate"],
+      "additionalProperties": false,
+      "properties": {
+        "personSurName": {
+          "$ref": "#/$defs/personName",
+          "description": "Student last name provided in the request."
+        },
+        "personGivenName": {
+          "$ref": "#/$defs/personName",
+          "description": "Student first name provided in the request."
+        },
+        "personMiddleName": {
+          "$ref": "#/$defs/personName",
+          "description": "Student middle name provided in the request."
+        },
+        "previousNames": {
+          "$ref": "#/$defs/previousNames",
+          "description": "Previously used names for the student."
+        },
+        "personBirthDate": {
+          "$ref": "#/$defs/dateString",
+          "description": "Student date of birth."
+        }
+      }
+    },
+    "previousNames": {
+      "type": "object",
+      "required": ["personGivenName", "personSurName"],
+      "additionalProperties": false,
+      "properties": {
+        "personGivenName": {
+          "$ref": "#/$defs/personName",
+          "description": "Previous first name."
+        },
+        "personMiddleName": {
+          "$ref": "#/$defs/personName",
+          "description": "Previous middle name."
+        },
+        "personSurName": {
+          "$ref": "#/$defs/personName",
+          "description": "Previous last name."
+        }
+      }
+    },
+    "enrollmentDetails": {
+      "description": "Enrollment information.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 99,
+      "items": {
+        "$ref": "#/$defs/enrollmentDetail"
+      }
+    },
+    "enrollmentDetail": {
+      "type": "object",
+      "required": [
+        "officialSchoolName",
+        "schoolCode",
+        "currentEnrollmentStatusCode",
+        "enrollmentData"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "officialSchoolName": {
+          "description": "Official school name.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "schoolCode": {
+          "description": "Department of Education school ID.",
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 6
+        },
+        "branchCode": {
+          "description": "School branch identifier.",
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2
+        },
+        "currentEnrollmentStatusCode": {
+          "description": "Current enrollment status.",
+          "type": "string",
+          "enum": ["CC", "CN"]
+        },
+        "enrollmentData": {
+          "description": "Enrollment term details.",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 99,
+          "items": {
+            "$ref": "#/$defs/enrollmentTerm"
+          }
+        }
+      }
+    },
+    "enrollmentTerm": {
+      "type": "object",
+      "required": [
+        "enrollmentStatusCode",
+        "termBeginDate",
+        "termEndDate",
+        "schoolCertifiedOnDate"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "enrollmentStatusCode": {
+          "description": "Student enrollment status code.",
+          "type": "string",
+          "enum": ["F", "Q", "H", "L", "Y", "A", "W", "S", "G", "D"]
+        },
+        "termBeginDate": {
+          "$ref": "#/$defs/dateString",
+          "description": "Start date of enrollment term."
+        },
+        "termEndDate": {
+          "$ref": "#/$defs/dateString",
+          "description": "End date of enrollment term."
+        },
+        "schoolCertifiedOnDate": {
+          "$ref": "#/$defs/dateString",
+          "description": "Date school certified the record."
+        },
+        "anticipatedGraduationDate": {
+          "$ref": "#/$defs/dateString",
+          "description": "Expected graduation date."
+        }
+      }
+    },
+    "personName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 30
+    },
+    "dateString": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 10,
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "moneyAmount": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]{2}$"
+    },
+    "nscDateTimeText": {
+      "type": "string",
+      "maxLength": 24,
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{1,4}$"
+    }
+  }
+}
