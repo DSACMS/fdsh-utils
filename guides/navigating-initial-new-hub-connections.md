@@ -57,20 +57,25 @@ This example is provided for reference only; your specific infrastructure may re
 The Hub requires a client certificate for mTLS and OAuth client credentials for token requests. For our walkthrough, we're assuming they are stored in AWS Secrets Manager.
 
 ```bash
-# Retrieve the full secret
-SECRET=$(aws secretsmanager get-secret-value \
+
+#import credentials, extract client certificate and key
+
+aws secretsmanager get-secret-value \
   --secret-id /fdsh/mesh/impl/credentials \
   --query SecretString \
-  --output text)
+  --output text > /tmp/fdsh-mesh-credentials.json
 
-# Save the client certificate and private key
-echo "$SECRET" | python3 -c "import sys,json; print(json.load(sys.stdin)['cert'])" > client.crt
-echo "$SECRET" | python3 -c "import sys,json; print(json.load(sys.stdin)['certKey'])" > client.key
+jq -r '.cert' /tmp/fdsh-mesh-credentials.json > client.crt
+jq -r '.certKey' /tmp/fdsh-mesh-credentials.json > client.key
+
 chmod 600 client.key
 
-# Set OAuth credentials as environment variables
-export OAUTH_CLIENT_KEY=$(echo "$SECRET" | python3 -c "import sys,json; print(json.load(sys.stdin)['clientKey'])")
-export OAUTH_CLIENT_SECRET=$(echo "$SECRET" | python3 -c "import sys,json; print(json.load(sys.stdin)['clientSecret'])")
+#export credentials
+
+export OAUTH_CLIENT_KEY="$(jq -r '.clientKey' /tmp/fdsh-mesh-credentials.json)"
+export OAUTH_CLIENT_SECRET="$(jq -r '.clientSecret' /tmp/fdsh-mesh-credentials.json)"
+
+rm -f /tmp/fdsh-mesh-credentials.json
 ```
 
 ### Step 2: Establish the Connection
