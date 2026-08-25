@@ -1,6 +1,7 @@
 require 'net/http'
 require 'json'
 require 'uri'
+require 'securerandom'
 
 module Hub
   # HubGateway abstracts the communication with the Hub Service API.
@@ -54,6 +55,7 @@ module Hub
       request = Net::HTTP::Post.new(uri)
       request['Content-Type'] = 'application/json'
       request['Authorization'] = "Bearer #{access_token}"
+      request['messageID'] = SecureRandom.uuid
       request.body = body.to_json
 
       execute(uri, request)
