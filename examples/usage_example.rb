@@ -23,8 +23,8 @@ def run_live_test
     token_url: token_url,
     client_id: client_id,
     client_secret: client_secret,
-    client_cert_path: '/tmp/oauth_client_id',
-    client_key_path: '/tmp/oauth_client_secret',
+    client_cert_path: '/tmp/client.cert',
+    client_key_path: '/tmp/client.key',
     education_enrollment_url: education_path,
     resolve: "impl.hub.cms.gov:8443:127.0.0.1"
   )
