@@ -7,14 +7,15 @@
 # client certificate is in /tmp/client.crt and its private key is in
 # /tmp/client.key. OAuth ID and secret are in environment variables
 
-OAUTH_CLIENT_KEY=...
-OAUTH_CLIENT_SECRET=...
+OAUTH_CLIENT_KEY=${OAUTH_CLIENT_KEY}
+OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
 
 # get access token from /auth/oauth/v2/token
 # The encoded token is in the "access_token" property of the JSON response
-ACCESS_TOKEN=$(curl -s \
-  --cert ./client.crt \
-  --key ./client.key \
+echo "Getting access token..."
+ACCESS_TOKEN=$(curl \
+  --cert /tmp/client.crt \
+  --key /tmp/client.key \
   --tlsv1.2 --tls-max 1.2 \
   --resolve "impl.hub.cms.gov:8443:127.0.0.1" \
   -X POST \
@@ -23,6 +24,7 @@ ACCESS_TOKEN=$(curl -s \
   -d "grant_type=client_credentials&client_id=${OAUTH_CLIENT_KEY}&client_secret=${OAUTH_CLIENT_SECRET}" \
 | jq -r .access_token)
 
+echo "Calling NSC API..."
 # call the NSC search API
 curl -H "Authorization: Bearer ${ACCESS_TOKEN}" \
   --cert /tmp/client.crt \
