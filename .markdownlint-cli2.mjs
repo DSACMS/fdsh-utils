@@ -6,7 +6,7 @@ const markdownItFactory = () => markdownIt({ html: true });
 const options = {
   gitignore: true,
   globs: ["**/*.{md,mdx}"],
-  ignores: [".agents/**", ".github/**"],
+  ignores: [".agents/**", ".github/**", "COMMUNITY.md"],
   config: init({
     "line-length": false,
   }),
