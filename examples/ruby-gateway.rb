@@ -62,22 +62,33 @@ module Hub
     def execute(uri, request)
       hostname = uri.hostname
       port = uri.port
+      connect_ip = @resolve[hostname][port] if @resolve && @resolve[hostname] && @resolve[hostname][port]
 
-      if @resolve && @resolve[hostname] && @resolve[hostname][port]
-        hostname = @resolve[hostname][port]
-      end
+      http = Net::HTTP.new(hostname, port)
+      http.ipaddr = connect_ip if connect_ip
+      http.use_ssl = uri.scheme == 'https'
+      http.cert = @client_cert
+      http.key = @client_key
+      http.min_version = OpenSSL::SSL::TLS1_2_VERSION
+      http.max_version = OpenSSL::SSL::TLS1_2_VERSION
 
-      response = Net::HTTP.start(hostname, port,
-                                 use_ssl: uri.scheme == 'https',
-                                 cert: @client_cert,
-                                 key: @client_key,
-                                 ssl_version: :TLSv1_2,
-                                 min_version: OpenSSL::SSL::TLS1_2_VERSION,
-                                 max_version: OpenSSL::SSL::TLS1_2_VERSION) do |http|
+      response = http.start do
         http.request(request)
       end
 
       handle_response(response)
+    end
+
+    def fetch_token
+      uri = URI(token_url)
+      request = Net::HTTP::Post.new(uri)
+      request.set_form_data(
+        grant_type: 'client_credentials',
+        client_id: client_id,
+        client_secret: client_secret
+      )
+
+      execute(uri, request)
     end
 
     def handle_response(response)
@@ -94,40 +105,8 @@ module Hub
     end
 
     def access_token
-      @token = fetch_token if @token.nil?
+      @token = fetch_token['access_token'] if @token.nil?
       @token
-    end
-
-    def fetch_token
-      uri = URI(token_url)
-      request = Net::HTTP::Post.new(uri)
-      request.set_form_data(
-        grant_type: 'client_credentials',
-        client_id: client_id,
-        client_secret: client_secret
-      )
-
-      hostname = uri.hostname
-      port = uri.port
-      connect_ip = @resolve[hostname][port]
-
-      http = Net::HTTP.new(hostname, port, nil)
-      http.ipaddr = connect_ip
-      http.use_ssl = true
-      http.cert = @client_cert
-      http.key = @client_key
-      http.min_version = OpenSSL::SSL::TLS1_2_VERSION
-      http.max_version = OpenSSL::SSL::TLS1_2_VERSION
-
-      response = http.start do
-        http.request(request)
-      end
-
-      if response.code.to_i == 200
-        JSON.parse(response.body)['access_token']
-      else
-        raise AuthenticationError, "Failed to obtain access token: #{response.body}"
-      end
     end
 
     def load_cert(path)
