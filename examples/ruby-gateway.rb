@@ -101,23 +101,25 @@ module Hub
     def fetch_token
       uri = URI(token_url)
       request = Net::HTTP::Post.new(uri)
-      request.basic_auth(client_id, client_secret)
-      request.set_form_data(grant_type: 'client_credentials')
+      request.set_form_data(
+        grant_type: 'client_credentials',
+        client_id: client_id,
+        client_secret: client_secret
+      )
 
       hostname = uri.hostname
       port = uri.port
+      connect_ip = @resolve[hostname][port]
 
-      if @resolve && @resolve[hostname] && @resolve[hostname][port]
-        hostname = @resolve[hostname][port]
-      end
+      http = Net::HTTP.new(hostname, port, nil)
+      http.ipaddr = connect_ip
+      http.use_ssl = true
+      http.cert = @client_cert
+      http.key = @client_key
+      http.min_version = OpenSSL::SSL::TLS1_2_VERSION
+      http.max_version = OpenSSL::SSL::TLS1_2_VERSION
 
-      response = Net::HTTP.start(hostname, port,
-                                 use_ssl: uri.scheme == 'https',
-                                 cert: @client_cert,
-                                 key: @client_key,
-                                 ssl_version: :TLSv1_2,
-                                 min_version: OpenSSL::SSL::TLS1_2_VERSION,
-                                 max_version: OpenSSL::SSL::TLS1_2_VERSION) do |http|
+      response = http.start do
         http.request(request)
       end
 
