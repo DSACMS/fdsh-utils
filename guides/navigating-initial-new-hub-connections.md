@@ -49,6 +49,8 @@ This example is provided for reference only; your specific infrastructure may re
 ### Prerequisites
 
 * **curl**: Standard utility for making HTTP requests.
+* **jq**: Standard utility for parsing JSON.
+* **aws**: Standard utility for aws command line (if you are using AWS to manage credentials).
 
 ## Step-by-Step Integration
 
@@ -105,8 +107,9 @@ curl -s \
 
 ### JWT Response Payload
 
-A successful request returns an OAuth 2.0 response containing the access token. Below is a sample payload:
+A successful request returns an OAuth 2.0 response containing the access token. While the top-level response contains standard OAuth fields, the `access_token` itself is a JWT that contains critical metadata.
 
+#### OAuth 2.0 Response Wrapper
 ```json
 {
   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -116,14 +119,38 @@ A successful request returns an OAuth 2.0 response containing the access token. 
 }
 ```
 
-#### Field Definitions
+#### Decoded JWT Content
+When the `access_token` is decoded, it contains the following structure:
+
+```json
+{
+  "iss": "https://impl.hub.cms.gov:8443",
+  "iat": 1787613531,
+  "aud": "8e1ce620-d9c6-48ab-9b11-4970dd06551b",
+  "exp": 1787615331,
+  "refresh_token": "",
+  "jti": "0db9a20a-fdf9-40ae-ae74-eab11bcfc516-1787615331",
+  "token_details": {
+    "scope": "MH-1 MH-2 RJ74",
+    "expires_in": 1800,
+    "token_type": "Bearer"
+  }
+}
+```
+
+#### Field Definitions (Decoded JWT)
 
 | Field | Description |
 | :--- | :--- |
-| `access_token` | The JSON Web Token (JWT) used to authenticate subsequent service requests. |
-| `token_type` | The type of token issued (always "Bearer"). |
-| `expires_in` | The remaining lifetime of the token in seconds (typically 1800 or 3600). |
-| `scope` | A space-separated list of permissions (scopes) granted to this token. |
+| `iss` | Issuer: The URL of the Hub authentication server. |
+| `iat` | Issued At: Epoch timestamp of when the token was generated. |
+| `aud` | Audience: The client ID or intended recipient of the token. |
+| `exp` | Expiration Time: Epoch timestamp when the token expires. |
+| `jti` | JWT ID: A unique identifier for the token. |
+| `token_details` | A nested object containing specific token metadata. |
+| `token_details.scope` | A space-separated list of permissions (scopes) granted. |
+| `token_details.expires_in` | The lifetime of the token in seconds (e.g., 1800). |
+| `token_details.token_type` | The type of token issued (always "Bearer"). |
 
 ## Troubleshooting
 
