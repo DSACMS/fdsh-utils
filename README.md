@@ -158,6 +158,10 @@ All contributions to this project will be released under the CC0 dedication. By 
   the future mock-service Docker image.
 * [FDSH Hub Service Specifications](specs/README.md): Specification project
   index.
+* [Hub Connection Guide](guides/navigating-initial-new-hub-connections.md): Technical
+  setup for NSC and VA services.
+* [SSH Tunneling Example](guides/ssh-tunnelling-example.md): Example method for
+  accessing whitelisted Hub environments.
 
 ## Codeowners
 
