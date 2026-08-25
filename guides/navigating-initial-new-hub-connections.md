@@ -15,6 +15,7 @@ This guide assists external developers with the initial technical setup, testing
 Before beginning the technical integration, ensure you have reviewed the following foundational documentation:
 
 ### External Documentation
+
 * **CMS zONE Hub Onboarding**: Detailed documentation on the administrative process for requesting access, providing IP ranges, and SSL certificate submission.
 * **OAuth 2.0 Boarding Guide**: The official CMS guide for OAuth 2.0 integration (available on zONE).
 * **HUB Testing Cheat Sheet**: A reference guide for testing Hub connections, including checks for `HubConnectivityService`.
@@ -22,6 +23,7 @@ Before beginning the technical integration, ensure you have reviewed the followi
 * **Formal Environment Testing URL End Points**: Lists the URLs that are used for testing the Hub's Implementation (IMPL) environment.
 
 ### Repository Documentation
+
 * [**Project README**](../README.md): Overview of the `fdsh-utils` project and its core goals.
 * [**MEDH NSC Service Specifications**](../specs/medh/nsc/README.md): Detailed OpenAPI and JSON Schema specifications for the NSC endpoint.
 * [**Security Policy**](../SECURITY.md): Guidelines for vulnerability reporting and sensitive data handling.
@@ -29,6 +31,7 @@ Before beginning the technical integration, ensure you have reviewed the followi
 ## Initial Setup Requirements
 
 To establish a connection to the Hub's Implementation (IMPL) environment, you must first complete the onboarding process:
+
 1. **IP Whitelisting**: Provide your outbound IP ranges to the Hub team.
 2. **SSL Certificates**: Submit your public SSL certificates to the Hub for mTLS authentication.
 
@@ -110,14 +113,14 @@ curl -s \
 A successful request returns an OAuth 2.0 response containing the access token. While the top-level response contains standard OAuth fields, the `access_token` itself is a JWT that contains critical metadata.
 
 #### OAuth 2.0 Response Wrapper
+
 ```json
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
   "token_type": "Bearer",
   "expires_in": 1800,
   "scope": "MH-1 MH-2 RJ74"
 }
-```
 
 #### Decoded JWT Content
 When the `access_token` is decoded, it contains the following structure:
