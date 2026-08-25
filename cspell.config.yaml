@@ -6,7 +6,7 @@ ignorePaths:
   - .pnpm-store
   - node_modules
   - pnpm-lock.yaml
-  - CONTRIBUTING.md
+  - COMMUNITY.md
   - "**/*.~*"
   - "**/*.docx"
   - "**/*.png"
