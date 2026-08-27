@@ -2,6 +2,8 @@ import json
 import os
 import sys
 
+import requests
+
 import python_gateway
 
 
@@ -26,7 +28,7 @@ def run_live_test():
         client_secret,
         "/tmp/client.crt",
         "/tmp/client.key",
-        "",
+        resolve="impl.hub.cms.gov:8443:127.0.0.1",
         education_enrollment_path=education_path,
     )
 

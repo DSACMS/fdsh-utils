@@ -23,7 +23,7 @@ class HubGateway:
         client_secret,
         client_cert_path,
         client_key_path,
-        resolve,
+        resolve=None,
         education_enrollment_path="/api/v1/education-enrollments",
     ):
         self.base_url = base_url
@@ -36,7 +36,7 @@ class HubGateway:
         self._token = None
         self._session = requests.Session()
         self._session.cert = (client_cert_path, client_key_path)
-        self._session.mount("https://", TLS1_2_Adapter())
+        self._session.mount("https://", TLS1_2_Adapter(resolve_dict=self.resolve))
 
     def get_education_enrollment_v1(self, payload):
         """Get enrollment data from FDSH NSC API.
@@ -124,6 +124,27 @@ class HubGateway:
 
 class TLS1_2_Adapter(HTTPAdapter):
     """Force TLS version 1.2"""
+
+    def __init__(self, *args, resolve_dict={}, **kwargs):
+        """Override DNS resolution for one host.
+
+        resolve_dict has a hostname as the key and the value is a mapping from
+        port number to an IP address.
+        """
+        self.resolve_dict = resolve_dict
+        super().__init__(*args, **kwargs)
+
+    def get_connection(self, *args, **kwargs):
+        conn = super().get_connection(*args, **kwargs)
+
+        if conn.host in self.resolve_dict:
+            # Save original hostname for SSL/SNI & validation
+            conn.assert_hostname = conn.host
+            conn.server_hostname = conn.host
+
+            # Redirect the actual network destination socket to the IP
+            conn.host = self.resolve_dict[conn.host][conn.port]
+        return conn
 
     def init_poolmanager(self, *args, **kwargs):
         context = ssl.create_default_context()
