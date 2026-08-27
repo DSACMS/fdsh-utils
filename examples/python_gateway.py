@@ -9,9 +9,6 @@ import uuid
 
 from requests.adapters import HTTPAdapter
 
-from cryptography import x509
-from cryptography.hazmat.primitives import serialization
-
 
 class HubGateway:
 
