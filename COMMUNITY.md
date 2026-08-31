@@ -71,6 +71,20 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more details on the release process.
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/neilmb">
+                    <img src="https://avatars.githubusercontent.com/u/443389?v=4" width="100;" alt="neilmb"/>
+                    <br />
+                    <sub><b>Neil MartinsenBurrell</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/iannorriswork">
+                    <img src="https://avatars.githubusercontent.com/u/207737457?v=4" width="100;" alt="iannorriswork"/>
+                    <br />
+                    <sub><b>iannorriswork</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/IsaacMilarky">
                     <img src="https://avatars.githubusercontent.com/u/24639268?v=4" width="100;" alt="IsaacMilarky"/>
                     <br />
@@ -82,13 +96,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more details on the release process.
                     <img src="https://avatars.githubusercontent.com/u/107957201?v=4" width="100;" alt="decause-gov"/>
                     <br />
                     <sub><b>decause-gov</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/iannorriswork">
-                    <img src="https://avatars.githubusercontent.com/u/207737457?v=4" width="100;" alt="iannorriswork"/>
-                    <br />
-                    <sub><b>iannorriswork</b></sub>
                 </a>
             </td>
 		</tr>
