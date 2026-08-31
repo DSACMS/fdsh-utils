@@ -1,3 +1,16 @@
+
+"""
+Run tests of the FDSH NSC API.
+
+When run without arguments, `python3 usage_example.py`, this script creates a
+connection to the FDSH using the details given in the code, then calls the
+API for a sample user and prints the results.
+
+This same script can also read newline-delimited JSON payloads from stdin to allow
+for querying the API multiple times. E.g. `python3 usage_example.py < nsc_sample_users.json`
+"""
+
+import io
 import json
 import os
 import sys
@@ -34,24 +47,32 @@ def run_live_test():
 
     print("Gateway initialized.")
 
-    payload = {
-        "personGivenName": "Neil",
-        "personSurName": "Martinsen-Burrell",
-        "personBirthDate": "1999-01-01",
-        "asOfDate": "1900-01-01",
-        "termsAcceptedIndicator": True,
-    }
+    if sys.stdin.isatty():
+        print("Searching for sample individuals...")
+        payload = {
+            "personGivenName": "Teresa",
+            "personSurName": "Kaminsky",
+            "personBirthDate": "1994-06-20",
+            "asOfDate": "2026-08-27",
+            "termsAcceptedIndicator": True,
+        }
+        input_stream = io.StringIO(json.dumps(payload) + "\n")
+    else:
+        print("Searching for individuals from stdin...")
+        input_stream = sys.stdin
 
-    try:
-        print("Attempting to get education enrollment...")
-        result_dict = gateway.get_education_enrollment_v1(payload)
-        print("Success!")
-        print(json.dumps(result_dict, indent=2))
-    except requests.exceptions.HTTPError as e:
-        print("HTTP Error:", e)
-    except:
-        print("Unexpected Error:")
-        raise
+    for line in input_stream:
+        payload = json.loads(line)
+        try:
+            print("Attempting to get education enrollment...")
+            result_dict = gateway.get_education_enrollment_v1(payload)
+            print("Success!")
+            print(json.dumps(result_dict, indent=2))
+        except requests.exceptions.HTTPError as e:
+            print("HTTP Error:", e)
+        except:
+            print("Unexpected Error:")
+            raise
 
 
 if __name__ == "__main__":
