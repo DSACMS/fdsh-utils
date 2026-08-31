@@ -11,6 +11,7 @@ ignorePaths:
   - "**/*.docx"
   - "**/*.png"
   - "**/*.emf"
+  - "**/*.py"
 words:
   - ACA
   - ALPN
