@@ -56,7 +56,7 @@ mock-service/
 ├── Dockerfile                     # Builds mock service image
 ├── README.md                      # Project overview and onboarding
 ├── specs.md                       # API contract / field-level specs
-└── supervisord.conf
+└── supervisord.conf               # Runs auth, api, and nginx within Docker container
 ```
 
 * `README.md`: Project overview, contribution guidance, and local policy

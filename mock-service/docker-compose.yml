@@ -1,0 +1,20 @@
+# Build and run the combined read-only mock service image.
+# Server certificates and nginx configuration are supplied by the host and are
+# never included in the image. Keep client.crt and client.key outside this
+# mounted directory.
+
+services:
+  mock-service:
+    build: .
+    image: ${MOCK_SERVICE_IMAGE:-fdsh-mock-service:latest}
+    restart: unless-stopped
+    ports:
+      - "8443:8443"
+      - "9100:9000"
+    environment:
+      JWT_SIGNING_KEY: ${JWT_SIGNING_KEY:-local-dev-signing-key}
+      CLIENT_ID: ${CLIENT_ID:-local-dev-client-id}
+      CLIENT_SECRET: ${CLIENT_SECRET:-local-dev-client-secret}
+    volumes:
+      - ${CERT_DIR:-./certs}:/etc/nginx/certs:ro
+      - ${NGINX_CONFIG:-./nginx/nginx.conf}:/etc/nginx/nginx.conf:ro
