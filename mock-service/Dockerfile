@@ -2,9 +2,6 @@ FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    JWT_SIGNING_KEY=local-dev-signing-key \
-    CLIENT_ID=local-dev-client-id \
-    CLIENT_SECRET=local-dev-client-secret \
     NSC_DATA_FILE=/app/data/records.json
 
 RUN apt-get update \
