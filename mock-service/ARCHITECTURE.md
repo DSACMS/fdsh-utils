@@ -93,6 +93,8 @@ The `client_id` and `client_secret` can be changed. The following files must be 
 
 **Retrieve a record:**
 
+Create a request.json based on the [nsc-request.schema.json](../specs/medh/nsc/schemas/nsc-request.schema.json) and use it in the request:
+
 ```sh
 curl --cacert certs/ca.crt \
   --cert certs/client.crt \
