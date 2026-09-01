@@ -32,9 +32,31 @@ container build configuration, fixtures, and executable validation targets here.
 ## Repository Structure
 
 ```text
-.
-├── README.md
-└── specs.md
+mock-service/
+├── api/
+│   ├── app/
+│   │   ├── domains/
+│   │   │   └── nsc.py             # NSC operations
+│   │   ├── main.py                # FastAPI app entry point, router registration
+│   │   └── schemas.py             # NSC request/response Pydantic schemas
+│   └── pyproject.toml
+├── auth/
+│   ├── app/
+│   │   ├── main.py                # FastAPI app: /token and /introspect routes
+│   │   └── security.py            # JWT issuance and validation logic
+│   └── pyproject.toml
+├── certs/
+│   ├── check_expiry.sh            # Warns if any cert is nearing expiry
+│   └── generate.sh                # Generates CA, server, and client certs
+├── data/
+│   └── generate_records.py        # Synthetic data generator CLI
+├── nginx/
+│   └── nginx.conf                 # mTLS + auth_request configuration
+├── docker-compose.yml             # Orchestrates all services
+├── Dockerfile                     # Builds mock service image
+├── README.md                      # Project overview and onboarding
+├── specs.md                       # API contract / field-level specs
+└── supervisord.conf
 ```
 
 * `README.md`: Project overview, contribution guidance, and local policy
