@@ -2,7 +2,7 @@
 
 A single Docker image bundles nginx, an OAuth auth service, and a read-only FastAPI API. The container is self-contained and retrieve-only: it has no create, update, or delete operations.
 
-```
+```text
 +----------------------------------------------------------------+
 | fdsh-mock-service container                                    |
 |                                                                |
@@ -36,8 +36,8 @@ Requests flow from nginx (TLS 1.2 with mTLS, requiring a valid client certificat
 
 Two paths are mounted into the container at runtime:
 
-- `/etc/nginx/certs/` — host `certs/` directory, mounted read-only
-- `/etc/nginx/nginx.conf` — mounted read-only and configurable
+* `/etc/nginx/certs/` — host `certs/` directory, mounted read-only
+* `/etc/nginx/nginx.conf` — mounted read-only and configurable
 
 The mounted `certs/` directory holds only the server-side files: `ca.crt`, `server.crt`, and `server.key`. The client certificate and key stay on the calling host and are passed directly to curl or an integration client for mTLS — they're never copied into the image.
 
@@ -49,8 +49,8 @@ The API reads a single domain-specific, bundled flat file. The `nsc` domain curr
 
 Two ports are exposed publicly:
 
-- `8443` → nginx HTTPS retrieve endpoint
-- `9100` → auth OAuth token endpoint
+* `8443` → nginx HTTPS retrieve endpoint
+* `9100` → auth OAuth token endpoint
 
 The API's port `8000` stays internal to the container and isn't exposed on the host. The OAuth token endpoint is `http://localhost:9100/auth/oauth/v2/token`, and the NSC retrieve endpoint is `https://localhost:8443/mesh/imp1/NationalStudentClearinghouseService`. Registered future domains use `POST /domains/{domain_name}` and return a matching response from that domain's bundled file; missing records and invalid NSC requests return the standard NSC error response shape.
 
@@ -107,5 +107,4 @@ curl --cacert certs/ca.crt \
 
 ## Publish
 
-*coming*
-
+coming
