@@ -80,6 +80,10 @@ The Compose file mounts the host `certs/` directory read-only at `/etc/nginx/cer
 docker compose up --build -d
 ```
 
+**Specify location of ca.crt:**
+
+Export a variable called `CURL_CA_BUNDLE` and point to the ca.crt created earlier. This tells the curl command where to find the ca.crt.
+
 **Get a token:**
 
 ```sh
@@ -96,8 +100,7 @@ The `client_id` and `client_secret` can be changed. The following files must be 
 Create a request.json based on the [nsc-request.schema.json](../specs/medh/nsc/schemas/nsc-request.schema.json) and use it in the request:
 
 ```sh
-curl --cacert certs/ca.crt \
-  --cert certs/client.crt \
+curl --cert certs/client.crt \
   --key certs/client.key \
   -X POST https://localhost:8443/mesh/imp1/NationalStudentClearinghouseService \
   -H "Authorization: Bearer <access_token>" \
