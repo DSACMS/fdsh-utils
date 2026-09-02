@@ -78,6 +78,13 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more details on the release process.
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/dmtrscms">
+                    <img src="https://avatars.githubusercontent.com/u/237252101?v=4" width="100;" alt="dmtrscms"/>
+                    <br />
+                    <sub><b>dmtrscms</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/iannorriswork">
                     <img src="https://avatars.githubusercontent.com/u/207737457?v=4" width="100;" alt="iannorriswork"/>
                     <br />
