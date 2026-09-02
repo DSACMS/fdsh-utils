@@ -108,6 +108,20 @@ curl --cert certs/client.crt \
   -d @<request.json>
 ```
 
+If you don't want to pass a file, pass the json by replacing `-d` option with the `--json option`.
+
+Example:
+```
+--json '{"nscRequest": {
+        "personGivenName": "Casey",
+        "personSurName": "Bennett",
+        "personBirthDate": "1966-06-07",
+        "asOfDate": "2023-10-13",
+        "termsAcceptedIndicator": true
+        }
+        }'
+```
+
 ## Publish
 
 coming
