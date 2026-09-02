@@ -12,6 +12,12 @@ ignorePaths:
   - "**/*.png"
   - "**/*.emf"
   - "**/*.py"
+  - "**/*.toml"
+  - "**/*.sh"
+  - "**/*.json"
+  - "**/*.yml"
+  - "**/*.conf"
+  - Dockerfile
 words:
   - ACA
   - ALPN
@@ -145,3 +151,6 @@ words:
   - uritemplate
   - scaffolder
   - Anull
+  - Pydantic
+  - pyproject
+  - supervisord
