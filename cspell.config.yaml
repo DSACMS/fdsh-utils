@@ -6,10 +6,12 @@ ignorePaths:
   - .pnpm-store
   - node_modules
   - pnpm-lock.yaml
+  - COMMUNITY.md
   - "**/*.~*"
   - "**/*.docx"
   - "**/*.png"
   - "**/*.emf"
+  - "**/*.py"
 words:
   - ACA
   - ALPN
@@ -74,6 +76,7 @@ words:
   - jschema
   - localisation
   - messageID
+  - nonprod
   - nscRequest
   - nscResponse
   - openapi
@@ -84,3 +87,61 @@ words:
   - skillsets
   - sublicensable
   - tlsv
+  - Martinsen
+  - Burrell
+  - stefanzweifel
+  - akhilmhdh
+  - pipefail
+  - gacts
+  - codejson
+  - openapis
+  - ucschar
+  - iprivate
+  - DQUOTE
+  - HEXDIG
+  - FDCF
+  - FFEF
+  - FFFD
+  - AFFFD
+  - BFFFD
+  - CFFFD
+  - DFFFD
+  - EFFFD
+  - FFFFD
+  - petstore
+  - pchar
+  - httpbis
+  - Cblack
+  - Cbrown
+  - Edsger
+  - edijkstra
+  - Diṅnāga
+  - diṅnāga
+  - الخوارزميّ
+  - jsonseq
+  - eventstream
+  - BQAAA
+  - AAQAAAABAAAA
+  - ACAAQAAAABAAAA
+  - ADAAQAAAABAAAA
+  - AAAADO
+  - QAAAAE
+  - EQVQIHWP
+  - ACTGCSAQANHQE
+  - QAAAABJRU
+  - Jggg
+  - subschema
+  - byteranges
+  - myevent
+  - Busername
+  - linkset
+  - xyzzy
+  - subschemas
+  - Cinfo
+  - Eabc
+  - CMYK
+  - postamble
+  - PKCE
+  - uritemplate
+  - scaffolder
+  - Anull

@@ -61,13 +61,34 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more details on the release process.
 
 <!-- readme: contributors -start -->
 <table>
- <tbody>
-  <tr>
+	<tbody>
+		<tr>
             <td align="center">
                 <a href="https://github.com/j-shilling">
                     <img src="https://avatars.githubusercontent.com/u/17163542?v=4" width="100;" alt="j-shilling"/>
                     <br />
                     <sub><b>Jake Shilling</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/neilmb">
+                    <img src="https://avatars.githubusercontent.com/u/443389?v=4" width="100;" alt="neilmb"/>
+                    <br />
+                    <sub><b>Neil MartinsenBurrell</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/dmtrscms">
+                    <img src="https://avatars.githubusercontent.com/u/237252101?v=4" width="100;" alt="dmtrscms"/>
+                    <br />
+                    <sub><b>dmtrscms</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/iannorriswork">
+                    <img src="https://avatars.githubusercontent.com/u/207737457?v=4" width="100;" alt="iannorriswork"/>
+                    <br />
+                    <sub><b>iannorriswork</b></sub>
                 </a>
             </td>
             <td align="center">
@@ -84,8 +105,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more details on the release process.
                     <sub><b>decause-gov</b></sub>
                 </a>
             </td>
-  </tr>
- <tbody>
+		</tr>
+	<tbody>
 </table>
 <!-- readme: contributors -end -->
 
