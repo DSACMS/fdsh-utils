@@ -111,7 +111,8 @@ curl --cert certs/client.crt \
 If you don't want to pass a file, pass the json by replacing `-d` option with the `--json option`.
 
 Example:
-```
+
+```text
 --json '{"nscRequest": {
         "personGivenName": "Casey",
         "personSurName": "Bennett",
