@@ -10,7 +10,6 @@ services:
     restart: unless-stopped
     ports:
       - "8443:8443"
-      - "9100:9000"
     environment:
       JWT_SIGNING_KEY: ${JWT_SIGNING_KEY:-local-dev-signing-key}
       CLIENT_ID: ${CLIENT_ID:-local-dev-client-id}
