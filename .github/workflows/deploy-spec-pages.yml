@@ -10,6 +10,7 @@ on:
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
       - "specs/**"
+      - "public/**"
   workflow_dispatch:
 
 permissions:
@@ -60,6 +61,9 @@ jobs:
 
           pnpm --dir specs/medh/nsc exec redocly bundle openapi.yml --output "${artifact_dir}/openapi.yml"
           cp specs/medh/nsc/schemas/*.schema.json "${artifact_dir}/schema/"
+
+          # Copy public directory content
+          cp -R public/* "${artifact_dir}/"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
