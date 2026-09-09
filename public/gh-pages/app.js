@@ -63,12 +63,19 @@ createApp({
       }
     });
 
+    const showFutureFeatureAlert = () => {
+      alert(
+        "This will be added as a feature in a future release, reach out and flag an issue if you want this faster!",
+      );
+    };
+
     return {
       allExperiments,
       activeSource,
       searchQuery,
       dataSources,
       filteredGroupedExperiments,
+      showFutureFeatureAlert,
     };
   },
 }).mount("#app");
