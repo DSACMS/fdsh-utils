@@ -253,11 +253,15 @@
                               d="C7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
                             ></path>
                           </svg>
-                          <span class="truncate max-w-[150px]">{{ doc.name }}</span>
+                          <span class="truncate max-w-[150px]"
+                            >{{ doc.name }}</span
+                          >
                         </a>
                       </div>
-                      <div v-if="!exp.document_links || exp.document_links.length === 0">
-                         <a
+                      <div
+                        v-if="!exp.document_links || exp.document_links.length === 0"
+                      >
+                        <a
                           :href="exp.bsd_link"
                           class="flex items-center text-blue-600 hover:text-blue-900 transition"
                           title="Download Business Service Document (BSD)"
@@ -283,8 +287,7 @@
                   </td>
                   <td
                     class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
-                  >
-                  </td>
+                  ></td>
                 </tr>
               </tbody>
             </table>
@@ -340,7 +343,9 @@
                     Roles and Profile (HARP) account depending on your role.
                   </li>
                   <li>
-                    Once registered for the zONE, request access to the "CMS FDSH Services Repository" and "FDSH State Testing" communities.
+                    Once registered for the zONE, request access to the "CMS
+                    FDSH Services Repository" and "FDSH State Testing"
+                    communities.
                   </li>
                   <li>
                     Once registered and logged in, you can search for the
