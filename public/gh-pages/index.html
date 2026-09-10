@@ -13,9 +13,48 @@
   </head>
   <body class="bg-gray-50 min-h-screen">
     <div id="app" class="container mx-auto px-4 py-8" v-cloak>
-      <div class="flex justify-between items-center mb-8">
+      <div class="flex justify-between items-center mb-4">
         <h1 class="text-3xl font-bold text-gray-900">FDSH Exploratory View</h1>
-        <span class="text-sm text-gray-500">Static GitHub Pages Version</span>
+        <span class="text-sm text-gray-500">Beta Version -- Work In Progress </span>
+      </div>
+
+      <div
+        class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-8 rounded-r-md shadow-sm"
+      >
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg
+              class="h-5 w-5 text-blue-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-blue-700">
+              This tool is provided by the OHTP division to assist in navigating
+              the Federal Data Services Hub (FDSH). It is
+              <span class="font-semibold"
+                >not directly affiliated with the Federal Data Services
+                Hub</span
+              >.
+            </p>
+            <p class="text-sm text-blue-700 mt-2">
+              If you have questions or feedback, please
+              <a
+                href="https://github.com/DSACMS/fdsh-utils/issues"
+                target="_blank"
+                class="font-medium underline hover:text-blue-800"
+                >create a GitHub issue</a
+              >.
+            </p>
+          </div>
+        </div>
       </div>
 
       <div class="space-y-8">
@@ -48,7 +87,7 @@
             <input
               type="text"
               v-model="searchQuery"
-              placeholder="Search BSDs or purposes within active view..."
+              placeholder="Search Business Service Documents (BSDs) or purposes within active view..."
               class="block w-full rounded-md border-0 py-2.5 pl-4 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
             />
           </div>
@@ -67,7 +106,7 @@
             </h2>
             <span
               class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full"
-              >{{ experiments.length }} BSDs</span
+              >{{ experiments.length }} Business Service Documents (BSDs)</span
             >
           </div>
 
@@ -81,7 +120,7 @@
                     scope="col"
                     class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                   >
-                    BSD Document
+                    Business Service Document (BSD)
                   </th>
                   <th
                     scope="col"
@@ -174,7 +213,7 @@
                       <a
                         :href="exp.bsd_link"
                         class="flex items-center text-blue-600 hover:text-blue-900 transition"
-                        title="Download BSD Document"
+                        title="Download Business Service Document (BSD)"
                         target="_blank"
                       >
                         <svg
@@ -190,7 +229,7 @@
                             d="C7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
                           ></path>
                         </svg>
-                        BSD
+                        Business Service Document (BSD)
                       </a>
                     </div>
                   </td>
