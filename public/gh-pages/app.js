@@ -5,6 +5,8 @@ createApp({
     const allExperiments = ref([]);
     const activeSource = ref("All");
     const searchQuery = ref("");
+    const selectedSchema = ref(null);
+    const selectedSchemaName = ref("");
 
     const dataSources = computed(() => {
       const sources = allExperiments.value.map(
@@ -73,13 +75,21 @@ createApp({
       );
     };
 
+    const showSchema = (exp) => {
+      selectedSchema.value = exp.response_schema;
+      selectedSchemaName.value = exp.service_name;
+    };
+
     return {
       allExperiments,
       activeSource,
       searchQuery,
+      selectedSchema,
+      selectedSchemaName,
       dataSources,
       filteredGroupedExperiments,
       showFutureFeatureAlert,
+      showSchema,
     };
   },
 }).mount("#app");
