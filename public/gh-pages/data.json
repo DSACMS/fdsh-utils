@@ -857,19 +857,14 @@
       "title": "NSC (MH1) - Response Schema",
       "description": "Response Schema for National Student Clearinghouse (NSC) Service.",
       "type": "object",
-      "required": [
-        "nscResponse"
-      ],
+      "required": ["nscResponse"],
       "properties": {
         "nscResponse": {
           "oneOf": [
             {
               "description": "Business details of an NSC response.",
               "type": "object",
-              "required": [
-                "transactionDetails",
-                "responseMetadata"
-              ],
+              "required": ["transactionDetails", "responseMetadata"],
               "additionalProperties": false,
               "properties": {
                 "transactionDetails": {
@@ -901,10 +896,7 @@
                     "transactionStatusCode": {
                       "description": "Current status of the NSC transaction. Valid values: 'CNF' - Confirmed, 'UCF' - Unable to respond.",
                       "type": "string",
-                      "enum": [
-                        "CNF",
-                        "UCF"
-                      ]
+                      "enum": ["CNF", "UCF"]
                     },
                     "transactionFee": {
                       "description": "The fee per transaction, inclusive of school surcharges, if applicable. This will typically be 0.00.",
@@ -971,10 +963,7 @@
                       "maxItems": 5,
                       "items": {
                         "type": "object",
-                        "required": [
-                          "personGivenName",
-                          "personSurName"
-                        ],
+                        "required": ["personGivenName", "personSurName"],
                         "properties": {
                           "personGivenName": {
                             "$ref": "#/$defs/personGivenNameType"
@@ -1030,10 +1019,7 @@
                       "currentEnrollmentStatusCode": {
                         "description": "The current enrollment status of the student. Valid values include: 'CC' - Currently Enrolled, 'CN' - Currently not Enrolled.",
                         "type": "string",
-                        "enum": [
-                          "CC",
-                          "CN"
-                        ]
+                        "enum": ["CC", "CN"]
                       },
                       "enrollmentData": {
                         "type": "array",
@@ -1101,9 +1087,7 @@
             {
               "description": "An error response.",
               "type": "object",
-              "required": [
-                "responseMetadata"
-              ],
+              "required": ["responseMetadata"],
               "additionalProperties": false,
               "properties": {
                 "responseMetadata": {
@@ -1137,10 +1121,7 @@
         "responseMetadataType": {
           "description": "A set of details about a response (successful or not)",
           "type": "object",
-          "required": [
-            "responseCode",
-            "responseText"
-          ],
+          "required": ["responseCode", "responseText"],
           "additionalProperties": false,
           "properties": {
             "responseCode": {
