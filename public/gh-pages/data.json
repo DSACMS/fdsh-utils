@@ -1,6 +1,6 @@
 [
   {
-    "bsd_document": "dsh_rd_bsd_verification_of_qhp_aptc_and_csr_enrollment.docx",
+    "service_name": "Verification of QHP, APTC & CSR Enrollment",
     "primary_purpose": "QHP/APTC/CSR Enrollment Verification",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "⚠️ Indirect",
@@ -27,7 +27,7 @@
     ]
   },
   {
-    "bsd_document": "dsh_rd_bsd_ifsvv10_s55.docx",
+    "service_name": "Verify Annual Household Income and Family Size (IFSV)",
     "primary_purpose": "IFSV – Income & Family Size Verification",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "⚠️ Partial",
@@ -54,7 +54,7 @@
     ]
   },
   {
-    "bsd_document": "dsh_rd_bsd_mfausrmgtusrauthvipauth_s53_0.docx",
+    "service_name": "Medicaid Eligibility Service Hub (MESH) Veterans Disability Rating Service JavaScript Object Notation",
     "primary_purpose": "MFA / User Mgmt / Auth – Variant",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -89,7 +89,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_VA_RESTJSON_0.docx",
+    "service_name": "Medicaid Eligibility Service Hub (MESH) Veterans Disability Rating Service JavaScript Object Notation",
     "primary_purpose": "Veterans Disability Rating Service - REST/JSON Interface",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -112,7 +112,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_IFSV_RESTJSON_0.docx",
+    "service_name": "Annual Household Income and Family Size Verification (IFSV) REST JSON",
     "primary_purpose": "IFSV – REST/JSON Interface",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "⚠️ Partial",
@@ -143,7 +143,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_PVC.docx",
+    "service_name": "Periodic Verification Composite (PVC) Service",
     "primary_purpose": "PVC – Premium & Value Calculation",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -190,7 +190,7 @@
     ]
   },
   {
-    "bsd_document": "DSH-RD-BSD-APC-RESTJSON.docx",
+    "service_name": "Advance Payment Computation (APC) Representational State Transfer (REST) JavaScript Object Notation (JSON) Service Business Service Definition (BSD)",
     "primary_purpose": "APC – REST/JSON",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -221,7 +221,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_Reporting_to_IRS.docx",
+    "service_name": "IRS Monthly Reporting Service",
     "primary_purpose": "IRS Reporting",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "✅ Yes",
@@ -260,7 +260,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_HubConnectivity_RESTJSON.docx",
+    "service_name": "Hub Connectivity Representational State Transfer (REST) JavaScript Object Notation (JSON) Business Service Definition (BSD)",
     "primary_purpose": "Hub Connectivity – REST/JSON",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -279,7 +279,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_AT.docx",
+    "service_name": "Account Transfer Service",
     "primary_purpose": "AT – Account Transfer",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -370,7 +370,7 @@
     ]
   },
   {
-    "bsd_document": "dsh_int_icd_hub_state.docx",
+    "service_name": "State Hosted Service - Verify Non ESI MEC",
     "primary_purpose": "Hub ICD – State Integration",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -393,7 +393,7 @@
     ]
   },
   {
-    "bsd_document": "dsh_rd_bsd_verify_esi_mec_v7_s56.docx",
+    "service_name": "Verify_ESI_MEC",
     "primary_purpose": "Verify ESI MEC v7",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -420,7 +420,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_Reporting_to_IRS_1.docx",
+    "service_name": "Medicaid Eligibility Service Hub (MESH) Veterans Disability Rating Service JavaScript Object Notation",
     "primary_purpose": "IRS Reporting – Annual",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "✅ Yes",
@@ -463,7 +463,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_VerifyCurrentIncome_RESTJSON_0.docx",
+    "service_name": "Medicaid Eligibility Service Hub (MESH) Veterans Disability Rating Service JavaScript Object Notation",
     "primary_purpose": "Verify Current Income – REST/JSON Interface",
     "quarterly_wage_data": "✅ Primary",
     "yearly_wage_data": "✅ Primary",
@@ -494,7 +494,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_RIDP-RBA_Get Record_RESTJSON.docx",
+    "service_name": "Remote Identity Proofing Risk Based Alternative (RBA) and Get Record Service",
     "primary_purpose": "RIDP RBA – Get Record",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -565,7 +565,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_RRV.docx",
+    "service_name": "Renewal and Redetermination Verification (RRV) Composite Service (bulk)",
     "primary_purpose": "RRV – Batch Renewal/Redetermination",
     "quarterly_wage_data": "✅ Primary",
     "yearly_wage_data": "✅ Primary",
@@ -616,7 +616,7 @@
     ]
   },
   {
-    "bsd_document": "dsh_rd_bsd_ridp139_fars140.docx",
+    "service_name": "RIDP (H139) & FARS (H140)",
     "primary_purpose": "RIDP & FARS – Identity Proofing",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -643,7 +643,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_SSAComposite_RESTJSON_1.docx",
+    "service_name": "Social Security Administration (SSA) Composite Representational State Transfer (REST) JavaScript Object Notation (JSON) Business Service Definition (BSD)",
     "primary_purpose": "SSA Composite – REST/JSON Interface",
     "quarterly_wage_data": "⚠️ Partial (QC/Quarters)",
     "yearly_wage_data": "✅ (Title II Annual)",
@@ -670,7 +670,7 @@
     ]
   },
   {
-    "bsd_document": "dsh_rd_bsd_ssacompositev6-5_s60.docx",
+    "service_name": "SSAComposite",
     "primary_purpose": "SSA Composite Service",
     "quarterly_wage_data": "⚠️ Partial (QC/Quarters)",
     "yearly_wage_data": "✅ (Title II Annual)",
@@ -701,7 +701,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_Verify_ESI_MEC_RESTJSON.docx",
+    "service_name": "Verify Employer-Sponsored Insurance Minimum Essential Coverage (Verify ESI MEC) Representational State Transfer (REST) JavaScript Object Notation (JSON) Business Service Definition (BSD).",
     "primary_purpose": "Verify ESI MEC – REST/JSON",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -728,7 +728,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_VerifyNonESIMEC_RESTJSON (1).docx",
+    "service_name": "Verify Non-Employer Sponsored Insurance Minimum Essential Coverage (Verify Non-ESI MEC) REST JSON Business Service Definition (BSD)",
     "primary_purpose": "Verify Non-ESI MEC – REST/JSON",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -759,7 +759,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_VerifyNonESIMEC.docx",
+    "service_name": "VerifyNonEsiMecService",
     "primary_purpose": "Verify Non-ESI MEC",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -786,7 +786,7 @@
     ]
   },
   {
-    "bsd_document": "dsh_rd_bsd_mfausrmgtusrauthvipauth_s53.docx",
+    "service_name": "VeriSign Identity Protection (VIP) User Authentication",
     "primary_purpose": "MFA / User Mgmt / Auth",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -813,7 +813,7 @@
     ]
   },
   {
-    "bsd_document": "dsh_rd_bsd_mfausrmgtusrauthvipauth_s53_1.docx",
+    "service_name": "Medicaid Eligibility Service Hub (MESH) Veterans Disability Rating Service JavaScript Object Notation",
     "primary_purpose": "MFA / User Mgmt / Auth – Variant",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -840,7 +840,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_NSC_RESTJSON.docx",
+    "service_name": "Medicaid Eligibility Service HUB (MESH) National Student Clearinghouse Business Service Definition for Representational State Transfer JavaScript Object Notation",
     "primary_purpose": "National Student Clearinghouse Business Service - REST/JSON Interface",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -863,7 +863,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_VLP_v37.1_v2.docx",
+    "service_name": "Verify Lawful Presence v37.1 v2 Business Service Definition (v37.1 v2 )",
     "primary_purpose": "VLP v37.1 v2",
     "quarterly_wage_data": "❌",
     "yearly_wage_data": "❌",
@@ -898,7 +898,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_VLP_v38-DRAFT.docx",
+    "service_name": "Verify Lawful Presence v38 Business Service Definition (BSD)",
     "primary_purpose": "Verify Lawful Presence v38 Business Service Definition (BSD)",
     "quarterly_wage_data": "❌ No",
     "yearly_wage_data": "❌ No",
@@ -917,7 +917,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_VLP_v37.1.docx",
+    "service_name": "Verify Lawful Presence (VLP) v37.1 Business Service Definition (BSD)",
     "primary_purpose": "Verify Lawful Presence (VLP) v37.1 Business Service Definition (BSD)",
     "quarterly_wage_data": "❌ No",
     "yearly_wage_data": "❌ No",
@@ -948,7 +948,7 @@
     ]
   },
   {
-    "bsd_document": "DSH_RD_BSD_VLP_v37 - RED-LINE.docx",
+    "service_name": "Verify Lawful Presence V37",
     "primary_purpose": "Verify Lawful Presence V37",
     "quarterly_wage_data": "❌ No",
     "yearly_wage_data": "❌ No",
@@ -983,7 +983,7 @@
     ]
   },
   {
-    "bsd_document": "dsh_rd_bsd_vlp_v33.docx",
+    "service_name": "Verify Lawful Presence V33",
     "primary_purpose": "Verify Lawful Presence V33",
     "quarterly_wage_data": "❌ No",
     "yearly_wage_data": "❌ No",

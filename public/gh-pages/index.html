@@ -157,7 +157,7 @@
                     scope="col"
                     class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                   >
-                    Business Service Document (BSD)
+                    Service Name
                   </th>
                   <th
                     scope="col"
@@ -191,13 +191,13 @@
               <tbody class="divide-y divide-gray-200 bg-white">
                 <tr
                   v-for="exp in experiments"
-                  :key="exp.bsd_document"
+                  :key="exp.service_name"
                   class="hover:bg-gray-50 transition"
                 >
                   <td
-                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                    class="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 max-w-xs break-words"
                   >
-                    {{ exp.bsd_document }}
+                    {{ exp.service_name }}
                   </td>
                   <td
                     class="px-3 py-4 text-sm text-gray-500 max-w-xs break-words"
