@@ -26,9 +26,13 @@ createApp({
         const query = searchQuery.value.toLowerCase();
         filtered = filtered.filter(
           (exp) =>
-            exp.bsd_document.toLowerCase().includes(query) ||
+            exp.service_name.toLowerCase().includes(query) ||
             exp.primary_purpose.toLowerCase().includes(query) ||
-            (exp.notes && exp.notes.toLowerCase().includes(query)),
+            (exp.notes && exp.notes.toLowerCase().includes(query)) ||
+            (exp.document_links &&
+              exp.document_links.some((doc) =>
+                doc.name.toLowerCase().includes(query),
+              )),
         );
       }
 

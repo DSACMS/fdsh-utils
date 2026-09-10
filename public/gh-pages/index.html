@@ -13,11 +13,45 @@
   </head>
   <body class="bg-gray-50 min-h-screen">
     <div id="app" class="container mx-auto px-4 py-8" v-cloak>
+      <div
+        class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-4 rounded-r-md shadow-sm"
+      >
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg
+              class="h-5 w-5 text-amber-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-amber-700 font-bold">
+              Beta Version -- Work In Progress
+            </p>
+            <p class="text-sm text-amber-700 mt-1">
+              This tool is currently under development. Some features may be
+              incomplete or subject to change.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div class="flex justify-between items-center mb-4">
         <h1 class="text-3xl font-bold text-gray-900">FDSH Exploratory View</h1>
-        <span class="text-sm text-gray-500"
-          >Beta Version -- Work In Progress
-        </span>
+        <div class="flex items-center space-x-4">
+          <a
+            href="#faq"
+            class="text-sm font-medium text-blue-600 hover:text-blue-800 transition"
+            >FAQ & Help</a
+          >
+          <span class="text-sm text-gray-500">Static GitHub Pages Version</span>
+        </div>
       </div>
 
       <div
@@ -123,7 +157,7 @@
                     scope="col"
                     class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                   >
-                    Business Service Document (BSD)
+                    Service Name
                   </th>
                   <th
                     scope="col"
@@ -147,7 +181,7 @@
                     scope="col"
                     class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Resources
+                    Document Resources
                   </th>
                   <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                     <span class="sr-only">Actions</span>
@@ -157,13 +191,13 @@
               <tbody class="divide-y divide-gray-200 bg-white">
                 <tr
                   v-for="exp in experiments"
-                  :key="exp.bsd_document"
+                  :key="exp.service_name"
                   class="hover:bg-gray-50 transition"
                 >
                   <td
-                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                    class="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 max-w-xs break-words"
                   >
-                    {{ exp.bsd_document }}
+                    {{ exp.service_name }}
                   </td>
                   <td
                     class="px-3 py-4 text-sm text-gray-500 max-w-xs break-words"
@@ -194,48 +228,66 @@
                     {{ exp.notes }}
                   </td>
                   <td class="px-3 py-4 text-sm text-gray-500">
-                    <div class="flex flex-col space-y-1">
-                      <button
-                        @click="showFutureFeatureAlert"
-                        class="text-left text-blue-600 hover:text-blue-900 transition cursor-pointer"
+                    <div class="flex flex-col space-y-2">
+                      <div
+                        v-for="doc in exp.document_links"
+                        :key="doc.link"
+                        class="flex items-center"
                       >
-                        Testing Docs
-                      </button>
-                      <button
-                        @click="showFutureFeatureAlert"
-                        class="text-left text-blue-600 hover:text-blue-900 transition cursor-pointer"
+                        <a
+                          :href="doc.link"
+                          class="flex items-center text-blue-600 hover:text-blue-900 transition"
+                          :title="'Download ' + doc.name"
+                          target="_blank"
+                        >
+                          <svg
+                            class="w-4 h-4 mr-1 flex-shrink-0"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="C7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+                            ></path>
+                          </svg>
+                          <span class="truncate max-w-[150px]"
+                            >{{ doc.name }}</span
+                          >
+                        </a>
+                      </div>
+                      <div
+                        v-if="!exp.document_links || exp.document_links.length === 0"
                       >
-                        Schemas
-                      </button>
+                        <a
+                          :href="exp.bsd_link"
+                          class="flex items-center text-blue-600 hover:text-blue-900 transition"
+                          title="Download Business Service Document (BSD)"
+                          target="_blank"
+                        >
+                          <svg
+                            class="w-4 h-4 mr-1 flex-shrink-0"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="C7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+                            ></path>
+                          </svg>
+                          <span class="truncate max-w-[150px]">BSD</span>
+                        </a>
+                      </div>
                     </div>
                   </td>
                   <td
                     class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
-                  >
-                    <div class="flex justify-end items-center">
-                      <a
-                        :href="exp.bsd_link"
-                        class="flex items-center text-blue-600 hover:text-blue-900 transition"
-                        title="Download Business Service Document (BSD)"
-                        target="_blank"
-                      >
-                        <svg
-                          class="w-4 h-4 mr-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="C7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
-                          ></path>
-                        </svg>
-                        Business Service Document (BSD)
-                      </a>
-                    </div>
-                  </td>
+                  ></td>
                 </tr>
               </tbody>
             </table>
@@ -247,6 +299,63 @@
           class="text-center py-12"
         >
           <p class="text-gray-500">No matching experiments found.</p>
+        </div>
+
+        <div id="faq" class="mt-16 pt-8 border-t border-gray-200">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">
+            Frequently Asked Questions
+          </h2>
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">
+                How do I access the documents? It mentions a zONE?
+              </h3>
+              <p class="mt-2 text-gray-600">
+                Many of the Business Service Documents (BSDs) and technical
+                specifications are hosted on the CMS zONE portal. To access
+                these, you must have an active CMS zONE account.
+              </p>
+              <div
+                class="mt-4 bg-gray-50 p-4 rounded-md border border-gray-200"
+              >
+                <h4 class="text-sm font-bold text-gray-700 uppercase">
+                  Instructions to access CMS zONE:
+                </h4>
+                <ol
+                  class="mt-2 list-decimal ml-5 text-sm text-gray-600 space-y-2"
+                >
+                  <li>
+                    Visit the
+                    <a
+                      href="https://zone.cms.gov/"
+                      target="_blank"
+                      class="text-blue-600 underline hover:text-blue-800"
+                      >CMS zONE Portal</a
+                    >.
+                  </li>
+                  <li>
+                    If you don't have an account, you will need to register.
+                    Click on the "Register" link on the portal home page.
+                  </li>
+                  <li>
+                    Follow the registration instructions, which may require a
+                    CMS Enterprise Identity Management (EIDM) or HCQIS Access
+                    Roles and Profile (HARP) account depending on your role.
+                  </li>
+                  <li>
+                    Once registered for the zONE, request access to the "CMS
+                    FDSH Services Repository" and "FDSH State Testing"
+                    communities.
+                  </li>
+                  <li>
+                    Once registered and logged in, you can search for the
+                    specific FDSH documents or use the links provided in this
+                    tool.
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
