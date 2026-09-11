@@ -24,7 +24,8 @@
         "name": "Sprint_25_VerifyQHP-APTC-CSREnrollment.zip",
         "link": "https://zone.cms.gov/system/files/services/sprint_25_verifyqhp-aptc-csrenrollment.zip"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML"
   },
   {
     "service_name": "Verify Annual Household Income and Family Size (IFSV)",
@@ -51,7 +52,8 @@
         "name": "verifyAnnualHouseholdIncomeAndFamilySizeService-1.0.zip",
         "link": "https://zone.cms.gov/system/files/services/verifyannualhouseholdincomeandfamilysizeservice-1.0.zip"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML Batch"
   },
   {
     "service_name": "VeriSign Identity Protection (VIP) User Management",
@@ -86,7 +88,8 @@
         "name": "VIPAccess_ReleaseNotes_2_1_1.pdf",
         "link": "https://zone.cms.gov/system/files/services/vipaccess_releasenotes_2_1_1.pdf"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML"
   },
   {
     "service_name": "Medicaid Eligibility Service Hub (MESH) Veterans Disability Rating Service JavaScript Object Notation",
@@ -100,6 +103,183 @@
     "request_elements": "personGivenName, personMiddleName, personSurName, personBirthDate, personSocialSecurityNumber, personSexCode, streetLineOneAddress, streetLineTwoAddress, cityName, stateText, zipCode, countryText, telephoneNumber",
     "response_elements": "permanentAndTotalStatusIndicator, totalDisabilityStatusIndicator, totalDisabilityEffectiveDate, combinedDisabilityRatingPercentage, combinedEffectiveDate, legalEffectiveDate, individualRatings (decisionText, ratingEffectiveDate, ratingEndDate, ratingPercentage, disabilityRatingId, staticIndicator)",
     "bsd_link": "https://zone.cms.gov/system/files/services/1981/bsd/2026/07/DSH_RD_BSD_VA_RESTJSON_0.docx",
+    "response_schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "./VA-DR-Response-schema.jschema",
+      "title": "VA Disability Service (MH2) - Response Schema",
+      "description": "Response Schema for the U.S. Department of Veterans Affairs (VA) Disability Service.",
+      "type": "object",
+      "required": ["vadrResponse"],
+      "properties": {
+        "vadrResponse": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["ptdrInformation", "sdrInformation"],
+              "properties": {
+                "ptdrInformation": {
+                  "description": "Information relating to an individual's Permanent and Total Disability Rating (PTDR).",
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "required": [
+                        "permanentAndTotalStatusIndicator",
+                        "totalDisabilityStatusIndicator",
+                        "responseMetadata"
+                      ],
+                      "properties": {
+                        "permanentAndTotalStatusIndicator": {
+                          "description": "The PT status for service-connected disabilities.",
+                          "type": "boolean"
+                        },
+                        "totalDisabilityStatusIndicator": {
+                          "description": "Total disability status.",
+                          "type": "boolean"
+                        },
+                        "totalDisabilityEffectiveDate": {
+                          "description": "The date the service decision goes into effect. YYYY-MM-DD.",
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "responseMetadata": {
+                          "$ref": "#/$defs/responseMetadataType"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "required": ["responseMetadata"],
+                      "properties": {
+                        "responseMetadata": {
+                          "$ref": "#/$defs/responseMetadataType"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "sdrInformation": {
+                  "description": "Information relating to an individual's Summary Disability Rating (SDR).",
+                  "type": "object",
+                  "anyOf": [
+                    {
+                      "required": ["responseMetadata"],
+                      "properties": {
+                        "combinedDisabilityRatingPercentage": {
+                          "description": "The Veteran's combined disability rating percentage.",
+                          "type": "number"
+                        },
+                        "combinedEffectiveDate": {
+                          "description": "Date the Veteran can start receiving disability benefits. YYYY-MM-DD.",
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "legalEffectiveDate": {
+                          "description": "Date of a law change that affects a Veteran's disability compensation. YYYY-MM-DD.",
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "individualRatings": {
+                          "type": "array",
+                          "minItems": 1,
+                          "maxItems": 16,
+                          "items": {
+                            "description": "Information about each disability rating, which makes up the combined disability rating.",
+                            "type": "object",
+                            "properties": {
+                              "decisionText": {
+                                "description": "Returns explanations of VA's decision on a claimant's disability or on their claim for a benefit.",
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 50
+                              },
+                              "ratingEffectiveDate": {
+                                "description": "The date the service decision goes into effect. YYYY-MM-DD.",
+                                "type": "string",
+                                "format": "date"
+                              },
+                              "ratingEndDate": {
+                                "description": "The date the service decision expires. YYYY-MM-DD.",
+                                "type": "string",
+                                "format": "date"
+                              },
+                              "ratingPercentage": {
+                                "description": "The percentage of the assigned rating, based on the Veteran's disability.",
+                                "type": "number"
+                              },
+                              "disabilityRatingId": {
+                                "description": "The individual disability rating identifier. Numeric only.",
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 15,
+                                "pattern": "^[0-9]{1,15}$"
+                              },
+                              "staticIndicator": {
+                                "description": "The purpose of this field is to allow users to make a 'yes' or 'no' decision about re-examination for all disabilities that have not been determined to be static.",
+                                "type": "boolean"
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "responseMetadata": {
+                          "$ref": "#/$defs/responseMetadataType"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "required": ["responseMetadata"],
+                      "properties": {
+                        "responseMetadata": {
+                          "$ref": "#/$defs/responseMetadataType"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "description": "An error response.",
+              "type": "object",
+              "required": ["responseMetadata"],
+              "properties": {
+                "responseMetadata": {
+                  "$ref": "#/$defs/responseMetadataType"
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "$defs": {
+        "responseMetadataType": {
+          "description": "A set of details about a response (successful or not)",
+          "type": "object",
+          "required": ["responseCode", "responseText"],
+          "properties": {
+            "responseCode": {
+              "description": "A coded response: ME/MS/MX followed by 6 digits.",
+              "type": "string"
+            },
+            "responseText": {
+              "description": "A description of a response",
+              "type": "string"
+            },
+            "tdsResponseText": {
+              "description": "A description of a response from a data source designated as trusted (a trusted data source or TDS) by the Centers for Medicare and Medicaid Services.",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
     "document_links": [
       {
         "name": "DSH_RD_BSD_VA_RESTJSON.docx",
@@ -109,7 +289,8 @@
         "name": "VA-RD-JSON-Schema-Package-20260730.zip",
         "link": "https://zone.cms.gov/system/files/services/1981/addnl-files/2026/09/VA-RD-JSON-Schema-Package-20260730.zip"
       }
-    ]
+    ],
+    "protocol": "REST/JSON"
   },
   {
     "service_name": "Annual Household Income and Family Size Verification (IFSV) REST JSON",
@@ -140,7 +321,8 @@
         "name": "RJ009T_IFSV_SampleRESTProject.zip",
         "link": "https://zone.cms.gov/system/files/services/RJ009T_IFSV_SampleRESTProject.zip"
       }
-    ]
+    ],
+    "protocol": "REST/JSON"
   },
   {
     "service_name": "Periodic Verification Composite (PVC) Service",
@@ -187,7 +369,8 @@
         "name": "sprint_30_pvc_dmf_xsds_20140613.zip",
         "link": "https://zone.cms.gov/system/files/services/sprint_30_pvc_dmf_xsds_20140613_0.zip"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML"
   },
   {
     "service_name": "Advance Payment Computation (APC) Representational State Transfer (REST) JavaScript Object Notation (JSON) Service Business Service Definition (BSD)",
@@ -218,7 +401,8 @@
         "name": "RJ19_APTCV3_Project.zip",
         "link": "https://zone.cms.gov/system/files/services/RJ19_APTCV3_Project.zip"
       }
-    ]
+    ],
+    "protocol": "REST/JSON"
   },
   {
     "service_name": "IRS Monthly Reporting Service",
@@ -257,7 +441,10 @@
         "name": "IA_PHIII_S1.001c.zip",
         "link": "https://zone.cms.gov/system/files/services/IA_PHIII_S1.001c.zip"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML Batch",
+    "response_schema": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<xsd:schema xmlns:Q1=\"http://hix.cms.gov/0.1/hix-core\" xmlns:ext=\"http://bdshfferesp.dsh.cms.gov/extension/1.0\" xmlns:hix-core=\"http://hix.cms.gov/0.1/hix-core\" xmlns:i=\"http://niem.gov/niem/appinfo/2.0\" xmlns:i2=\"http://niem.gov/niem/appinfo/2.1\" xmlns:nc=\"http://niem.gov/niem/niem-core/2.0\" xmlns:niem-xsd=\"http://niem.gov/niem/proxy/xsd/2.0\" xmlns:s=\"http://niem.gov/niem/structures/2.0\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" attributeFormDefault=\"qualified\" elementFormDefault=\"qualified\" targetNamespace=\"http://bdshfferesp.dsh.cms.gov/extension/1.0\" version=\"1\">\r\n  <xsd:annotation>\r\n    <xsd:appinfo>\r\n      <i:ConformantIndicator>true</i:ConformantIndicator>\r\n    </xsd:appinfo>\r\n    <xsd:documentation source=\"\">An extension model with additional components for submitting one transmission from a batch, with multiple attachments.</xsd:documentation>\r\n  </xsd:annotation>\r\n  <xsd:import namespace=\"http://hix.cms.gov/0.1/hix-core\" schemaLocation=\"../.././XMLschemas/niem/domains/hix/0.1/hix-core/hix-core.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/appinfo/2.0\" schemaLocation=\"../../XMLschemas/subset/niem/appinfo/2.0/appinfo.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/appinfo/2.1\" schemaLocation=\"../../XMLschemas/subset/niem/appinfo/2.1/appinfo.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/niem-core/2.0\" schemaLocation=\"../.././XMLschemas/niem/niem-core.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/proxy/xsd/2.0\" schemaLocation=\"../../XMLschemas/subset/niem/proxy/xsd/2.0/xsd.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/structures/2.0\" schemaLocation=\"../../XMLschemas/subset/niem/structures/2.0/structures.xsd\"/>\r\n  <xsd:element abstract=\"false\" name=\"Attachment\" type=\"ext:RequestDocumentType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">An attachment (electronic document).</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"BatchCategoryCode\" substitutionGroup=\"hix-core:BatchCategory\" type=\"ext:BatchCategoryCodeSimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"BatchCategory\" i:namespace=\"http://hix.cms.gov/0.1/hix-core\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A kind of QHP batch submission.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"EFTFileName\" type=\"niem-xsd:string\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A Documented Component</xsd:documentation>\r\n      <xsd:documentation source=\"\">A name for the file transferred through the Enterprise File Transfer process</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"MissingDocumentSequenceID\" type=\"ext:RestrictedMinimumQuantitySimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A Documented Component</xsd:documentation>\r\n      <xsd:documentation source=\"\">A Documented Component</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"OriginalBatchID\" type=\"ext:RestrictedBatchIDSimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A Documented Component</xsd:documentation>\r\n      <xsd:documentation source=\"\">The original batch ID </xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"ReportPeriod\" type=\"nc:DateType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">Reporting period of the data being reported for. Year for YEarly and Month &amp; Year for Monthly</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"SHA256HashValueText\" substitutionGroup=\"hix-core:ChecksumText\" type=\"niem-xsd:string\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"ChecksumText\" i:namespace=\"http://hix.cms.gov/0.1/hix-core\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A Documented Component</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"ServiceSpecificData\" nillable=\"false\" type=\"ext:ServiceSpecificDataType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">Service specific data</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:simpleType name=\"BatchCategoryCodeSimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for Cummulative list of predetermined values identifying each possible kind of batch processing. (List will be updated as new bulk services are implemented)</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:restriction base=\"xsd:token\">\r\n      <xsd:enumeration value=\"IRS_EOM_SUCCESS_RESP\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies a successful processing of End of Month Request</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_ERROR_RESP\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies a failure in the End of month Request processing</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_FILE_REJECTED_RESP\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies end of Month file rejected response</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_RESUBMISSION_REJECTED_RESP\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies end of month resubmission rejected response</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_MISSING_FILE_RESP\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies end of month missing file response</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_DUPLICATE_FILE_REJECTED_RESP\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies end of month, rejected due to duplicate file response</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_ORIGINAL_SUBMISSION_REJECTED_RESP\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies end of month original submission rejection response</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_DUPLICATE_SUBMISSION_REJECTED_RESP\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies end of month, duplicate submission rejected response</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_ACK_RESP\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies and acknowledgment for end of month file</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_NACK_BATCH_REJECTED_BY_HUB_RESP\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies an End of Month Batch transmission rejected by Hub</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_NACK_FILE_REJECTED_AT_IRS_PORTAL_RESP\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies an End of Month file transmission rejected by IRS Portal</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_NACK_FILE_REJECTED_BY_IRS_RESP\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies an End of Month file transmission rejected by IRS back-end system</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n    </xsd:restriction>\r\n  </xsd:simpleType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"BatchRequestType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for a single transmission within a larger batch.</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:extension base=\"s:ComplexObjectType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:BatchMetadata\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"0\" ref=\"hix-core:TransmissionMetadata\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"0\" ref=\"ext:ServiceSpecificData\"/>\r\n          <xsd:element maxOccurs=\"unbounded\" minOccurs=\"0\" ref=\"ext:Attachment\"/>\r\n        </xsd:sequence>\r\n      </xsd:extension>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"RequestDocumentType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"RestrictedDocumentType\" i:namespace=\"http://bdshfferesp.dsh.cms.gov/extension/1.0\"/>\r\n      </xsd:appinfo>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:extension base=\"ext:RestrictedDocumentType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"0\" ref=\"hix-core:ResponseMetadata\"/>\r\n        </xsd:sequence>\r\n      </xsd:extension>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n  <xsd:simpleType name=\"RestrictedBatchIDSimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n    </xsd:annotation>\r\n    <xsd:restriction base=\"xsd:dateTime\">\r\n      <xsd:pattern value=\"[1-9][0-9]{3}\\-.+T[^\\.]+(Z|[\\+\\-].+)\"/>\r\n    </xsd:restriction>\r\n  </xsd:simpleType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"RestrictedDocumentType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"DocumentType\" i:namespace=\"http://niem.gov/niem/niem-core/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for a subset of an attachment needed for a request.</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:restriction base=\"nc:DocumentType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"0\" ref=\"nc:DocumentBinary\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"0\" ref=\"nc:DocumentFileName\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"0\" ref=\"nc:DocumentSequenceID\"/>\r\n        </xsd:sequence>\r\n      </xsd:restriction>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"RestrictedMinimumOneQuantityType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n    </xsd:annotation>\r\n    <xsd:simpleContent>\r\n      <xsd:restriction base=\"nc:QuantityType\">\r\n        <xsd:minInclusive value=\"1\"/>\r\n        <xsd:pattern value=\"[0-9]*\"/>\r\n        <xsd:attributeGroup ref=\"s:SimpleObjectAttributeGroup\"/>\r\n      </xsd:restriction>\r\n    </xsd:simpleContent>\r\n  </xsd:complexType>\r\n  <xsd:simpleType name=\"RestrictedMinimumQuantitySimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for A restriction to allow a minimum of 1 quantity</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:restriction base=\"xsd:integer\">\r\n      <xsd:minInclusive value=\"1\"/>\r\n    </xsd:restriction>\r\n  </xsd:simpleType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"RestrictedMinimumZeroQuantityType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n    </xsd:annotation>\r\n    <xsd:simpleContent>\r\n      <xsd:restriction base=\"nc:QuantityType\">\r\n        <xsd:maxInclusive value=\"99999\"/>\r\n        <xsd:minInclusive value=\"0\"/>\r\n        <xsd:pattern value=\"[0-9]*\"/>\r\n        <xsd:attributeGroup ref=\"s:SimpleObjectAttributeGroup\"/>\r\n      </xsd:restriction>\r\n    </xsd:simpleContent>\r\n  </xsd:complexType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"RestrictedNonNegativeDecimalMinimumOneType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n    </xsd:annotation>\r\n    <xsd:simpleContent>\r\n      <xsd:restriction base=\"nc:NonNegativeDecimalType\">\r\n        <xsd:minInclusive value=\"1\"/>\r\n        <xsd:pattern value=\"[0-9]*\"/>\r\n        <xsd:attributeGroup ref=\"s:SimpleObjectAttributeGroup\"/>\r\n      </xsd:restriction>\r\n    </xsd:simpleContent>\r\n  </xsd:complexType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"ServiceSpecificDataType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for A datatyoe for holding service specific data</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:extension base=\"s:ComplexObjectType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"0\" ref=\"ext:ReportPeriod\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"0\" ref=\"ext:OriginalBatchID\"/>\r\n          <xsd:element maxOccurs=\"unbounded\" minOccurs=\"0\" ref=\"hix-core:ResponseMetadata\"/>\r\n          <xsd:element maxOccurs=\"unbounded\" minOccurs=\"0\" ref=\"ext:MissingDocumentSequenceID\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"0\" ref=\"ext:EFTFileName\"/>\r\n        </xsd:sequence>\r\n      </xsd:extension>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n</xsd:schema>\r\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<xsd:schema xmlns:ext=\"http://bdshfferesp.dsh.cms.gov/extension/1.0\" xmlns:hix-core=\"http://hix.cms.gov/0.1/hix-core\" xmlns:i=\"http://niem.gov/niem/appinfo/2.0\" xmlns:i2=\"http://niem.gov/niem/appinfo/2.1\" xmlns:nc=\"http://niem.gov/niem/niem-core/2.0\" xmlns:niem-xsd=\"http://niem.gov/niem/proxy/xsd/2.0\" xmlns:s=\"http://niem.gov/niem/structures/2.0\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" attributeFormDefault=\"qualified\" elementFormDefault=\"qualified\" targetNamespace=\"http://hix.cms.gov/0.1/hix-core\" version=\"&quot;1&quot;\">\r\n  <xsd:annotation>\r\n    <xsd:appinfo>\r\n      <i:ConformantIndicator>true</i:ConformantIndicator>\r\n    </xsd:appinfo>\r\n    <xsd:documentation source=\"\">A reference model containing data components that either a) are good candidates for inclusion in NIEM-Core or b) are needed to support web services.</xsd:documentation>\r\n  </xsd:annotation>\r\n  <xsd:import namespace=\"http://bdshfferesp.dsh.cms.gov/extension/1.0\" schemaLocation=\"../../../../../.././XMLschemas/extension/ExtensionModel.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/appinfo/2.0\" schemaLocation=\"../../../../../../XMLschemas/subset/niem/appinfo/2.0/appinfo.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/appinfo/2.1\" schemaLocation=\"../../../../../../XMLschemas/subset/niem/appinfo/2.1/appinfo.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/niem-core/2.0\" schemaLocation=\"../../../../../.././XMLschemas/niem/niem-core.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/proxy/xsd/2.0\" schemaLocation=\"../../../../../../XMLschemas/subset/niem/proxy/xsd/2.0/xsd.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/structures/2.0\" schemaLocation=\"../../../../../../XMLschemas/subset/niem/structures/2.0/structures.xsd\"/>\r\n  <xsd:element abstract=\"false\" name=\"BatchAttachmentTotalQuantity\" type=\"nc:QuantityType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A count of the total number of attachments in a batch submission (across all transmissions).</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"true\" name=\"BatchCategory\" type=\"xsd:anyType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A data concept for a kind of batch submission.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"BatchID\" type=\"niem-xsd:string\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">An identifier of a batch submission. This identifier is shared by all the individual transmissions in the batch.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"BatchMetadata\" type=\"hix-core:BatchMetadataType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A Metadata about batch submission of data (often broken into multiple separate transmissions).</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"BatchPartnerID\" type=\"niem-xsd:string\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">An identifier for a participant in the health insurance exchange ecosystem.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"BatchTransmissionQuantity\" type=\"nc:QuantityType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A count of the number of transmissions in a batch submission (in K of N, the transmission quantity is N).</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"BinaryMIMEFormatID\" nillable=\"true\" type=\"niem-xsd:string\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A Multipurpose Internet Mail Extensions (MIME) identifier for a content type of a binary object.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"BinarySizeValue\" nillable=\"false\" type=\"nc:NonNegativeDecimalType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A size of a binary object in bytes. (This property differs from nc:BinarySizeValue only in the units of measure.)</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"ChecksumAugmentation\" substitutionGroup=\"s:Augmentation\" type=\"hix-core:ChecksumAugmentationType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">Supplements an object with checksum information, often used to detect errors in transmission.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"true\" name=\"ChecksumText\" nillable=\"true\" type=\"niem-xsd:string\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A checksum value.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"true\" name=\"Response\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A data concept for a response made to a request.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"ResponseCode\" nillable=\"false\" substitutionGroup=\"hix-core:Response\" type=\"nc:TextType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Response\" i:namespace=\"http://hix.cms.gov/0.1/hix-core\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A coded response.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"ResponseDescriptionText\" substitutionGroup=\"hix-core:Response\" type=\"nc:TextType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Response\" i:namespace=\"http://hix.cms.gov/0.1/hix-core\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A description of a response.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"ResponseMetadata\" type=\"hix-core:ResponseMetadataType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A Metadata about a response.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"TDSResponseDescriptionText\" nillable=\"false\" substitutionGroup=\"hix-core:Response\" type=\"nc:TextType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Response\" i:namespace=\"http://hix.cms.gov/0.1/hix-core\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A description of a response from a data source designated as trusted (a trusted data source or TDS) by the Centers for Medicare &amp; Medicaid Services.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"TransmissionAttachmentQuantity\" type=\"nc:QuantityType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A count of the number of attachments included in a single transmission message.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"TransmissionMetadata\" type=\"hix-core:TransmissionMetadataType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A Metadata about a single message as part of a batch submission.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"TransmissionSequenceID\" type=\"niem-xsd:nonNegativeInteger\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">An identifier used to order transmissions in a batch (in K of N, a sequence id is K).</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"BatchMetadataType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"MetadataType\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n        <i:AppliesTo i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n        <i:AppliesTo i:name=\"Association\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for metadata about batch submission of data (often broken into multiple separate transmissions).</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:extension base=\"s:MetadataType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"0\" ref=\"hix-core:BatchID\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"0\" ref=\"hix-core:BatchPartnerID\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"0\" ref=\"hix-core:BatchAttachmentTotalQuantity\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:BatchCategory\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"0\" ref=\"hix-core:BatchTransmissionQuantity\"/>\r\n        </xsd:sequence>\r\n      </xsd:extension>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"BinaryType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>true<AugmentedTypeIndicator xmlns=\"http://niem.gov/niem/appinfo/2.1\">true</AugmentedTypeIndicator>\r\n        <i:Base i:name=\"BinaryType\" i:namespace=\"http://niem.gov/niem/niem-core/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for a digital representation of an object encoded in a binary format.</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:extension base=\"nc:BinaryType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:ChecksumAugmentation\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:BinarySizeValue\"/>\r\n        </xsd:sequence>\r\n      </xsd:extension>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"ChecksumAugmentationType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"AugmentationType\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type that supplements an object with checksum information, often used to detect errors in transmission.</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:extension base=\"s:AugmentationType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"ext:SHA256HashValueText\"/>\r\n        </xsd:sequence>\r\n      </xsd:extension>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"ResponseMetadataType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"MetadataType\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n        <i:AppliesTo i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n        <i:AppliesTo i:name=\"Association\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for metadata about a response.</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:extension base=\"s:MetadataType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:ResponseDescriptionText\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"0\" ref=\"hix-core:TDSResponseDescriptionText\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:ResponseCode\"/>\r\n        </xsd:sequence>\r\n      </xsd:extension>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"TransmissionMetadataType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"MetadataType\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n        <i:AppliesTo i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n        <i:AppliesTo i:name=\"Association\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for metadata about a single message as part of a batch submission.</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:extension base=\"s:MetadataType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:TransmissionAttachmentQuantity\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:TransmissionSequenceID\"/>\r\n        </xsd:sequence>\r\n      </xsd:extension>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n</xsd:schema>\r\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<xsd:schema xmlns:exch=\"http://bdshfferesp.dsh.cms.gov/exchange/1.0\" xmlns:ext=\"http://bdshfferesp.dsh.cms.gov/extension/1.0\" xmlns:i=\"http://niem.gov/niem/appinfo/2.0\" xmlns:i2=\"http://niem.gov/niem/appinfo/2.1\" xmlns:niem-xsd=\"http://niem.gov/niem/proxy/xsd/2.0\" xmlns:s=\"http://niem.gov/niem/structures/2.0\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" attributeFormDefault=\"qualified\" elementFormDefault=\"qualified\" targetNamespace=\"http://bdshfferesp.dsh.cms.gov/exchange/1.0\" version=\"1\">\r\n  <xsd:annotation>\r\n    <xsd:appinfo>\r\n      <i:ConformantIndicator>true</i:ConformantIndicator>\r\n    </xsd:appinfo>\r\n    <xsd:documentation source=\"\">An exchange model for submitting one transmission from a batch, with multiple attachments.</xsd:documentation>\r\n  </xsd:annotation>\r\n  <xsd:import namespace=\"http://bdshfferesp.dsh.cms.gov/extension/1.0\" schemaLocation=\"../.././XMLschemas/extension/ExtensionModel.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/appinfo/2.0\" schemaLocation=\"../../XMLschemas/subset/niem/appinfo/2.0/appinfo.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/appinfo/2.1\" schemaLocation=\"../../XMLschemas/subset/niem/appinfo/2.1/appinfo.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/proxy/xsd/2.0\" schemaLocation=\"../../XMLschemas/subset/niem/proxy/xsd/2.0/xsd.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/structures/2.0\" schemaLocation=\"../../XMLschemas/subset/niem/structures/2.0/structures.xsd\"/>\r\n  <xsd:element abstract=\"false\" name=\"BatchHandlingServiceRequest\" nillable=\"false\" type=\"ext:BatchRequestType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A single transmission within a larger batch.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n</xsd:schema>\r\n",
+    "request_schema": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<xsd:schema xmlns:Q1=\"http://hix.cms.gov/0.1/hix-core\" xmlns:ext=\"http://birsrep.dsh.cms.gov/extension/1.0\" xmlns:hix-core=\"http://hix.cms.gov/0.1/hix-core\" xmlns:i=\"http://niem.gov/niem/appinfo/2.0\" xmlns:i2=\"http://niem.gov/niem/appinfo/2.1\" xmlns:nc=\"http://niem.gov/niem/niem-core/2.0\" xmlns:niem-xsd=\"http://niem.gov/niem/proxy/xsd/2.0\" xmlns:s=\"http://niem.gov/niem/structures/2.0\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" attributeFormDefault=\"qualified\" elementFormDefault=\"qualified\" targetNamespace=\"http://birsrep.dsh.cms.gov/extension/1.0\" version=\"1\">\r\n  <xsd:annotation>\r\n    <xsd:appinfo>\r\n      <i:ConformantIndicator>true</i:ConformantIndicator>\r\n    </xsd:appinfo>\r\n    <xsd:documentation source=\"\">An extension model with additional components for submitting one transmission from a batch, with multiple attachments.</xsd:documentation>\r\n  </xsd:annotation>\r\n  <xsd:import namespace=\"http://hix.cms.gov/0.1/hix-core\" schemaLocation=\"../.././XMLschemas/niem/domains/hix/0.1/hix-core/hix-core.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/appinfo/2.0\" schemaLocation=\"../../XMLschemas/subset/niem/appinfo/2.0/appinfo.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/appinfo/2.1\" schemaLocation=\"../../XMLschemas/subset/niem/appinfo/2.1/appinfo.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/niem-core/2.0\" schemaLocation=\"../.././XMLschemas/niem/niem-core.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/proxy/xsd/2.0\" schemaLocation=\"../../XMLschemas/subset/niem/proxy/xsd/2.0/xsd.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/structures/2.0\" schemaLocation=\"../../XMLschemas/subset/niem/structures/2.0/structures.xsd\"/>\r\n  <xsd:element abstract=\"false\" name=\"Attachment\" type=\"ext:RequestDocumentType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">An attachment (electronic document).</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"BatchCategoryCode\" substitutionGroup=\"hix-core:BatchCategory\" type=\"ext:BatchCategoryCodeSimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"BatchCategory\" i:namespace=\"http://hix.cms.gov/0.1/hix-core\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A kind of QHP batch submission.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"OriginalBatchID\" type=\"ext:RestrictedBatchIDSimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">The Original batch ID for which a resubmission is being done.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"ReportPeriod\" type=\"nc:DateType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">Reporting period of the data being reported for. Year for YEarly and Month &amp; Year for Monthly</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"SHA256HashValueText\" substitutionGroup=\"hix-core:ChecksumText\" type=\"ext:RestrictedSHA256HashValueSimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"ChecksumText\" i:namespace=\"http://hix.cms.gov/0.1/hix-core\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A SHA (Secure Hash Algorithm) value computed using the SHA-256 algorithm.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"ServiceSpecificData\" nillable=\"false\" type=\"ext:ServiceSpecificDataType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">Service specific data</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:simpleType name=\"BatchCategoryCodeSimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for Cummulative list of predetermined values identifying each possible kind of batch processing. (List will be updated as new bulk services are implemented)</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:restriction base=\"xsd:token\">\r\n      <xsd:enumeration value=\"IRS_EOM_IND_REQ\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies End of Month Request processing for an Individual Marketplace</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_IND_RESUBMIT_FILE_REQ\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies End of Month Resubmit file request for an Individual Marketplace</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_IND_RESUBMIT_BATCH_REQ\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies End of month resubmit batch request for an Individual Marketplace</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_IND_RESUBMIT_MISSING_FILE_REQ\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies End of month resubmit missing file request for an Individual Marketplace</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_SHOP_REQ\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies End of Month Request processing for SHOP Marketplace</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_SHOP_RESUBMIT_FILE_REQ\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies End of Month Resubmit file request for SHOP Marketplace</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_SHOP_RESUBMIT_BATCH_REQ\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies End of month resubmit batch request for SHOP Marketplace</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_SHOP_RESUBMIT_MISSING_FILE_REQ\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies End of month resubmit missing file request for SHOP Marketplace</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_IND_RESUBMIT_FILE_PORTAL_REJECTION_REQ\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies End of Month Resubmit file request for IRS Portal Rejection Response Individual Marketplace receives from IRS.</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_IND_RESUBMIT_BATCH_PORTAL_REJECTION_REQ\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies End of Month Resubmit batch request for IRS Portal Rejection Response Individual Marketplace receives from IRS.</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_SHOP_RESUBMIT_FILE_PORTAL_REJECTION_REQ\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies End of Month Resubmit file request for IRS Portal Rejection Response SHOP Marketplace receives from IRS.</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n      <xsd:enumeration value=\"IRS_EOM_SHOP_RESUBMIT_BATCH_PORTAL_REJECTION_REQ\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">Identifies End of Month Resubmit batch request for IRS Portal Rejection Response SHOP Marketplace receives from IRS.</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n    </xsd:restriction>\r\n  </xsd:simpleType>\r\n  <xsd:simpleType name=\"BatchPartnerIDSimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n    </xsd:annotation>\r\n    <xsd:restriction base=\"xsd:string\">\r\n      <xsd:pattern value=\"[0-9]{2}\\.[a-zA-Z]{2}[a-zA-Z*]{1}\\.[a-zA-Z0-9]{3}\\.[0-9]{3}\\.[0-9]{3}\"/>\r\n    </xsd:restriction>\r\n  </xsd:simpleType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"BatchRequestType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for a single transmission within a larger batch.</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:extension base=\"s:ComplexObjectType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:BatchMetadata\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:TransmissionMetadata\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"ext:ServiceSpecificData\"/>\r\n          <xsd:element maxOccurs=\"unbounded\" minOccurs=\"1\" ref=\"ext:Attachment\"/>\r\n        </xsd:sequence>\r\n      </xsd:extension>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n  <xsd:simpleType name=\"BinaryMIMEFormatCodeSimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for An enumerated datatype for the possible MIME type values.</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:restriction base=\"xsd:string\">\r\n      <xsd:enumeration value=\"application/xml\">\r\n        <xsd:annotation>\r\n          <xsd:documentation source=\"\">A code indicating an xml file.</xsd:documentation>\r\n        </xsd:annotation>\r\n      </xsd:enumeration>\r\n    </xsd:restriction>\r\n  </xsd:simpleType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"RequestDocumentType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"DocumentType\" i:namespace=\"http://niem.gov/niem/niem-core/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for a subset of an attachment needed for a request.</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:restriction base=\"nc:DocumentType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"nc:DocumentBinary\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"nc:DocumentFileName\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"nc:DocumentSequenceID\"/>\r\n        </xsd:sequence>\r\n      </xsd:restriction>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n  <xsd:simpleType name=\"RestrictedBatchIDSimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n    </xsd:annotation>\r\n    <xsd:restriction base=\"xsd:dateTime\">\r\n      <xsd:pattern value=\"[1-9][0-9]{3}\\-.+T[^\\.]+Z\"/>\r\n    </xsd:restriction>\r\n  </xsd:simpleType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"RestrictedBatchQuantityType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n    </xsd:annotation>\r\n    <xsd:simpleContent>\r\n      <xsd:restriction base=\"nc:QuantityType\">\r\n        <xsd:maxInclusive value=\"99999\"/>\r\n        <xsd:minInclusive value=\"1\"/>\r\n        <xsd:pattern value=\"[0-9]*\"/>\r\n        <xsd:attributeGroup ref=\"s:SimpleObjectAttributeGroup\"/>\r\n      </xsd:restriction>\r\n    </xsd:simpleContent>\r\n  </xsd:complexType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"RestrictedDocumentFileNameType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n    </xsd:annotation>\r\n    <xsd:simpleContent>\r\n      <xsd:restriction base=\"nc:TextType\">\r\n        <xsd:length value=\"41\"/>\r\n        <xsd:pattern value=\"EOM_Request_(0000[1-9]|000[1-9][0-9]|00[1-9][0-9][0-9]|0[1-9][0-9][0-9][0-9]|[1-9][0-9][0-9][0-9][0-9])_[1-9][0-9]{3}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])T([0-1][0-9]|2[0-3])([0-5][0-9])([0-5][0-9])[0-9]{3}Z\\.xml\"/>\r\n        <xsd:attributeGroup ref=\"s:SimpleObjectAttributeGroup\"/>\r\n      </xsd:restriction>\r\n    </xsd:simpleContent>\r\n  </xsd:complexType>\r\n  <xsd:simpleType name=\"RestrictedDocumentSequenceIDSimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n    </xsd:annotation>\r\n    <xsd:restriction base=\"xsd:string\">\r\n      <xsd:length value=\"5\"/>\r\n      <xsd:pattern value=\"(0000[1-9]|000[1-9][0-9]|00[1-9][0-9][0-9]|0[1-9][0-9][0-9][0-9]|[1-9][0-9][0-9][0-9][0-9])\"/>\r\n    </xsd:restriction>\r\n  </xsd:simpleType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"RestrictedMinimumQuantityType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n    </xsd:annotation>\r\n    <xsd:simpleContent>\r\n      <xsd:restriction base=\"nc:QuantityType\">\r\n        <xsd:minInclusive value=\"1\"/>\r\n        <xsd:pattern value=\"[0-9]*\"/>\r\n        <xsd:attributeGroup ref=\"s:SimpleObjectAttributeGroup\"/>\r\n      </xsd:restriction>\r\n    </xsd:simpleContent>\r\n  </xsd:complexType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"RestrictedNonNegativeDecimalType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n    </xsd:annotation>\r\n    <xsd:simpleContent>\r\n      <xsd:restriction base=\"nc:NonNegativeDecimalType\">\r\n        <xsd:minInclusive value=\"1\"/>\r\n        <xsd:pattern value=\"[0-9]*\"/>\r\n        <xsd:attributeGroup ref=\"s:SimpleObjectAttributeGroup\"/>\r\n      </xsd:restriction>\r\n    </xsd:simpleContent>\r\n  </xsd:complexType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"RestrictedQuantityType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n    </xsd:annotation>\r\n    <xsd:simpleContent>\r\n      <xsd:restriction base=\"nc:QuantityType\">\r\n        <xsd:maxInclusive value=\"1\"/>\r\n        <xsd:minInclusive value=\"1\"/>\r\n        <xsd:pattern value=\"[0-9]*\"/>\r\n        <xsd:attributeGroup ref=\"s:SimpleObjectAttributeGroup\"/>\r\n      </xsd:restriction>\r\n    </xsd:simpleContent>\r\n  </xsd:complexType>\r\n  <xsd:simpleType name=\"RestrictedSHA256HashValueSimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n    </xsd:annotation>\r\n    <xsd:restriction base=\"xsd:string\">\r\n      <xsd:pattern value=\"[0-9A-Fa-f]{64}\"/>\r\n    </xsd:restriction>\r\n  </xsd:simpleType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"ServiceSpecificDataType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for A datatyoe for holding service specific data</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:extension base=\"s:ComplexObjectType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"ext:ReportPeriod\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"0\" ref=\"ext:OriginalBatchID\"/>\r\n        </xsd:sequence>\r\n      </xsd:extension>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n</xsd:schema>\r\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<xsd:schema xmlns:ext=\"http://birsrep.dsh.cms.gov/extension/1.0\" xmlns:hix-core=\"http://hix.cms.gov/0.1/hix-core\" xmlns:i=\"http://niem.gov/niem/appinfo/2.0\" xmlns:i2=\"http://niem.gov/niem/appinfo/2.1\" xmlns:nc=\"http://niem.gov/niem/niem-core/2.0\" xmlns:niem-xsd=\"http://niem.gov/niem/proxy/xsd/2.0\" xmlns:s=\"http://niem.gov/niem/structures/2.0\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" attributeFormDefault=\"qualified\" elementFormDefault=\"qualified\" targetNamespace=\"http://hix.cms.gov/0.1/hix-core\" version=\"&quot;1&quot;\">\r\n  <xsd:annotation>\r\n    <xsd:appinfo>\r\n      <i:ConformantIndicator>true</i:ConformantIndicator>\r\n    </xsd:appinfo>\r\n    <xsd:documentation source=\"\">A reference model containing data components that either a) are good candidates for inclusion in NIEM-Core or b) are needed to support web services.</xsd:documentation>\r\n  </xsd:annotation>\r\n  <xsd:import namespace=\"http://birsrep.dsh.cms.gov/extension/1.0\" schemaLocation=\"../../../../../.././XMLschemas/extension/ExtensionModel.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/appinfo/2.0\" schemaLocation=\"../../../../../../XMLschemas/subset/niem/appinfo/2.0/appinfo.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/appinfo/2.1\" schemaLocation=\"../../../../../../XMLschemas/subset/niem/appinfo/2.1/appinfo.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/niem-core/2.0\" schemaLocation=\"../../../../../.././XMLschemas/niem/niem-core.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/proxy/xsd/2.0\" schemaLocation=\"../../../../../../XMLschemas/subset/niem/proxy/xsd/2.0/xsd.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/structures/2.0\" schemaLocation=\"../../../../../../XMLschemas/subset/niem/structures/2.0/structures.xsd\"/>\r\n  <xsd:element abstract=\"false\" name=\"BatchAttachmentTotalQuantity\" type=\"nc:QuantityType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A count of the total number of attachments in a batch submission (across all transmissions).</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"true\" name=\"BatchCategory\" type=\"xsd:anyType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A data concept for a kind of batch submission.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"BatchID\" type=\"niem-xsd:string\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">An identifier of a batch submission. This identifier is shared by all the individual transmissions in the batch.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"BatchMetadata\" type=\"hix-core:BatchMetadataType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A Metadata about batch submission of data (often broken into multiple separate transmissions).</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"BatchPartnerID\" type=\"niem-xsd:string\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">An identifier for a participant in the health insurance exchange ecosystem.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"BatchTransmissionQuantity\" type=\"nc:QuantityType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A count of the number of transmissions in a batch submission (in K of N, the transmission quantity is N).</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"BinarySizeValue\" type=\"nc:NonNegativeDecimalType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A size of a binary object in bytes. (This property differs from nc:BinarySizeValue only in the units of measure.)</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"ChecksumAugmentation\" substitutionGroup=\"s:Augmentation\" type=\"hix-core:ChecksumAugmentationType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">Supplements an object with checksum information, often used to detect errors in transmission.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"true\" name=\"ChecksumText\" type=\"ext:RestrictedSHA256HashValueSimpleType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A checksum value.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"TransmissionAttachmentQuantity\" type=\"nc:QuantityType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A count of the number of attachments included in a single transmission message.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"TransmissionMetadata\" type=\"hix-core:TransmissionMetadataType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A Metadata about a single message as part of a batch submission.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:element abstract=\"false\" name=\"TransmissionSequenceID\" type=\"niem-xsd:nonNegativeInteger\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">An identifier used to order transmissions in a batch (in K of N, a sequence id is K).</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"BatchMetadataType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"MetadataType\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n        <i:AppliesTo i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n        <i:AppliesTo i:name=\"Association\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for metadata about batch submission of data (often broken into multiple separate transmissions).</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:extension base=\"s:MetadataType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:BatchID\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:BatchPartnerID\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:BatchAttachmentTotalQuantity\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:BatchCategory\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:BatchTransmissionQuantity\"/>\r\n        </xsd:sequence>\r\n      </xsd:extension>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"BinaryType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>true<AugmentedTypeIndicator xmlns=\"http://niem.gov/niem/appinfo/2.1\">true</AugmentedTypeIndicator>\r\n        <i:Base i:name=\"BinaryType\" i:namespace=\"http://niem.gov/niem/niem-core/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for a digital representation of an object encoded in a binary format.</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:extension base=\"nc:BinaryType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:ChecksumAugmentation\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:BinarySizeValue\"/>\r\n        </xsd:sequence>\r\n      </xsd:extension>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"ChecksumAugmentationType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"AugmentationType\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type that supplements an object with checksum information, often used to detect errors in transmission.</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:extension base=\"s:AugmentationType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"ext:SHA256HashValueText\"/>\r\n        </xsd:sequence>\r\n      </xsd:extension>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n  <xsd:complexType abstract=\"false\" mixed=\"false\" name=\"TransmissionMetadataType\">\r\n    <xsd:annotation>\r\n      <xsd:appinfo>\r\n        <i:Base i:name=\"MetadataType\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n        <i:AppliesTo i:name=\"Object\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n        <i:AppliesTo i:name=\"Association\" i:namespace=\"http://niem.gov/niem/structures/2.0\"/>\r\n      </xsd:appinfo>\r\n      <xsd:documentation source=\"\">A data type for metadata about a single message as part of a batch submission.</xsd:documentation>\r\n    </xsd:annotation>\r\n    <xsd:complexContent>\r\n      <xsd:extension base=\"s:MetadataType\">\r\n        <xsd:sequence>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:TransmissionAttachmentQuantity\"/>\r\n          <xsd:element maxOccurs=\"1\" minOccurs=\"1\" ref=\"hix-core:TransmissionSequenceID\"/>\r\n        </xsd:sequence>\r\n      </xsd:extension>\r\n    </xsd:complexContent>\r\n  </xsd:complexType>\r\n</xsd:schema>\r\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<xsd:schema xmlns:exch=\"http://birsrep.dsh.cms.gov/exchange/1.0\" xmlns:ext=\"http://birsrep.dsh.cms.gov/extension/1.0\" xmlns:i=\"http://niem.gov/niem/appinfo/2.0\" xmlns:i2=\"http://niem.gov/niem/appinfo/2.1\" xmlns:niem-xsd=\"http://niem.gov/niem/proxy/xsd/2.0\" xmlns:s=\"http://niem.gov/niem/structures/2.0\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" attributeFormDefault=\"qualified\" elementFormDefault=\"qualified\" targetNamespace=\"http://birsrep.dsh.cms.gov/exchange/1.0\" version=\"1\">\r\n  <xsd:annotation>\r\n    <xsd:appinfo>\r\n      <i:ConformantIndicator>true</i:ConformantIndicator>\r\n    </xsd:appinfo>\r\n    <xsd:documentation source=\"\">An exchange model for submitting one transmission from a batch, with multiple attachments.</xsd:documentation>\r\n  </xsd:annotation>\r\n  <xsd:import namespace=\"http://birsrep.dsh.cms.gov/extension/1.0\" schemaLocation=\"../.././XMLschemas/extension/ExtensionModel.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/appinfo/2.0\" schemaLocation=\"../../XMLschemas/subset/niem/appinfo/2.0/appinfo.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/appinfo/2.1\" schemaLocation=\"../../XMLschemas/subset/niem/appinfo/2.1/appinfo.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/proxy/xsd/2.0\" schemaLocation=\"../../XMLschemas/subset/niem/proxy/xsd/2.0/xsd.xsd\"/>\r\n  <xsd:import namespace=\"http://niem.gov/niem/structures/2.0\" schemaLocation=\"../../XMLschemas/subset/niem/structures/2.0/structures.xsd\"/>\r\n  <xsd:element abstract=\"false\" name=\"BatchHandlingServiceRequest\" nillable=\"false\" type=\"ext:BatchRequestType\">\r\n    <xsd:annotation>\r\n      <xsd:documentation source=\"\">A single transmission within a larger batch.</xsd:documentation>\r\n    </xsd:annotation>\r\n  </xsd:element>\r\n</xsd:schema>\r\n"
   },
   {
     "service_name": "Hub Connectivity Representational State Transfer (REST) JavaScript Object Notation (JSON) Business Service Definition (BSD)",
@@ -276,7 +463,8 @@
         "name": "DSH_RD_BSD_HubConnectivity_RESTJSON.docx",
         "link": "https://zone.cms.gov/system/files/services/DSH_RD_BSD_HubConnectivity_RESTJSON.docx"
       }
-    ]
+    ],
+    "protocol": "REST/JSON"
   },
   {
     "service_name": "Account Transfer Service",
@@ -367,7 +555,8 @@
         "name": "Guidance For States On Targeted Transfers.pdf",
         "link": "https://zone.cms.gov/system/files/services/Guidance%20For%20States%20On%20Targeted%20Transfers.pdf"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML Batch"
   },
   {
     "service_name": "State Hosted Service - Verify Non ESI MEC",
@@ -390,7 +579,8 @@
         "name": "DSH_INT_ICD_Hub_State.docx",
         "link": "https://zone.cms.gov/system/files/services/dsh_int_icd_hub_state.docx"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML"
   },
   {
     "service_name": "Verify_ESI_MEC",
@@ -417,7 +607,8 @@
         "name": "calculateOPMPremium-S15-sources.zip",
         "link": "https://zone.cms.gov/system/files/services/calculateopmpremium-s15-sources.zip"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML"
   },
   {
     "service_name": "IRS Annual Reporting Service",
@@ -460,7 +651,8 @@
         "name": "IA_R5_PHIII_S6.001 a.zip",
         "link": "https://zone.cms.gov/system/files/services/IA_R5_PHIII_S6.001%20a.zip"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML"
   },
   {
     "service_name": "Verify Current Income (H8T & H138)",
@@ -491,7 +683,8 @@
         "name": "CurrentIncome_RequestResponse_JSON.zip",
         "link": "https://zone.cms.gov/system/files/services/CurrentIncome_RequestResponse_JSON.zip"
       }
-    ]
+    ],
+    "protocol": "REST/JSON"
   },
   {
     "service_name": "Remote Identity Proofing Risk Based Alternative (RBA) and Get Record Service",
@@ -562,7 +755,8 @@
         "name": "deviceinsight-ref-impl-ios-fraud-objc-8.0.3-dist (3).zip",
         "link": "https://zone.cms.gov/system/files/services/1981/addnl-files/2026/07/deviceinsight-ref-impl-ios-fraud-objc-8.0.3-dist%20%283%29.zip"
       }
-    ]
+    ],
+    "protocol": "REST/JSON"
   },
   {
     "service_name": "Renewal and Redetermination Verification (RRV) Composite Service (bulk)",
@@ -613,7 +807,8 @@
         "name": "Medicare Response File Schema (1).zip",
         "link": "https://zone.cms.gov/system/files/services/Medicare%20Response%20File%20Schema%20%281%29.zip"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML Batch"
   },
   {
     "service_name": "RIDP (H139) & FARS (H140)",
@@ -640,7 +835,8 @@
         "name": "sprint-99-xml-schema-package-fars-20200304.zip",
         "link": "https://zone.cms.gov/system/files/services/sprint-99-xml-schema-package-fars-20200304.zip"
       }
-    ]
+    ],
+    "protocol": "REST/JSON"
   },
   {
     "service_name": "Social Security Administration (SSA) Composite Representational State Transfer (REST) JavaScript Object Notation (JSON) Business Service Definition (BSD)",
@@ -667,7 +863,8 @@
         "name": "RJ03_SSAComposite.zip",
         "link": "https://zone.cms.gov/system/files/services/RJ03_SSAComposite.zip"
       }
-    ]
+    ],
+    "protocol": "REST/JSON"
   },
   {
     "service_name": "SSAComposite",
@@ -698,7 +895,8 @@
         "name": "ssa_composite-_032513.zip",
         "link": "https://zone.cms.gov/system/files/services/ssa_composite-_032513_0.zip"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML"
   },
   {
     "service_name": "Verify Employer-Sponsored Insurance Minimum Essential Coverage (Verify ESI MEC) Representational State Transfer (REST) JavaScript Object Notation (JSON) Business Service Definition (BSD).",
@@ -725,7 +923,8 @@
         "name": "RJ014-ESIMEC_SampleRESTProject.zip",
         "link": "https://zone.cms.gov/system/files/services/RJ014-ESIMEC_SampleRESTProject.zip"
       }
-    ]
+    ],
+    "protocol": "REST/JSON"
   },
   {
     "service_name": "Verify Non-Employer Sponsored Insurance Minimum Essential Coverage (Verify Non-ESI MEC) REST JSON Business Service Definition (BSD)",
@@ -756,7 +955,8 @@
         "name": "RJ031_Non-ESI MEC_SampleRESTProject.zip",
         "link": "https://zone.cms.gov/system/files/services/RJ031_Non-ESI%20MEC_SampleRESTProject.zip"
       }
-    ]
+    ],
+    "protocol": "REST/JSON"
   },
   {
     "service_name": "VerifyNonEsiMecService",
@@ -783,7 +983,8 @@
         "name": "verifyNonEsiMec-S15-sources.zip",
         "link": "https://zone.cms.gov/system/files/services/verifynonesimec-s15-sources.zip"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML"
   },
   {
     "service_name": "VeriSign Identity Protection (VIP) User Authentication",
@@ -810,7 +1011,8 @@
         "name": "mfaManagementService-1.0-SNAPSHOT-sources.zip",
         "link": "https://zone.cms.gov/system/files/services/mfamanagementservice-1.0-snapshot-sources_0.zip"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML"
   },
   {
     "service_name": "VeriSign Identity Protection (VIP) Token Authorization",
@@ -837,7 +1039,8 @@
         "name": "mfaTokenAuthorizationService-1.0-SNAPSHOT-sources.zip",
         "link": "https://zone.cms.gov/system/files/services/mfatokenauthorizationservice-1.0-snapshot-sources.zip"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML"
   },
   {
     "service_name": "Medicaid Eligibility Service HUB (MESH) National Student Clearinghouse Business Service Definition for Representational State Transfer JavaScript Object Notation",
@@ -1149,7 +1352,8 @@
         "name": "NSC-JSON-Schema-Package-20260714.zip",
         "link": "https://zone.cms.gov/system/files/services/1981/bundle/2026/07/NSC-JSON-Schema-Package-20260714.zip"
       }
-    ]
+    ],
+    "protocol": "REST/JSON"
   },
   {
     "service_name": "Verify Lawful Presence v37.1 v2 Business Service Definition (v37.1 v2 )",
@@ -1184,7 +1388,8 @@
         "name": "VLP v37.1 v2 FAQ - 05192026.pdf",
         "link": "https://zone.cms.gov/system/files/services/1981/addnl-files/2026/06/VLP%20v37.1%20v2%20FAQ%20-%2005192026.pdf"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML"
   },
   {
     "service_name": "Verify Lawful Presence v38 Business Service Definition (BSD)",
@@ -1203,7 +1408,8 @@
         "name": "DSH_RD_BSD_VLP_v38-DRAFT.docx",
         "link": "https://zone.cms.gov/system/files/services/1981/bsd/2025/05/DSH_RD_BSD_VLP_v38-DRAFT.docx"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML"
   },
   {
     "service_name": "Verify Lawful Presence (VLP) v37.1 Business Service Definition (BSD)",
@@ -1234,7 +1440,8 @@
         "name": "VLP v37.1 FAQ as of 2023-11-30.xlsx",
         "link": "https://zone.cms.gov/system/files/services/VLP%20v37.1%20FAQ%20as%20of%202023-11-30.xlsx"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML"
   },
   {
     "service_name": "Verify Lawful Presence V37",
@@ -1269,7 +1476,8 @@
         "name": "VLPv37 REST-XML Projects.zip",
         "link": "https://zone.cms.gov/system/files/services/VLPv37%20REST-XML%20Projects.zip"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML"
   },
   {
     "service_name": "Verify Lawful Presence V33",
@@ -1296,6 +1504,7 @@
         "name": "Sprint_28_VLP_v33.zip",
         "link": "https://zone.cms.gov/system/files/services/sprint_28_vlp_v33.zip"
       }
-    ]
+    ],
+    "protocol": "SOAP/XML"
   }
 ]

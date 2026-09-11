@@ -7,6 +7,7 @@ ignorePaths:
   - node_modules
   - pnpm-lock.yaml
   - COMMUNITY.md
+  - public/gh-pages/data.json
   - "**/*.~*"
   - "**/*.docx"
   - "**/*.png"
@@ -48,6 +49,14 @@ words:
   - messageID
   - nscRequest
   - nscResponse
+  - vadr
+  - vadrResponse
+  - niem
+  - appinfo
+  - nillable
+  - niem-xsd
+  - niem-core
+  - hix-core
   - plainlanguage
   - repolinter
   - skillsets

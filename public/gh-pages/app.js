@@ -6,7 +6,10 @@ createApp({
     const activeSource = ref("All");
     const searchQuery = ref("");
     const selectedSchema = ref(null);
+    const selectedSchemaType = ref("response");
+    const selectedExp = ref(null);
     const selectedSchemaName = ref("");
+    const selectedSchemaProtocol = ref("");
 
     const dataSources = computed(() => {
       const sources = allExperiments.value.map(
@@ -30,6 +33,7 @@ createApp({
           (exp) =>
             exp.service_name.toLowerCase().includes(query) ||
             exp.primary_purpose.toLowerCase().includes(query) ||
+            (exp.protocol && exp.protocol.toLowerCase().includes(query)) ||
             (exp.notes && exp.notes.toLowerCase().includes(query)) ||
             (exp.document_links &&
               exp.document_links.some((doc) =>
@@ -75,10 +79,132 @@ createApp({
       );
     };
 
-    const showSchema = (exp) => {
-      selectedSchema.value = exp.response_schema;
+    const showSchema = (exp, type = "response") => {
+      selectedExp.value = exp;
+      selectedSchemaType.value = type;
+      selectedSchema.value =
+        type === "request" ? exp.request_schema : exp.response_schema;
       selectedSchemaName.value = exp.service_name;
+      selectedSchemaProtocol.value = exp.protocol;
     };
+
+    const toggleSchemaType = (type) => {
+      if (!selectedExp.value) return;
+      showSchema(selectedExp.value, type);
+    };
+
+    const parsedSchemaElements = computed(() => {
+      if (!selectedSchema.value) return null;
+
+      // Check for XML
+      const schemaStr =
+        typeof selectedSchema.value === "string"
+          ? selectedSchema.value.trim()
+          : "";
+      if (schemaStr.startsWith("<?xml") || schemaStr.includes("<xsd:schema")) {
+        try {
+          const parser = new DOMParser();
+          // Remove XML declarations if they are nested in a combined schema
+          const cleanedSchemaStr = schemaStr.replace(/<\?xml.*?\?>/g, "");
+          const xmlDoc = parser.parseFromString(
+            cleanedSchemaStr.includes("<root_schemas>")
+              ? cleanedSchemaStr
+              : `<root_schemas>${cleanedSchemaStr}</root_schemas>`,
+            "text/xml",
+          );
+          const elements = [];
+          const seen = new Set();
+
+          // Helper to extract elements
+          const extractElements = (doc) => {
+            const xsdElements = doc.getElementsByTagNameNS("*", "element");
+            for (let i = 0; i < xsdElements.length; i++) {
+              const el = xsdElements[i];
+              const name = el.getAttribute("name");
+              const type = el.getAttribute("type") || "Reference";
+              if (name && !seen.has(name)) {
+                elements.push({
+                  name,
+                  type: type.includes(":") ? type.split(":")[1] : type,
+                  kind: "Element",
+                  description: "",
+                });
+                seen.add(name);
+              }
+            }
+
+            const xsdComplexTypes = doc.getElementsByTagNameNS(
+              "*",
+              "complexType",
+            );
+            for (let i = 0; i < xsdComplexTypes.length; i++) {
+              const ct = xsdComplexTypes[i];
+              const name = ct.getAttribute("name");
+              if (name && !seen.has(name)) {
+                elements.push({
+                  name,
+                  type: "Complex Type",
+                  kind: "Type Definition",
+                  description: "",
+                });
+                seen.add(name);
+              }
+            }
+          };
+
+          extractElements(xmlDoc);
+          return elements.length > 0 ? elements : null;
+        } catch (e) {
+          console.error("XML Parse Error", e);
+          return null;
+        }
+      }
+
+      // Check for JSON Schema
+      if (
+        typeof selectedSchema.value === "object" &&
+        selectedSchema.value !== null
+      ) {
+        try {
+          const elements = [];
+          const props = selectedSchema.value.properties;
+
+          if (props) {
+            Object.keys(props).forEach((key) => {
+              const prop = props[key];
+              elements.push({
+                name: key,
+                type: prop.type || (prop.$ref ? "Reference" : "unknown"),
+                kind: "Property",
+              });
+            });
+          }
+
+          // Handle common nested structures in our data
+          if (elements.length === 1 && selectedSchema.value.properties) {
+            const topKey = Object.keys(selectedSchema.value.properties)[0];
+            const topProp = selectedSchema.value.properties[topKey];
+            if (topProp.properties) {
+              Object.keys(topProp.properties).forEach((key) => {
+                const prop = topProp.properties[key];
+                elements.push({
+                  name: `${topKey}.${key}`,
+                  type: prop.type || (prop.$ref ? "Reference" : "unknown"),
+                  kind: "Nested Property",
+                });
+              });
+            }
+          }
+
+          return elements.length > 0 ? elements : null;
+        } catch (e) {
+          console.error("Error parsing JSON schema:", e);
+          return null;
+        }
+      }
+
+      return null;
+    });
 
     return {
       allExperiments,
@@ -86,10 +212,15 @@ createApp({
       searchQuery,
       selectedSchema,
       selectedSchemaName,
+      selectedSchemaProtocol,
       dataSources,
       filteredGroupedExperiments,
       showFutureFeatureAlert,
       showSchema,
+      toggleSchemaType,
+      parsedSchemaElements,
+      selectedSchemaType,
+      selectedExp,
     };
   },
 }).mount("#app");
