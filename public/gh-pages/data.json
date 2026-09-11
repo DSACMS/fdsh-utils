@@ -306,7 +306,7 @@
         "link": "https://zone.cms.gov/system/files/services/1981/addnl-files/2026/09/VA-RD-JSON-Schema-Package-20260730.zip"
       }
     ],
-    "protocol": "SOAP/XML"
+    "protocol": "REST/JSON"
   },
   {
     "service_name": "Annual Household Income and Family Size Verification (IFSV) REST JSON",
@@ -700,7 +700,7 @@
         "link": "https://zone.cms.gov/system/files/services/CurrentIncome_RequestResponse_JSON.zip"
       }
     ],
-    "protocol": "SOAP/XML"
+    "protocol": "REST/JSON"
   },
   {
     "service_name": "Remote Identity Proofing Risk Based Alternative (RBA) and Get Record Service",
@@ -772,7 +772,7 @@
         "link": "https://zone.cms.gov/system/files/services/1981/addnl-files/2026/07/deviceinsight-ref-impl-ios-fraud-objc-8.0.3-dist%20%283%29.zip"
       }
     ],
-    "protocol": "SOAP/XML"
+    "protocol": "REST/JSON"
   },
   {
     "service_name": "Renewal and Redetermination Verification (RRV) Composite Service (bulk)",
@@ -852,7 +852,7 @@
         "link": "https://zone.cms.gov/system/files/services/sprint-99-xml-schema-package-fars-20200304.zip"
       }
     ],
-    "protocol": "SOAP/XML"
+    "protocol": "REST/JSON"
   },
   {
     "service_name": "Social Security Administration (SSA) Composite Representational State Transfer (REST) JavaScript Object Notation (JSON) Business Service Definition (BSD)",
