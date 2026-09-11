@@ -430,7 +430,8 @@
                     class="text-lg leading-6 font-medium text-gray-900 mb-4"
                     id="modal-title"
                   >
-                    {{ selectedSchemaType === 'request' ? 'Request' : 'Response' }} Schema: {{ selectedSchemaName }}
+                    {{ selectedSchemaType === 'request' ? 'Request' : 'Response'
+                    }} Schema: {{ selectedSchemaName }}
                     <span
                       class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800"
                     >
@@ -439,7 +440,10 @@
                   </h3>
 
                   <!-- Schema Type Toggle -->
-                  <div v-if="selectedExp && selectedExp.request_schema && selectedExp.response_schema" class="mb-4">
+                  <div
+                    v-if="selectedExp && selectedExp.request_schema && selectedExp.response_schema"
+                    class="mb-4"
+                  >
                     <div class="flex p-0.5 bg-gray-100 rounded-lg w-fit">
                       <button
                         @click="toggleSchemaType('request')"
@@ -464,7 +468,9 @@
                       <h4 class="text-sm font-bold text-gray-700 uppercase">
                         Schema Elements & Data Types
                       </h4>
-                      <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                      <span
+                        class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded"
+                      >
                         {{ parsedSchemaElements.length }} elements found
                       </span>
                     </div>
@@ -521,11 +527,10 @@
                     <pre
                       v-if="typeof selectedSchema === 'string'"
                       class="text-green-400 text-sm font-mono"
-                      >{{ selectedSchema }}</pre
                     >
+{{ selectedSchema }}</pre>
                     <pre v-else class="text-green-400 text-sm font-mono">
-{{ JSON.stringify(selectedSchema, null, 2) }}</pre
-                    >
+{{ JSON.stringify(selectedSchema, null, 2) }}</pre>
                   </div>
                 </div>
               </div>

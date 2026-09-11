@@ -133,7 +133,10 @@ createApp({
               }
             }
 
-            const xsdComplexTypes = doc.getElementsByTagNameNS("*", "complexType");
+            const xsdComplexTypes = doc.getElementsByTagNameNS(
+              "*",
+              "complexType",
+            );
             for (let i = 0; i < xsdComplexTypes.length; i++) {
               const ct = xsdComplexTypes[i];
               const name = ct.getAttribute("name");
