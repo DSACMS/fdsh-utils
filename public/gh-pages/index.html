@@ -307,13 +307,22 @@
                   <td
                     class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
                   >
-                    <button
-                      v-if="exp.response_schema"
-                      @click="showSchema(exp)"
-                      class="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1 rounded-md transition border border-blue-200"
-                    >
-                      View Schema
-                    </button>
+                    <div class="flex flex-col space-y-2 justify-end">
+                      <button
+                        v-if="exp.request_schema"
+                        @click="showSchema(exp, 'request')"
+                        class="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1 rounded-md transition border border-blue-200 text-xs whitespace-nowrap"
+                      >
+                        Request Schema
+                      </button>
+                      <button
+                        v-if="exp.response_schema"
+                        @click="showSchema(exp, 'response')"
+                        class="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1 rounded-md transition border border-blue-200 text-xs whitespace-nowrap"
+                      >
+                        Response Schema
+                      </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -421,7 +430,7 @@
                     class="text-lg leading-6 font-medium text-gray-900 mb-4"
                     id="modal-title"
                   >
-                    Response Schema: {{ selectedSchemaName }}
+                    {{ selectedSchemaType === 'request' ? 'Request' : 'Response' }} Schema: {{ selectedSchemaName }}
                     <span
                       class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800"
                     >
@@ -429,13 +438,38 @@
                     </span>
                   </h3>
 
+                  <!-- Schema Type Toggle -->
+                  <div v-if="selectedExp && selectedExp.request_schema && selectedExp.response_schema" class="mb-4">
+                    <div class="flex p-0.5 bg-gray-100 rounded-lg w-fit">
+                      <button
+                        @click="toggleSchemaType('request')"
+                        :class="selectedSchemaType === 'request' ? 'bg-white shadow text-blue-600' : 'text-gray-500 hover:text-gray-700'"
+                        class="px-4 py-1.5 text-xs font-medium rounded-md transition"
+                      >
+                        Request
+                      </button>
+                      <button
+                        @click="toggleSchemaType('response')"
+                        :class="selectedSchemaType === 'response' ? 'bg-white shadow text-blue-600' : 'text-gray-500 hover:text-gray-700'"
+                        class="px-4 py-1.5 text-xs font-medium rounded-md transition"
+                      >
+                        Response
+                      </button>
+                    </div>
+                  </div>
+
                   <!-- Schema Summary View -->
                   <div v-if="parsedSchemaElements" class="mb-6">
-                    <h4 class="text-sm font-bold text-gray-700 uppercase mb-2">
-                      Schema Elements & Data Types
-                    </h4>
+                    <div class="flex justify-between items-center mb-2">
+                      <h4 class="text-sm font-bold text-gray-700 uppercase">
+                        Schema Elements & Data Types
+                      </h4>
+                      <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                        {{ parsedSchemaElements.length }} elements found
+                      </span>
+                    </div>
                     <div
-                      class="border border-gray-200 rounded-md overflow-hidden"
+                      class="border border-gray-200 rounded-md overflow-hidden max-h-96 overflow-y-auto"
                     >
                       <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">

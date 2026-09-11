@@ -6,6 +6,8 @@ createApp({
     const activeSource = ref("All");
     const searchQuery = ref("");
     const selectedSchema = ref(null);
+    const selectedSchemaType = ref("response");
+    const selectedExp = ref(null);
     const selectedSchemaName = ref("");
     const selectedSchemaProtocol = ref("");
 
@@ -77,63 +79,80 @@ createApp({
       );
     };
 
-    const showSchema = (exp) => {
-      selectedSchema.value = exp.response_schema;
+    const showSchema = (exp, type = "response") => {
+      selectedExp.value = exp;
+      selectedSchemaType.value = type;
+      selectedSchema.value =
+        type === "request" ? exp.request_schema : exp.response_schema;
       selectedSchemaName.value = exp.service_name;
       selectedSchemaProtocol.value = exp.protocol;
+    };
+
+    const toggleSchemaType = (type) => {
+      if (!selectedExp.value) return;
+      showSchema(selectedExp.value, type);
     };
 
     const parsedSchemaElements = computed(() => {
       if (!selectedSchema.value) return null;
 
       // Check for XML
-      if (
-        typeof selectedSchema.value === "string" &&
-        selectedSchema.value.trim().startsWith("<?xml")
-      ) {
+      const schemaStr =
+        typeof selectedSchema.value === "string"
+          ? selectedSchema.value.trim()
+          : "";
+      if (schemaStr.startsWith("<?xml") || schemaStr.includes("<xsd:schema")) {
         try {
           const parser = new DOMParser();
+          // Remove XML declarations if they are nested in a combined schema
+          const cleanedSchemaStr = schemaStr.replace(/<\?xml.*?\?>/g, "");
           const xmlDoc = parser.parseFromString(
-            selectedSchema.value,
+            cleanedSchemaStr.includes("<root_schemas>")
+              ? cleanedSchemaStr
+              : `<root_schemas>${cleanedSchemaStr}</root_schemas>`,
             "text/xml",
           );
           const elements = [];
+          const seen = new Set();
 
-          const xsdElements = xmlDoc.getElementsByTagNameNS(
-            "http://www.w3.org/2001/XMLSchema",
-            "element",
-          );
-          for (let i = 0; i < xsdElements.length; i++) {
-            const el = xsdElements[i];
-            const name = el.getAttribute("name");
-            const type = el.getAttribute("type");
-            if (name) {
-              elements.push({
-                name,
-                type: type || "anonymous",
-                kind: "Element",
-              });
+          // Helper to extract elements
+          const extractElements = (doc) => {
+            const xsdElements = doc.getElementsByTagNameNS("*", "element");
+            for (let i = 0; i < xsdElements.length; i++) {
+              const el = xsdElements[i];
+              const name = el.getAttribute("name");
+              const type = el.getAttribute("type") || "Reference";
+              if (name && !seen.has(name)) {
+                elements.push({
+                  name,
+                  type: type.includes(":") ? type.split(":")[1] : type,
+                  kind: "Element",
+                  description: "",
+                });
+                seen.add(name);
+              }
             }
-          }
 
-          const xsdComplexTypes = xmlDoc.getElementsByTagNameNS(
-            "http://www.w3.org/2001/XMLSchema",
-            "complexType",
-          );
-          for (let i = 0; i < xsdComplexTypes.length; i++) {
-            const ct = xsdComplexTypes[i];
-            const name = ct.getAttribute("name");
-            if (name) {
-              elements.push({
-                name,
-                type: "ComplexType",
-                kind: "Type Definition",
-              });
+            const xsdComplexTypes = doc.getElementsByTagNameNS("*", "complexType");
+            for (let i = 0; i < xsdComplexTypes.length; i++) {
+              const ct = xsdComplexTypes[i];
+              const name = ct.getAttribute("name");
+              if (name && !seen.has(name)) {
+                elements.push({
+                  name,
+                  type: "Complex Type",
+                  kind: "Type Definition",
+                  description: "",
+                });
+                seen.add(name);
+              }
             }
-          }
+          };
+
+          extractElements(xmlDoc);
           return elements.length > 0 ? elements : null;
         } catch (e) {
-          console.error("Error parsing XML schema:", e);
+          console.error("XML Parse Error", e);
           return null;
         }
       }
@@ -195,7 +214,10 @@ createApp({
       filteredGroupedExperiments,
       showFutureFeatureAlert,
       showSchema,
+      toggleSchemaType,
       parsedSchemaElements,
+      selectedSchemaType,
+      selectedExp,
     };
   },
 }).mount("#app");
