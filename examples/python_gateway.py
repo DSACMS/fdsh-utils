@@ -35,7 +35,7 @@ class HubGateway:
         self._session.cert = (client_cert_path, client_key_path)
         self._session.mount("https://", TLS1_2_Adapter(resolve_dict=self.resolve))
 
-    def get_education_enrollment_v1(self, payload):
+    def get_education_enrollment_v1(self, payload, raise_on_error=True):
         """Get enrollment data from FDSH NSC API.
 
         Payload is a dictionary passed inside the nscRequest object, e.g.
@@ -47,7 +47,7 @@ class HubGateway:
           "personBirthDate": "1999-01-01",
         }
         """
-        return self._post(self.education_enrollment_path, {"nscRequest": payload})
+        return self._post(self.education_enrollment_path, {"nscRequest": payload}, raise_on_error=raise_on_error)
 
     @property
     def access_token(self):
@@ -71,8 +71,13 @@ class HubGateway:
         return self._token
 
     @staticmethod
-    def _handle_response(response):
-        """Return the JSON contents of the response unless there was an error."""
+    def _handle_response(response, raise_on_error=True):
+        """Return the JSON contents of the, optionally raising exceptions on error.
+
+        If raise_on_error is true, then raise an exception for non-200 status
+        codes. Otherwise, return the response body for any status code.
+        """
+
         # print("Handling response: ", response.status_code, response.content)
         if response.status_code >= 200 and response.status_code < 300:
             return response.json()
@@ -81,9 +86,12 @@ class HubGateway:
             # token might have expired, clear it
             self._token = None
 
-        response.raise_for_status()
+        if raise_on_error:
+            response.raise_for_status()
+        else:
+            return response.json()
 
-    def _post(self, url_path, data):
+    def _post(self, url_path, data, raise_on_error=True):
         """Post data in a JSON request to the specified path.
 
         The url_path is joined to self.base_url. `data` is a dictionary
@@ -100,11 +108,13 @@ class HubGateway:
             },
             json=data,
         )
-        return self._execute(request)
+        return self._execute(request, raise_on_error=raise_on_error)
 
-    def _execute(self, request):
+    def _execute(self, request, raise_on_error=True):
         """Handle a request on our specially configured TLS connection."""
-        return self._handle_response(self._session.send(self._session.prepare_request(request)))
+        return self._handle_response(
+            self._session.send(self._session.prepare_request(request)), raise_on_error=raise_on_error
+        )
 
     @staticmethod
     def _parse_resolve(resolve_string):
