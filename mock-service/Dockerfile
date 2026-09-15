@@ -13,7 +13,6 @@ WORKDIR /opt/mock-service
 COPY api /opt/mock-service/api
 COPY auth /opt/mock-service/auth
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
-COPY json /opt/mock-service/json
 COPY data/records.json /app/data/records.json
 COPY supervisord.conf /etc/supervisor/conf.d/mock-service.conf
 
