@@ -125,6 +125,8 @@ Example:
         }'
 ```
 
+The record must exist in the [records.json](data/records.json) for a successful retrieval.
+
 ## Publish
 
 coming
