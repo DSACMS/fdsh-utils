@@ -10,7 +10,7 @@ A single Docker image bundles nginx, an OAuth auth service, and a read-only Fast
 |  | nginx          |---->| auth           |                     |
 |  | TLS 1.2/mTLS   |     | JWT /token     |                     |
 |  | public :8443   |     | /introspect    |                     |
-|  +-------+--------+     | internal :9000 |                     |
+|  +-------+--------+     | internal :8443 |                     |
 |          |              +----------------+                     |
 |          | proxy_pass                                          |
 |          v                                                     |
@@ -47,12 +47,12 @@ The API reads a single domain-specific, bundled flat file. The `nsc` domain curr
 
 ## Ports and Endpoints
 
-Two ports are exposed publicly:
+One ports are exposed publicly, 8443:
 
-* `8443` → nginx HTTPS retrieve endpoint
-* `9100` → auth OAuth token endpoint
+* nginx HTTPS retrieve endpoint
+* auth OAuth token endpoint
 
-The API's port `8000` stays internal to the container and isn't exposed on the host. The OAuth token endpoint is `http://localhost:9100/auth/oauth/v2/token`, and the NSC retrieve endpoint is `https://localhost:8443/mesh/imp1/NationalStudentClearinghouseService`. Registered future domains use `POST /domains/{domain_name}` and return a matching response from that domain's bundled file; missing records and invalid NSC requests return the standard NSC error response shape.
+The API's port `8000` stays internal to the container and isn't exposed on the host. The OAuth token endpoint is `https://localhost:8443/auth/oauth/v2/token`, and the NSC retrieve endpoint is `https://localhost:8443/mesh/imp1/NationalStudentClearinghouseService`. Registered future domains use `POST /domains/{domain_name}` and return a matching response from that domain's bundled file; missing records and invalid NSC requests return the standard NSC error response shape.
 
 ## Build
 
@@ -87,7 +87,9 @@ Export a variable called `CURL_CA_BUNDLE` and point to the ca.crt created earlie
 **Get a token:**
 
 ```sh
-curl -X POST http://localhost:9100/auth/oauth/v2/token \
+curl -X POST https://localhost:8443/auth/oauth/v2/token \
+  --cert "certs/client.crt" \
+  --key "certs/client.key" \
   -d grant_type=client_credentials \
   -d client_id=local-dev-client-id \
   -d client_secret=local-dev-client-secret
