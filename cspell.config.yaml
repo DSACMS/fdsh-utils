@@ -7,6 +7,7 @@ ignorePaths:
   - node_modules
   - pnpm-lock.yaml
   - COMMUNITY.md
+  - public/gh-pages/data.json
   - "**/*.~*"
   - "**/*.docx"
   - "**/*.png"
@@ -19,19 +20,140 @@ ignorePaths:
   - "**/*.conf"
   - Dockerfile
 words:
-  - ACA
-  - ALPN
-  - Ajv
-  - BHP
-  - BSD
+  - Dockerized
+  - browsable
   - Bugcrowd
+  - ALPN
+  - Authent
+  - Respone
+  - Verif
+  - Countryof
+  - xsds
+  - APTCV
+  - PHIII
+  - IBAT
+  - deviceinsight
+  - podspec
+  - objc
+  - ridpv
+  - SSAC
+  - vlpv
+  - soapprojects
+  - CMCS
+  - crosscore
+  - mecv
+  - soapui
+  - esimecv
+  - VeriSign
+  - mfausrmgtusrauthvipauth
+  - APNG
+  - KHTML
+  - Referer
+  - cutover
+  - asOfDate
+  - contentType
+  - messageID
+  - nscRequest
+  - nscResponse
+  - vadr
+  - vadrResponse
+  - niem
+  - appinfo
+  - nillable
+  - niem-xsd
+  - niem-core
+  - hix-core
+  - plainlanguage
+  - repolinter
+  - skillsets
+  - sublicensable
+  - tlsv
+  - codeowners
+  - hotfixed
+  - jschema
+  - nonprod
+  - pchar
+  - httpbis
+  - jsonseq
+  - eventstream
+  - subschema
+  - byteranges
+  - linkset
+  - xyzzy
+  - subschemas
+  - postamble
+  - uritemplate
+  - scaffolder
+  - aptc
+  - ifsvv
+  - ridp
+  - ssacompositev
+  - webrick
+  - DQUOTE
+  - HEXDIG
+  - FDCF
+  - FFEF
+  - FFFFD
+  - AFFFD
+  - BFFFD
+  - CFFFD
+  - DFFFD
+  - EFFFD
+  - FFFFD
+  - Busername
+  - Cblack
+  - Cbrown
+  - Cinfo
+  - Eabc
+  - Anull
+  - Equifax
+  - CMSzONE
+  - Redline
+  - DSH
+  - RD
+  - QHP
+  - CSR
+  - ESI
+  - MEC
+  - IFSV
+  - PVC
+  - RRV
+  - VLP
+  - SSA
+  - RIDP
+  - FARS
+  - VIP
+  - EIDM
+  - HCQIS
+  - HARP
+  - SNAPSHOT
+  - WSDL
+  - XSD
+  - XML
+  - REST
+  - JSON
+  - BSD
+  - docx
+  - zip
+  - xml
+  - pdf
+  - png
+  - emf
+  - py
+  - pnpm
+  - node
+  - pnpm-store
+  - node_modules
+  - pnpm-lock.yaml
+  - Ajv
+  - ACA
+  - BHP
   - CCIIO
   - CHIP
   - CMS
   - CMSGov
   - CMA
   - DHDSS
-  - Dockerized
   - DSACMS
   - FDSH
   - FERPA
@@ -39,7 +161,6 @@ words:
   - GED
   - HHSM
   - IFC
-  - JSON
   - Medicaid
   - MEDH
   - MESH
@@ -55,7 +176,6 @@ words:
   - PII
   - PPACA
   - Redocly
-  - Requester
   - SBOM
   - SBE
   - SDK
@@ -65,34 +185,12 @@ words:
   - TDS
   - TLS
   - UUID
-  - WSDL
-  - XSD
-  - YAML
-  - asOfDate
-  - browsable
-  - codeowners
-  - contentType
-  - decause
-  - dockerized
   - dsacms
   - fdsh
   - fisma
   - heinrichreimer
-  - hotfixed
-  - jschema
   - localisation
-  - messageID
-  - nonprod
-  - nscRequest
-  - nscResponse
-  - openapi
-  - plainlanguage
-  - pnpm
   - postsecondary
-  - repolinter
-  - skillsets
-  - sublicensable
-  - tlsv
   - Martinsen
   - Burrell
   - stefanzweifel
@@ -103,29 +201,12 @@ words:
   - openapis
   - ucschar
   - iprivate
-  - DQUOTE
-  - HEXDIG
-  - FDCF
-  - FFEF
-  - FFFD
-  - AFFFD
-  - BFFFD
-  - CFFFD
-  - DFFFD
-  - EFFFD
-  - FFFFD
   - petstore
-  - pchar
-  - httpbis
-  - Cblack
-  - Cbrown
   - Edsger
   - edijkstra
   - Diṅnāga
   - diṅnāga
   - الخوارزميّ
-  - jsonseq
-  - eventstream
   - BQAAA
   - AAQAAAABAAAA
   - ACAAQAAAABAAAA
@@ -136,17 +217,7 @@ words:
   - ACTGCSAQANHQE
   - QAAAABJRU
   - Jggg
-  - subschema
-  - byteranges
-  - myevent
-  - Busername
-  - linkset
-  - xyzzy
-  - subschemas
-  - Cinfo
-  - Eabc
   - CMYK
-  - postamble
   - PKCE
   - uritemplate
   - scaffolder
@@ -154,3 +225,20 @@ words:
   - Pydantic
   - pyproject
   - supervisord
+  - Aptos
+  - Serv
+  - Sftwr
+  - DHSID
+  - Elig
+  - Mgmt
+  - RESTJSON
+  - PTDR
+  - slcsp
+  - SLCSP
+  - Hsld
+  - Initi
+  - Inito
+  - fars
+  - ESIMEC
+  - TRICARE
+  - chdir

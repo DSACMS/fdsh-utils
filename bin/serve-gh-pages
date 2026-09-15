@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+PORT = 4000
+DIRECTORY = "public/gh-pages"
+
+unless File.directory?(DIRECTORY)
+  puts "Error: Directory #{DIRECTORY} not found."
+  exit 1
+end
+
+puts "Starting local server for GitHub Pages at http://localhost:#{PORT}"
+puts "Serving from: #{DIRECTORY}"
+puts "Press Ctrl+C to stop."
+
+# Check for python3
+if system("command -v python3 > /dev/null 2>&1")
+  puts "Using python3 -m http.server"
+  exec "python3 -m http.server #{PORT} --directory #{DIRECTORY}"
+elsif system("command -v python > /dev/null 2>&1")
+  # Python 2.x
+  puts "Using python -m SimpleHTTPServer"
+  Dir.chdir(DIRECTORY) do
+    exec "python -m SimpleHTTPServer #{PORT}"
+  end
+elsif system("gem list -i webrick > /dev/null 2>&1")
+  puts "Using ruby httpd"
+  exec "ruby -run -e httpd #{DIRECTORY} -p #{PORT}"
+else
+  puts "Error: No suitable static file server found (python3, python2, or webrick)."
+  puts "Please install python3 or run 'gem install webrick'."
+  exit 1
+end
