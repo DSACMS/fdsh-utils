@@ -52,7 +52,7 @@ One ports are exposed publicly, 8443:
 * nginx HTTPS retrieve endpoint
 * auth OAuth token endpoint
 
-The API's port `8000` stays internal to the container and isn't exposed on the host. The OAuth token endpoint is `https://localhost:8443/auth/oauth/v2/token`, and the NSC retrieve endpoint is `https://localhost:8443/mesh/imp1/NationalStudentClearinghouseService`. Registered future domains use `POST /domains/{domain_name}` and return a matching response from that domain's bundled file; missing records and invalid NSC requests return the standard NSC error response shape.
+The API's port `8000` stays internal to the container and isn't exposed on the host. The OAuth token endpoint is `https://localhost:8443/auth/oauth/v2/token`, and the NSC retrieve endpoint is `https://localhost:8443/mesh/imp1/NationalStudentClearinghouseService`. Missing records and invalid NSC requests return the standard NSC error response shape.
 
 ## Build
 
