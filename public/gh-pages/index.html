@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FDSH Research Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <div id="app" class="container mx-auto px-4 py-8" v-cloak>
+      <div
+        class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-4 rounded-r-md shadow-sm"
+      >
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg
+              class="h-5 w-5 text-amber-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-amber-700 font-bold">
+              Beta Version -- Work In Progress
+            </p>
+            <p class="text-sm text-amber-700 mt-1">
+              This tool is currently under development. Some features may be
+              incomplete or subject to change.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center mb-4">
+        <h1 class="text-3xl font-bold text-gray-900">FDSH Exploratory View</h1>
+        <div class="flex items-center space-x-4">
+          <a
+            href="#faq"
+            class="text-sm font-medium text-blue-600 hover:text-blue-800 transition"
+            >FAQ & Help</a
+          >
+          <span class="text-sm text-gray-500">Static GitHub Pages Version</span>
+        </div>
+      </div>
+
+      <div
+        class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-8 rounded-r-md shadow-sm"
+      >
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg
+              class="h-5 w-5 text-blue-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-blue-700">
+              This tool is provided by the Office of Health Technology and
+              Products (OHTP) division to assist in navigating the Federal Data
+              Services Hub (FDSH). It is
+              <span class="font-semibold"
+                >not directly affiliated with the Federal Data Services
+                Hub</span
+              >.
+            </p>
+            <p class="text-sm text-blue-700 mt-2">
+              If you have questions or feedback, please
+              <a
+                href="https://github.com/DSACMS/fdsh-utils/issues"
+                target="_blank"
+                class="font-medium underline hover:text-blue-800"
+                >create a GitHub issue</a
+              >.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-8">
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <h3
+            class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4"
+          >
+            Filter by Data Source
+          </h3>
+          <div class="flex flex-wrap gap-2 mb-6">
+            <button
+              @click="activeSource = 'All'"
+              :class="activeSource === 'All' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+              class="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              All
+            </button>
+            <button
+              v-for="source in dataSources"
+              :key="source"
+              @click="activeSource = source"
+              :class="activeSource === source ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+              class="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              {{ source }}
+            </button>
+          </div>
+
+          <div class="relative rounded-md shadow-sm">
+            <input
+              type="text"
+              v-model="searchQuery"
+              placeholder="Search Business Service Documents (BSDs) or purposes within active view..."
+              class="block w-full rounded-md border-0 py-2.5 pl-4 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+
+        <div
+          v-for="(experiments, source) in filteredGroupedExperiments"
+          :key="source"
+          class="space-y-4"
+        >
+          <div
+            class="flex items-center space-x-2 pb-2 border-b border-gray-200"
+          >
+            <h2 class="text-xl font-semibold text-gray-800">
+              Data Source: {{ source }}
+            </h2>
+            <span
+              class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full"
+              >{{ experiments.length }} Business Service Documents (BSDs)</span
+            >
+          </div>
+
+          <div
+            class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg"
+          >
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                  >
+                    Service Name
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
+                    Primary Purpose
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
+                    Protocol
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
+                    Key Data Elements
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
+                    Notes
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
+                    Document Resources
+                  </th>
+                  <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                    <span class="sr-only">Actions</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                <tr
+                  v-for="exp in experiments"
+                  :key="exp.service_name"
+                  class="hover:bg-gray-50 transition"
+                >
+                  <td
+                    class="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 max-w-xs break-words"
+                  >
+                    {{ exp.service_name }}
+                  </td>
+                  <td
+                    class="px-3 py-4 text-sm text-gray-500 max-w-xs break-words"
+                  >
+                    {{ exp.primary_purpose }}
+                  </td>
+                  <td class="px-3 py-4 text-sm text-gray-500">
+                    <span
+                      class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
+                      :class="{
+                        'bg-green-100 text-green-800': exp.protocol === 'REST/JSON',
+                        'bg-blue-100 text-blue-800': exp.protocol === 'SOAP/XML',
+                        'bg-purple-100 text-purple-800': exp.protocol === 'SOAP/XML Batch',
+                        'bg-gray-100 text-gray-800': !exp.protocol
+                      }"
+                    >
+                      {{ exp.protocol || 'Unknown' }}
+                    </span>
+                  </td>
+                  <td class="px-3 py-4 text-sm text-gray-500">
+                    <div
+                      v-if="exp.request_elements || exp.response_elements"
+                      class="space-y-1"
+                    >
+                      <div v-if="exp.request_elements">
+                        <span class="font-semibold text-gray-700">Req:</span> {{
+                        exp.request_elements }}
+                      </div>
+                      <div v-if="exp.response_elements">
+                        <span class="font-semibold text-gray-700">Ret:</span> {{
+                        exp.response_elements }}
+                      </div>
+                    </div>
+                    <span v-else class="italic text-gray-400"
+                      >Not yet analyzed</span
+                    >
+                  </td>
+                  <td
+                    class="px-3 py-4 text-sm text-gray-500 max-w-xs break-words"
+                  >
+                    {{ exp.notes }}
+                  </td>
+                  <td class="px-3 py-4 text-sm text-gray-500">
+                    <div class="flex flex-col space-y-2">
+                      <div
+                        v-for="doc in exp.document_links"
+                        :key="doc.link"
+                        class="flex items-center"
+                      >
+                        <a
+                          :href="doc.link"
+                          class="flex items-center text-blue-600 hover:text-blue-900 transition"
+                          :title="'Download ' + doc.name"
+                          target="_blank"
+                        >
+                          <svg
+                            class="w-4 h-4 mr-1 flex-shrink-0"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="C7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+                            ></path>
+                          </svg>
+                          <span class="truncate max-w-[150px]"
+                            >{{ doc.name }}</span
+                          >
+                        </a>
+                      </div>
+                      <div
+                        v-if="!exp.document_links || exp.document_links.length === 0"
+                      >
+                        <a
+                          :href="exp.bsd_link"
+                          class="flex items-center text-blue-600 hover:text-blue-900 transition"
+                          title="Download Business Service Document (BSD)"
+                          target="_blank"
+                        >
+                          <svg
+                            class="w-4 h-4 mr-1 flex-shrink-0"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="C7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+                            ></path>
+                          </svg>
+                          <span class="truncate max-w-[150px]">BSD</span>
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+                  <td
+                    class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+                  >
+                    <div class="flex flex-col space-y-2 justify-end">
+                      <button
+                        v-if="exp.request_schema"
+                        @click="showSchema(exp, 'request')"
+                        class="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1 rounded-md transition border border-blue-200 text-xs whitespace-nowrap"
+                      >
+                        Request Schema
+                      </button>
+                      <button
+                        v-if="exp.response_schema"
+                        @click="showSchema(exp, 'response')"
+                        class="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1 rounded-md transition border border-blue-200 text-xs whitespace-nowrap"
+                      >
+                        Response Schema
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div
+          v-if="Object.keys(filteredGroupedExperiments).length === 0"
+          class="text-center py-12"
+        >
+          <p class="text-gray-500">No matching experiments found.</p>
+        </div>
+
+        <div id="faq" class="mt-16 pt-8 border-t border-gray-200">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">
+            Frequently Asked Questions
+          </h2>
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">
+                How do I access the documents? It mentions a zONE?
+              </h3>
+              <p class="mt-2 text-gray-600">
+                Many of the Business Service Documents (BSDs) and technical
+                specifications are hosted on the CMS zONE portal. To access
+                these, you must have an active CMS zONE account.
+              </p>
+              <div
+                class="mt-4 bg-gray-50 p-4 rounded-md border border-gray-200"
+              >
+                <h4 class="text-sm font-bold text-gray-700 uppercase">
+                  Instructions to access CMS zONE:
+                </h4>
+                <ol
+                  class="mt-2 list-decimal ml-5 text-sm text-gray-600 space-y-2"
+                >
+                  <li>
+                    Visit the
+                    <a
+                      href="https://zone.cms.gov/"
+                      target="_blank"
+                      class="text-blue-600 underline hover:text-blue-800"
+                      >CMS zONE Portal</a
+                    >.
+                  </li>
+                  <li>
+                    If you don't have an account, you will need to register.
+                    Click on the "Register" link on the portal home page.
+                  </li>
+                  <li>
+                    Follow the registration instructions, which may require a
+                    CMS Enterprise Identity Management (EIDM) or HCQIS Access
+                    Roles and Profile (HARP) account depending on your role.
+                  </li>
+                  <li>
+                    Once registered for the zONE, request access to the "CMS
+                    FDSH Services Repository" and "FDSH State Testing"
+                    communities.
+                  </li>
+                  <li>
+                    Once registered and logged in, you can search for the
+                    specific FDSH documents or use the links provided in this
+                    tool.
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schema Modal -->
+      <div
+        v-if="selectedSchema"
+        class="fixed inset-0 z-50 overflow-y-auto"
+        aria-labelledby="modal-title"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div
+          class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+        >
+          <div
+            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            aria-hidden="true"
+            @click="selectedSchema = null"
+          ></div>
+
+          <span
+            class="hidden sm:inline-block sm:align-middle sm:h-screen"
+            aria-hidden="true"
+            >&#8203;</span
+          >
+
+          <div
+            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full"
+          >
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div class="sm:flex sm:items-start">
+                <div
+                  class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                >
+                  <h3
+                    class="text-lg leading-6 font-medium text-gray-900 mb-4"
+                    id="modal-title"
+                  >
+                    {{ selectedSchemaType === 'request' ? 'Request' : 'Response'
+                    }} Schema: {{ selectedSchemaName }}
+                    <span
+                      class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800"
+                    >
+                      {{ selectedSchemaProtocol }}
+                    </span>
+                  </h3>
+
+                  <!-- Schema Type Toggle -->
+                  <div
+                    v-if="selectedExp && selectedExp.request_schema && selectedExp.response_schema"
+                    class="mb-4"
+                  >
+                    <div class="flex p-0.5 bg-gray-100 rounded-lg w-fit">
+                      <button
+                        @click="toggleSchemaType('request')"
+                        :class="selectedSchemaType === 'request' ? 'bg-white shadow text-blue-600' : 'text-gray-500 hover:text-gray-700'"
+                        class="px-4 py-1.5 text-xs font-medium rounded-md transition"
+                      >
+                        Request
+                      </button>
+                      <button
+                        @click="toggleSchemaType('response')"
+                        :class="selectedSchemaType === 'response' ? 'bg-white shadow text-blue-600' : 'text-gray-500 hover:text-gray-700'"
+                        class="px-4 py-1.5 text-xs font-medium rounded-md transition"
+                      >
+                        Response
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Schema Summary View -->
+                  <div v-if="parsedSchemaElements" class="mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                      <h4 class="text-sm font-bold text-gray-700 uppercase">
+                        Schema Elements & Data Types
+                      </h4>
+                      <span
+                        class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded"
+                      >
+                        {{ parsedSchemaElements.length }} elements found
+                      </span>
+                    </div>
+                    <div
+                      class="border border-gray-200 rounded-md overflow-hidden max-h-96 overflow-y-auto"
+                    >
+                      <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                          <tr>
+                            <th
+                              class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                            >
+                              Element/Property
+                            </th>
+                            <th
+                              class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                            >
+                              Type
+                            </th>
+                            <th
+                              class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                            >
+                              Kind
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                          <tr v-for="el in parsedSchemaElements" :key="el.name">
+                            <td
+                              class="px-4 py-2 text-sm font-mono text-blue-600"
+                            >
+                              {{ el.name }}
+                            </td>
+                            <td class="px-4 py-2 text-sm text-gray-600">
+                              {{ el.type }}
+                            </td>
+                            <td class="px-4 py-2 text-sm text-gray-500">
+                              {{ el.kind }}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <div
+                    class="mt-2 bg-gray-900 rounded-md p-4 overflow-x-auto max-h-[60vh]"
+                  >
+                    <h4
+                      class="text-xs font-bold text-gray-500 uppercase mb-2 border-b border-gray-700 pb-1"
+                    >
+                      Raw Schema View
+                    </h4>
+                    <pre
+                      v-if="typeof selectedSchema === 'string'"
+                      class="text-green-400 text-sm font-mono"
+                    >
+{{ selectedSchema }}</pre>
+                    <pre v-else class="text-green-400 text-sm font-mono">
+{{ JSON.stringify(selectedSchema, null, 2) }}</pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+            >
+              <button
+                type="button"
+                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                @click="selectedSchema = null"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
