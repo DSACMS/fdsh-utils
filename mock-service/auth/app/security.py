@@ -1,17 +1,16 @@
 import time
 
 import jwt
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="")
+
     jwt_signing_key: str = "local-dev-signing-key"
     client_id: str = "local-dev-client-id"
     client_secret: str = "local-dev-client-secret"
     token_ttl_seconds: int = 3600
-
-    class Config:
-        env_prefix = ""
 
 
 settings = Settings()
