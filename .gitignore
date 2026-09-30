@@ -1,5 +1,6 @@
 tmp
-fdsh_raw
 node_modules
 .pnpm-store
 .agent-shell
+.venv
+*.pyc
