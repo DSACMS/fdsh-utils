@@ -18,6 +18,16 @@ createApp({
       return [...new Set(sources)].sort();
     });
 
+    const setSource = (source) => {
+      activeSource.value = source;
+      if (typeof gtag === "function") {
+        gtag("event", "filter_used", {
+          filter_type: "data_source",
+          filter_value: source,
+        });
+      }
+    };
+
     const filteredExperiments = computed(() => {
       let filtered = allExperiments.value;
 
@@ -29,6 +39,13 @@ createApp({
 
       if (searchQuery.value.trim() !== "") {
         const query = searchQuery.value.toLowerCase();
+        if (typeof gtag === "function" && query.length > 3) {
+          // Debounce or only log significant searches could be better,
+          // but for now, let's just log when they search.
+          gtag("event", "search", {
+            search_term: query,
+          });
+        }
         filtered = filtered.filter(
           (exp) =>
             exp.service_name.toLowerCase().includes(query) ||
@@ -86,6 +103,14 @@ createApp({
         type === "request" ? exp.request_schema : exp.response_schema;
       selectedSchemaName.value = exp.service_name;
       selectedSchemaProtocol.value = exp.protocol;
+
+      if (typeof gtag === "function") {
+        gtag("event", "view_schema", {
+          service_name: exp.service_name,
+          schema_type: type,
+          protocol: exp.protocol,
+        });
+      }
     };
 
     const toggleSchemaType = (type) => {
@@ -221,6 +246,7 @@ createApp({
       parsedSchemaElements,
       selectedSchemaType,
       selectedExp,
+      setSource,
     };
   },
 }).mount("#app");
