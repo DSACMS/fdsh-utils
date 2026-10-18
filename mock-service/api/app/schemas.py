@@ -14,7 +14,7 @@ class PreviousName(StrictModel):
     personSurName: str = Field(min_length=1, max_length=30)
 
 
-class NscRequest(StrictModel):
+class StandardIdentityVerificationRequest(StrictModel):
     personSocialSecurityNumber: str | None = Field(default=None, min_length=4, max_length=9)
     personGivenName: str = Field(min_length=1, max_length=30)
     personMiddleName: str | None = Field(default=None, min_length=1, max_length=30)
@@ -36,8 +36,17 @@ class NscRequest(StrictModel):
         raise ValueError("personSocialSecurityNumber must be four digits or a valid nine-digit SSN")
 
 
+class SsnOnlyVerificationRequest(StrictModel):
+    personSocialSecurityNumber: str = Field(pattern=r"^[0-9]{9}$")
+    asOfDate: date
+    termsAcceptedIndicator: Literal[True]
+
+
+NscRequest = StandardIdentityVerificationRequest
+
+
 class NscRequestEnvelope(StrictModel):
-    nscRequest: NscRequest
+    nscRequest: StandardIdentityVerificationRequest | SsnOnlyVerificationRequest
 
 
 class ResponseMetadata(StrictModel):
@@ -50,12 +59,12 @@ class TransactionDetails(StrictModel):
     transactionId: str = Field(pattern=r"^[0-9]{9,15}$")
     orderId: str = Field(pattern=r"^[0-9]{9,15}$")
     transactionStatusCode: Literal["CNF", "UCF"]
-    transactionFee: str = Field(pattern=r"^[0-9]\.[0-9]{2}$")
-    salesTax: str = Field(pattern=r"^[0-9]\.[0-9]{2}$")
-    transactionTotal: str = Field(pattern=r"^[0-9]\.[0-9]{2}$")
+    transactionFee: str = Field(pattern=r"^[0-9]+\.[0-9]{2}$")
+    salesTax: str = Field(pattern=r"^[0-9]+\.[0-9]{2}$")
+    transactionTotal: str = Field(pattern=r"^[0-9]+\.[0-9]{2}$")
     requestedByText: str = Field(min_length=1, max_length=60)
-    requestedDateTimeText: str = Field(min_length=21, max_length=24)
-    notifiedDateTimeText: str | None = Field(default=None, min_length=21, max_length=24)
+    requestedDateTimeText: str = Field(pattern=r"^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{1,4}$", max_length=24)
+    notifiedDateTimeText: str | None = Field(default=None, pattern=r"^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{1,4}$", max_length=24)
     nscHitIndicator: bool
 
 
@@ -63,7 +72,7 @@ class StudentInfoProvided(StrictModel):
     personGivenName: str = Field(min_length=1, max_length=30)
     personMiddleName: str | None = Field(default=None, min_length=1, max_length=30)
     personSurName: str = Field(min_length=1, max_length=30)
-    previousNames: list[PreviousName] | None = Field(default=None, min_length=1, max_length=5)
+    previousNames: PreviousName | None = None
     personBirthDate: date
 
 
@@ -80,14 +89,13 @@ class EnrollmentDetails(StrictModel):
     schoolCode: str = Field(pattern=r"^[0-9]{6}$")
     branchCode: str = Field(pattern=r"^[0-9]{2}$")
     currentEnrollmentStatusCode: Literal["CC", "CN"]
-    enrollmentData: EnrollmentData
+    enrollmentData: list[EnrollmentData] = Field(min_length=1, max_length=99)
 
 
 class NscSuccess(StrictModel):
     transactionDetails: TransactionDetails
-    studentInfoProvided: StudentInfoProvided
-    enrollmentDetails: EnrollmentDetails
-    responseMetadata: ResponseMetadata
+    studentInfoProvided: StudentInfoProvided | None = None
+    enrollmentDetails: list[EnrollmentDetails] | None = Field(default=None, min_length=1, max_length=99)
 
 
 class NscError(StrictModel):

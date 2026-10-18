@@ -60,32 +60,66 @@ def previous_name(rng: random.Random) -> dict[str, str]:
 
 
 def build_record(rng: random.Random, record_number: int) -> dict:
-    given_name = rng.choice(FIRST_NAMES)
-    surname = rng.choice(LAST_NAMES)
-    birth_date = random_date(rng, date(1950, 1, 1), date(2005, 12, 31))
-    as_of_date = random_date(rng, date(2020, 1, 1), date(2026, 12, 31))
-    include_optional = record_number % 2 == 0
+    mode = (record_number - 1) % 4
+    is_maximum = mode in (1, 3)
+    is_maximum_cardinality = is_maximum and record_number == 2
+    ssn_only = mode in (2, 3)
+    given_name = "A" * 30 if is_maximum else rng.choice(FIRST_NAMES)
+    surname = "B" * 30 if is_maximum else rng.choice(LAST_NAMES)
+    birth_date = "1950-01-01" if is_maximum else random_date(rng, date(1950, 1, 1), date(2005, 12, 31))
+    as_of_date = "2026-12-31" if is_maximum else random_date(rng, date(2020, 1, 1), date(2026, 12, 31))
 
     request = {
+        "personSocialSecurityNumber": "123456789" if is_maximum else random_ssn(rng),
+        "asOfDate": as_of_date,
+        "termsAcceptedIndicator": True,
+    } if ssn_only else {
         "personGivenName": given_name,
         "personSurName": surname,
         "personBirthDate": birth_date,
         "asOfDate": as_of_date,
         "termsAcceptedIndicator": True,
     }
-    if include_optional:
-        request["personSocialSecurityNumber"] = random_ssn(rng)
-        request["personMiddleName"] = rng.choice(FIRST_NAMES)
-        request["previousNames"] = [previous_name(rng) for _ in range(rng.randint(1, 3))]
+    if not ssn_only and is_maximum:
+        request["personSocialSecurityNumber"] = "123456789"
+        request["personMiddleName"] = "C" * 30
+        request["previousNames"] = [
+            {"personGivenName": "D" * 30, "personSurName": "E" * 30, "personMiddleName": "F" * 30}
+            for _ in range(5)
+        ]
 
-    student_info = {
+    student_info = None if ssn_only else {
         "personGivenName": given_name,
         "personSurName": surname,
         "personBirthDate": birth_date,
     }
-    if include_optional:
+    if not ssn_only and is_maximum:
         student_info["personMiddleName"] = request["personMiddleName"]
-        student_info["previousNames"] = request["previousNames"]
+        student_info["previousNames"] = request["previousNames"][0]
+
+    enrollment_count = 99 if is_maximum_cardinality else 1
+    enrollment_term_count = 99 if is_maximum_cardinality else 1
+    enrollment_details = []
+    for enrollment_number in range(enrollment_count):
+        enrollment_data = [
+            {
+                "enrollmentStatusCode": rng.choice(ENROLLMENT_STATUSES),
+                "termBeginDate": "2025-08-25",
+                "termEndDate": "2025-12-19",
+                "schoolCertifiedOnDate": "2025-12-12",
+            }
+            for _ in range(enrollment_term_count)
+        ]
+        if is_maximum:
+            for enrollment_term in enrollment_data:
+                enrollment_term["anticipatedGraduationDate"] = "2027-05-17"
+        enrollment_details.append({
+            "officialSchoolName": "S" * 100 if is_maximum else rng.choice(SCHOOL_NAMES),
+            "schoolCode": f"{3790 + (enrollment_number % 1000):06d}",
+            "branchCode": f"{enrollment_number % 100:02d}",
+            "currentEnrollmentStatusCode": "CC",
+            "enrollmentData": enrollment_data,
+        })
 
     response = {
         "transactionDetails": {
@@ -99,27 +133,12 @@ def build_record(rng: random.Random, record_number: int) -> dict:
             "requestedDateTimeText": "2026-08-24 09:00:00.000",
             "nscHitIndicator": True,
         },
-        "studentInfoProvided": student_info,
-        "enrollmentDetails": {
-            "officialSchoolName": rng.choice(SCHOOL_NAMES),
-            "schoolCode": f"{3790 + (record_number % 1000):06d}",
-            "branchCode": f"{record_number % 100:02d}",
-            "currentEnrollmentStatusCode": "CC" if record_number % 3 else "CN",
-            "enrollmentData": {
-                "enrollmentStatusCode": rng.choice(ENROLLMENT_STATUSES),
-                "termBeginDate": "2025-08-25",
-                "termEndDate": "2025-12-19",
-                "schoolCertifiedOnDate": "2025-12-12",
-            },
-        },
-        "responseMetadata": {
-            "responseCode": "MS000000",
-            "responseText": "Success",
-        },
+        "enrollmentDetails": enrollment_details,
     }
-    if include_optional:
+    if student_info is not None:
+        response["studentInfoProvided"] = student_info
+    if is_maximum:
         response["transactionDetails"]["notifiedDateTimeText"] = "2026-08-24 09:00:01.000"
-        response["enrollmentDetails"]["enrollmentData"]["anticipatedGraduationDate"] = "2027-05-17"
 
     return {"nscRequest": request, "nscResponse": response}
 
