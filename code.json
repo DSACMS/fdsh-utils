@@ -11,7 +11,9 @@
         "URL": "https://github.com/DSACMS/fdsh-utils/blob/main/LICENSE"
       }
     ],
-    "usageType": ["openSource"]
+    "usageType": [
+      "openSource"
+    ]
   },
   "organization": "Centers for Medicare & Medicaid Services",
   "repositoryURL": "https://github.com/DSACMS/fdsh-utils",
@@ -22,15 +24,25 @@
   "disclaimerURL": "",
   "disclaimerText": "",
   "vcs": "git",
-  "laborHours": 5724,
+  "laborHours": 6907,
   "reuseFrequency": {
-    "forks": 1,
+    "forks": 2,
     "clones": 0
   },
-  "platforms": ["windows", "mac", "linux"],
-  "categories": ["application-development"],
+  "platforms": [
+    "windows",
+    "mac",
+    "linux"
+  ],
+  "categories": [
+    "application-development"
+  ],
   "softwareType": "library",
-  "languages": ["JavaScript"],
+  "languages": [
+    "HTML",
+    "JavaScript",
+    "Ruby"
+  ],
   "maintenance": "internal",
   "contractNumber": [],
   "SBOM": "None",
@@ -39,10 +51,13 @@
   "partners": [],
   "date": {
     "created": "2026-08-06T16:51:21Z",
-    "lastModified": "2026-08-31T19:07:59Z",
-    "metadataLastUpdated": "2026-09-01T04:31:09.844Z"
+    "lastModified": "2026-09-11T17:24:41Z",
+    "metadataLastUpdated": "2026-10-01T05:12:32.647Z"
   },
-  "tags": ["dsacms-tier4", "fdsh"],
+  "tags": [
+    "dsacms-tier4",
+    "fdsh"
+  ],
   "contact": {
     "email": "jake.shilling1@cms.hhs.gov",
     "name": "Jake Shilling"
@@ -56,7 +71,9 @@
   "group": "CMS/OHTP",
   "projects": [],
   "systems": [],
-  "subsetInHealthcare": ["medicaid"],
+  "subsetInHealthcare": [
+    "medicaid"
+  ],
   "userType": [],
   "maturityModelTier": 4
 }
