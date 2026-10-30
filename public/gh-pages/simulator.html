@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NSC Endpoint Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <div id="app" class="container mx-auto px-4 py-8" v-cloak>
+      <div class="mb-8 flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">NSC Endpoint Simulator</h1>
+          <p class="mt-2 text-gray-600">Simulate National Student Clearinghouse (NSC) service responses based on request payload and database state.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Input Section -->
+        <div class="space-y-6">
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">1. Input nscRequest</h2>
+            <div class="flex space-x-2 mb-2">
+              <button @click="loadExample('identity')" class="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded">Identity (Names+DOB)</button>
+              <button @click="loadExample('ssnOnly')" class="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded">SSN Only</button>
+            </div>
+            <textarea
+              v-model="nscRequestInput"
+              class="w-full h-64 p-4 font-mono text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder='{"nscRequest": { ... }}'
+            ></textarea>
+            <div v-if="error" class="mt-2 text-red-600 text-sm font-medium">
+              {{ error }}
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">2. Configuration</h2>
+            <div class="space-y-4">
+              <label class="flex items-center space-x-3 cursor-pointer p-2 hover:bg-gray-50 rounded">
+                <input type="checkbox" v-model="inNscDatabase" class="w-5 h-5 text-blue-600 rounded">
+                <span class="text-gray-700">Appears in NSC database</span>
+              </label>
+              <label class="flex items-center space-x-3 cursor-pointer p-2 hover:bg-gray-50 rounded">
+                <input type="checkbox" v-model="inNsldsDatabase" class="w-5 h-5 text-blue-600 rounded">
+                <span class="text-gray-700">Appears in NSLDS database</span>
+              </label>
+            </div>
+            <button
+              @click="simulate"
+              class="mt-6 w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition font-bold text-lg shadow-sm"
+            >
+              Simulate Result
+            </button>
+          </div>
+        </div>
+
+        <!-- Output Section -->
+        <div class="space-y-6">
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 min-h-[300px]">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Simulated Result</h2>
+
+            <div v-if="simulationResult" class="space-y-4">
+              <div class="bg-blue-50 p-4 rounded-md border border-blue-100">
+                <h3 class="text-sm font-bold text-blue-800 uppercase tracking-wider mb-2">Data Sources Checked</h3>
+                <ul class="list-disc list-inside text-blue-700">
+                  <li v-for="source in sourcesChecked" :key="source">{{ source }}</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Response Payload</h3>
+                <pre class="bg-gray-900 text-gray-100 p-4 rounded-md overflow-x-auto text-sm font-mono">{{ JSON.stringify(simulationResult, null, 2) }}</pre>
+              </div>
+            </div>
+
+            <div v-else class="flex flex-col items-center justify-center h-64 text-gray-400">
+              <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+              <p>Configure and run simulation to see results</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="simulator.js"></script>
+  </body>
+</html>
