@@ -26,9 +26,16 @@
         <div class="space-y-6">
           <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <h2 class="text-xl font-semibold mb-4 text-gray-800">1. Input nscRequest</h2>
-            <div class="flex space-x-2 mb-2">
+            <div class="flex flex-wrap gap-2 mb-2">
+              <span class="text-xs font-bold text-gray-400 w-full mb-1">Consent False:</span>
               <button @click="loadExample('identity')" class="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded">Identity (Names+DOB)</button>
               <button @click="loadExample('ssnOnly')" class="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded">SSN Only</button>
+              <button @click="loadExample('ssnIdentity')" class="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded">SSN + Identity</button>
+
+              <span class="text-xs font-bold text-gray-400 w-full mt-2 mb-1">Consent True:</span>
+              <button @click="loadExample('identityConsent')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1 rounded border border-blue-200">Identity (Names+DOB)</button>
+              <button @click="loadExample('ssnOnlyConsent')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1 rounded border border-blue-200">SSN Only</button>
+              <button @click="loadExample('ssnIdentityConsent')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1 rounded border border-blue-200">SSN + Identity</button>
             </div>
             <textarea
               v-model="nscRequestInput"
@@ -71,6 +78,13 @@
                 <h3 class="text-sm font-bold text-blue-800 uppercase tracking-wider mb-2">Data Sources Checked</h3>
                 <ul class="list-disc list-inside text-blue-700">
                   <li v-for="source in sourcesChecked" :key="source">{{ source }}</li>
+                </ul>
+              </div>
+
+              <div v-if="sourcesNotChecked.length > 0" class="bg-red-50 p-4 rounded-md border border-red-100">
+                <h3 class="text-sm font-bold text-red-800 uppercase tracking-wider mb-2">Data Sources NOT Checked</h3>
+                <ul class="list-disc list-inside text-red-700">
+                  <li v-for="source in sourcesNotChecked" :key="source">{{ source }}</li>
                 </ul>
               </div>
 
