@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NSC Endpoint Simulator</title>
+    <title>Education Endpoint Simulator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
@@ -16,8 +16,8 @@
     <div id="app" class="container mx-auto px-4 py-8" v-cloak>
       <div class="mb-8 flex items-center justify-between">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900">NSC Endpoint Simulator</h1>
-          <p class="mt-2 text-gray-600">Simulate National Student Clearinghouse (NSC) service responses based on request payload and database state.</p>
+          <h1 class="text-3xl font-bold text-gray-900">Education Endpoint Simulator</h1>
+          <p class="mt-2 text-gray-600">Simulate v2 of the Education Hub service responses based on request payload and database state.</p>
         </div>
       </div>
 
@@ -25,7 +25,7 @@
         <!-- Input Section -->
         <div class="space-y-6">
           <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800">1. Input nscRequest</h2>
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">1. Input educationRequest</h2>
             <div class="flex flex-wrap gap-2 mb-2">
               <span class="text-xs font-bold text-gray-400 w-full mb-1">Consent False:</span>
               <button @click="loadExample('identity')" class="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded">Identity (Names+DOB)</button>
@@ -38,9 +38,9 @@
               <button @click="loadExample('ssnIdentityConsent')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1 rounded border border-blue-200">SSN + Identity</button>
             </div>
             <textarea
-              v-model="nscRequestInput"
+              v-model="educationRequestInput"
               class="w-full h-64 p-4 font-mono text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder='{"nscRequest": { ... }}'
+              placeholder='{"educationRequest": { ... }}'
             ></textarea>
             <div v-if="error" class="mt-2 text-red-600 text-sm font-medium">
               {{ error }}

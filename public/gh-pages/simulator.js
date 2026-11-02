@@ -2,8 +2,8 @@ const { createApp, ref, computed } = Vue;
 
 createApp({
   setup() {
-    const nscRequestInput = ref(JSON.stringify({
-      "nscRequest": {
+    const educationRequestInput = ref(JSON.stringify({
+      "educationRequest": {
         "personGivenName": "Lillie",
         "personSurName": "Venson",
         "consent": {
@@ -32,7 +32,7 @@ createApp({
 
       if (type === 'identity') {
         payload = {
-          "nscRequest": {
+          "educationRequest": {
             "personGivenName": "Lillie",
             "personSurName": "Venson",
             "consent": {
@@ -46,7 +46,7 @@ createApp({
         };
       } else if (type === 'ssnOnly') {
         payload = {
-          "nscRequest": {
+          "educationRequest": {
             "personSocialSecurityNumber": "999887777",
             "consent": {
               "status": "not_provided",
@@ -58,7 +58,7 @@ createApp({
         };
       } else if (type === 'ssnIdentity') {
         payload = {
-          "nscRequest": {
+          "educationRequest": {
             "personGivenName": "Lillie",
             "personSurName": "Venson",
             "personSocialSecurityNumber": "999887777",
@@ -73,7 +73,7 @@ createApp({
         };
       } else if (type === 'identityConsent') {
         payload = {
-          "nscRequest": {
+          "educationRequest": {
             "personGivenName": "Lillie",
             "personSurName": "Venson",
             "consent": {
@@ -87,7 +87,7 @@ createApp({
         };
       } else if (type === 'ssnOnlyConsent') {
         payload = {
-          "nscRequest": {
+          "educationRequest": {
             "personSocialSecurityNumber": "999887777",
             "consent": {
               "status": "granted",
@@ -99,7 +99,7 @@ createApp({
         };
       } else if (type === 'ssnIdentityConsent') {
         payload = {
-          "nscRequest": {
+          "educationRequest": {
             "personGivenName": "Lillie",
             "personSurName": "Venson",
             "personSocialSecurityNumber": "999887777",
@@ -113,7 +113,7 @@ createApp({
           }
         };
       }
-      nscRequestInput.value = JSON.stringify(payload, null, 2);
+      educationRequestInput.value = JSON.stringify(payload, null, 2);
     };
 
     const simulate = () => {
@@ -124,28 +124,28 @@ createApp({
 
       let requestData;
       try {
-        requestData = JSON.parse(nscRequestInput.value);
+        requestData = JSON.parse(educationRequestInput.value);
       } catch (e) {
         error.value = "Invalid JSON input: " + e.message;
         return;
       }
 
-      const nscRequest = requestData.nscRequest;
-      if (!nscRequest) {
-        error.value = "Missing 'nscRequest' object in payload.";
+      const educationRequest = requestData.educationRequest;
+      if (!educationRequest) {
+        error.value = "Missing 'educationRequest' object in payload.";
         return;
       }
 
       // Check for consent and termsAcceptedIndicator as per the prompt's example
-      if (nscRequest.termsAcceptedIndicator !== true) {
+      if (educationRequest.termsAcceptedIndicator !== true) {
         error.value = "termsAcceptedIndicator must be true to proceed.";
         return;
       }
 
-      const hasSsn = !!nscRequest.personSocialSecurityNumber;
-      const hasIdentityInfo = !!(nscRequest.personGivenName && nscRequest.personBirthDate);
+      const hasSsn = !!educationRequest.personSocialSecurityNumber;
+      const hasIdentityInfo = !!(educationRequest.personGivenName && educationRequest.personBirthDate);
       const isSsnOnly = hasSsn && !hasIdentityInfo;
-      const isConsentGranted = nscRequest.consent?.status === 'granted';
+      const isConsentGranted = educationRequest.consent?.status === 'granted';
 
       let hitNsc = false;
       let hitNslds = false;
@@ -165,7 +165,7 @@ createApp({
       // Short-circuit if NSLDS match is found
       if (hitNslds) {
         sourcesNotChecked.value.push("NSC (Short-circuited: NSLDS match found)");
-        simulationResult.value = generateResponse(true, hasSsn, nscRequest, "NSLDS");
+        simulationResult.value = generateResponse(true, hasSsn, educationRequest, "NSLDS");
         return;
       }
 
@@ -193,12 +193,12 @@ createApp({
         finalSource = "National Student Clearinghouse";
       }
 
-      simulationResult.value = generateResponse(hit, hasSsn, nscRequest, finalSource);
+      simulationResult.value = generateResponse(hit, hasSsn, educationRequest, finalSource);
     };
 
-    const generateResponse = (hit, hasSsn, nscRequest, sourceName) => {
+    const generateResponse = (hit, hasSsn, educationRequest, sourceName) => {
       const response = {
-        "nscResponse": {
+        "educationResponse": {
           "enrollmentFound": hit,
           "dataSource": sourceName
         }
@@ -206,7 +206,7 @@ createApp({
 
       // Only include nscTransactionDetails for NSC source (NSLDS/Dept of Ed doesn't have this)
       if (sourceName === "National Student Clearinghouse") {
-        response.nscResponse.nscTransactionDetails = {
+        response.educationResponse.nscTransactionDetails = {
           "transactionId": "SIM-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
           "orderId": "ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
           "transactionStatusCode": "CNF",
@@ -220,14 +220,14 @@ createApp({
 
       if (hit) {
         if (!hasSsn) {
-           response.nscResponse.studentInfoProvided = {
-             "personSurName": nscRequest.personSurName,
-             "personGivenName": nscRequest.personGivenName,
-             "personBirthDate": nscRequest.personBirthDate
+           response.educationResponse.studentInfoProvided = {
+             "personSurName": educationRequest.personSurName,
+             "personGivenName": educationRequest.personGivenName,
+             "personBirthDate": educationRequest.personBirthDate
            };
         }
 
-        response.nscResponse.enrollmentDetails = [
+        response.educationResponse.enrollmentDetails = [
           {
             "officialSchoolName": "SIMULATED UNIVERSITY",
             "schoolCode": "123456",
@@ -246,7 +246,7 @@ createApp({
     };
 
     return {
-      nscRequestInput,
+      educationRequestInput,
       inNscDatabase,
       inNsldsDatabase,
       simulationResult,
