@@ -6,7 +6,11 @@ createApp({
       "nscRequest": {
         "personGivenName": "Lillie",
         "personSurName": "Venson",
-        "consent": false,
+        "consent": {
+          "status": "not_provided",
+          "assertedAt": new Date().toISOString(),
+          "scope": ["enrollment_verification"]
+        },
         "termsAcceptedIndicator": true,
         "personSocialSecurityNumber": "999887777",
         "personBirthDate": "2001-09-23"
@@ -23,12 +27,19 @@ createApp({
 
     const loadExample = (type) => {
       let payload = {};
+      const assertedAt = new Date().toISOString();
+      const scope = ["enrollment_verification"];
+
       if (type === 'identity') {
         payload = {
           "nscRequest": {
             "personGivenName": "Lillie",
             "personSurName": "Venson",
-            "consent": false,
+            "consent": {
+              "status": "not_provided",
+              "assertedAt": assertedAt,
+              "scope": scope
+            },
             "termsAcceptedIndicator": true,
             "personBirthDate": "2001-09-23"
           }
@@ -37,7 +48,11 @@ createApp({
         payload = {
           "nscRequest": {
             "personSocialSecurityNumber": "999887777",
-            "consent": false,
+            "consent": {
+              "status": "not_provided",
+              "assertedAt": assertedAt,
+              "scope": scope
+            },
             "termsAcceptedIndicator": true
           }
         };
@@ -47,7 +62,11 @@ createApp({
             "personGivenName": "Lillie",
             "personSurName": "Venson",
             "personSocialSecurityNumber": "999887777",
-            "consent": false,
+            "consent": {
+              "status": "not_provided",
+              "assertedAt": assertedAt,
+              "scope": scope
+            },
             "termsAcceptedIndicator": true,
             "personBirthDate": "2001-09-23"
           }
@@ -57,7 +76,11 @@ createApp({
           "nscRequest": {
             "personGivenName": "Lillie",
             "personSurName": "Venson",
-            "consent": true,
+            "consent": {
+              "status": "granted",
+              "assertedAt": assertedAt,
+              "scope": scope
+            },
             "termsAcceptedIndicator": true,
             "personBirthDate": "2001-09-23"
           }
@@ -66,7 +89,11 @@ createApp({
         payload = {
           "nscRequest": {
             "personSocialSecurityNumber": "999887777",
-            "consent": true,
+            "consent": {
+              "status": "granted",
+              "assertedAt": assertedAt,
+              "scope": scope
+            },
             "termsAcceptedIndicator": true
           }
         };
@@ -76,7 +103,11 @@ createApp({
             "personGivenName": "Lillie",
             "personSurName": "Venson",
             "personSocialSecurityNumber": "999887777",
-            "consent": true,
+            "consent": {
+              "status": "granted",
+              "assertedAt": assertedAt,
+              "scope": scope
+            },
             "termsAcceptedIndicator": true,
             "personBirthDate": "2001-09-23"
           }
@@ -106,7 +137,6 @@ createApp({
       }
 
       // Check for consent and termsAcceptedIndicator as per the prompt's example
-      // Update: If consent is false, we can still proceed but cannot use SSN-based sources
       if (nscRequest.termsAcceptedIndicator !== true) {
         error.value = "termsAcceptedIndicator must be true to proceed.";
         return;
@@ -115,17 +145,18 @@ createApp({
       const hasSsn = !!nscRequest.personSocialSecurityNumber;
       const hasIdentityInfo = !!(nscRequest.personGivenName && nscRequest.personBirthDate);
       const isSsnOnly = hasSsn && !hasIdentityInfo;
+      const isConsentGranted = nscRequest.consent?.status === 'granted';
 
       let hitNsc = false;
       let hitNslds = false;
 
       // 1. Evaluate NSLDS (Prioritized)
       if (hasSsn) {
-        if (nscRequest.consent !== false) {
+        if (isConsentGranted) {
           sourcesChecked.value.push("NSLDS (via SSN)");
           hitNslds = inNsldsDatabase.value;
         } else {
-          sourcesNotChecked.value.push("NSLDS (Blocked: SSN requires consent)");
+          sourcesNotChecked.value.push("NSLDS (Blocked: SSN requires consent status 'granted')");
         }
       } else {
         sourcesNotChecked.value.push("NSLDS (Bypassed: No SSN provided)");
@@ -140,8 +171,8 @@ createApp({
 
       // 2. Evaluate NSC
       if (hasIdentityInfo) {
-        if (isSsnOnly && nscRequest.consent === false) {
-          sourcesNotChecked.value.push("NSC (Blocked: SSN-only requires consent)");
+        if (isSsnOnly && !isConsentGranted) {
+          sourcesNotChecked.value.push("NSC (Blocked: SSN-only requires consent status 'granted')");
         } else {
           const label = hasSsn ? "NSC (Identity-based Fallback)" : "NSC (Identity-based)";
           sourcesChecked.value.push(label);
@@ -157,7 +188,7 @@ createApp({
       let finalSource = "None";
       if (hitNslds) {
         finalSource = "NSLDS";
-      } else if (hasIdentityInfo && !(isSsnOnly && nscRequest.consent === false)) {
+      } else if (hasIdentityInfo && !(isSsnOnly && !isConsentGranted)) {
         // If we attempted to hit NSC (not blocked or bypassed), attribute it to NSC
         finalSource = "National Student Clearinghouse";
       }
