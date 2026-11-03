@@ -152,12 +152,8 @@ createApp({
 
       // 1. Evaluate NSLDS (Prioritized)
       if (hasSsn) {
-        if (isConsentGranted) {
-          sourcesChecked.value.push("NSLDS (via SSN)");
-          hitNslds = inNsldsDatabase.value;
-        } else {
-          sourcesNotChecked.value.push("NSLDS (Blocked: SSN requires consent status 'granted')");
-        }
+        sourcesChecked.value.push("NSLDS (via SSN)");
+        hitNslds = inNsldsDatabase.value;
       } else {
         sourcesNotChecked.value.push("NSLDS (Bypassed: No SSN provided)");
       }
@@ -179,7 +175,7 @@ createApp({
           hitNsc = inNscDatabase.value;
         }
       } else {
-        sourcesNotChecked.value.push("NSC (Bypassed: Missing Names/DOB)");
+        sourcesNotChecked.value.push("NSC (Bypassed: Missing Names/DOB, SSN-only requires consent status 'granted')");
       }
 
       const hit = hitNsc || hitNslds;
