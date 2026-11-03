@@ -175,7 +175,13 @@ createApp({
           hitNsc = inNscDatabase.value;
         }
       } else {
-        sourcesNotChecked.value.push("NSC (Bypassed: Missing Names/DOB, SSN-only requires consent status 'granted')");
+        if (isSsnOnly && isConsentGranted) {
+          const label = hasSsn ? "NSC (Identity-based Fallback)" : "NSC (Identity-based)";
+          sourcesChecked.value.push(label);
+          hitNsc = inNscDatabase.value;
+        } else {
+          sourcesNotChecked.value.push("NSC (Bypassed: Missing Names/DOB, SSN-only requires consent status 'granted')");
+        }
       }
 
       const hit = hitNsc || hitNslds;
