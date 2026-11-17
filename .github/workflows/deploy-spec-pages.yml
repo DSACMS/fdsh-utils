@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - experiments-visualization
     paths:
       - ".github/workflows/deploy-spec-pages.yml"
       - "package.json"
@@ -64,6 +65,7 @@ jobs:
 
           # Copy public directory content
           cp -R public/* "${artifact_dir}/"
+          touch "${artifact_dir}/.nojekyll"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

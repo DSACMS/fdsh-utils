@@ -49,6 +49,15 @@ words:
   - messageID
   - nscRequest
   - nscResponse
+  - educationRequest
+  - educationResponse
+  - NSLDS
+  - Nslds
+  - Venson
+  - Watsonford
+  - Cornerside
+  - enrollmentFound
+  - nscTransactionDetails
   - vadr
   - vadrResponse
   - niem
