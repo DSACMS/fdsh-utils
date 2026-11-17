@@ -16,8 +16,13 @@
     <div id="app" class="container mx-auto px-4 py-8" v-cloak>
       <div class="mb-8 flex items-center justify-between">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900">Education Endpoint Simulator</h1>
-          <p class="mt-2 text-gray-600">Simulate v2 of the Education Hub service responses based on request payload and database state.</p>
+          <h1 class="text-3xl font-bold text-gray-900">
+            Education Endpoint Simulator
+          </h1>
+          <p class="mt-2 text-gray-600">
+            Simulate v2 of the Education Hub service responses based on request
+            payload and database state.
+          </p>
         </div>
       </div>
 
@@ -25,17 +30,53 @@
         <!-- Input Section -->
         <div class="space-y-6">
           <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800">1. Input educationRequest</h2>
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">
+              1. Input educationRequest
+            </h2>
             <div class="flex flex-wrap gap-2 mb-2">
-              <span class="text-xs font-bold text-gray-400 w-full mb-1">Consent False:</span>
-              <button @click="loadExample('identity')" class="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded">Identity (Names+DOB)</button>
-              <button @click="loadExample('ssnOnly')" class="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded">SSN Only</button>
-              <button @click="loadExample('ssnIdentity')" class="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded">SSN + Identity</button>
+              <span class="text-xs font-bold text-gray-400 w-full mb-1"
+                >Consent False:</span
+              >
+              <button
+                @click="loadExample('identity')"
+                class="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded"
+              >
+                Identity (Names+DOB)
+              </button>
+              <button
+                @click="loadExample('ssnOnly')"
+                class="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded"
+              >
+                SSN Only
+              </button>
+              <button
+                @click="loadExample('ssnIdentity')"
+                class="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded"
+              >
+                SSN + Identity
+              </button>
 
-              <span class="text-xs font-bold text-gray-400 w-full mt-2 mb-1">Consent True:</span>
-              <button @click="loadExample('identityConsent')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1 rounded border border-blue-200">Identity (Names+DOB)</button>
-              <button @click="loadExample('ssnOnlyConsent')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1 rounded border border-blue-200">SSN Only</button>
-              <button @click="loadExample('ssnIdentityConsent')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1 rounded border border-blue-200">SSN + Identity</button>
+              <span class="text-xs font-bold text-gray-400 w-full mt-2 mb-1"
+                >Consent True:</span
+              >
+              <button
+                @click="loadExample('identityConsent')"
+                class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1 rounded border border-blue-200"
+              >
+                Identity (Names+DOB)
+              </button>
+              <button
+                @click="loadExample('ssnOnlyConsent')"
+                class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1 rounded border border-blue-200"
+              >
+                SSN Only
+              </button>
+              <button
+                @click="loadExample('ssnIdentityConsent')"
+                class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1 rounded border border-blue-200"
+              >
+                SSN + Identity
+              </button>
             </div>
             <textarea
               v-model="educationRequestInput"
@@ -48,14 +89,28 @@
           </div>
 
           <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800">2. Configuration</h2>
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">
+              2. Configuration
+            </h2>
             <div class="space-y-4">
-              <label class="flex items-center space-x-3 cursor-pointer p-2 hover:bg-gray-50 rounded">
-                <input type="checkbox" v-model="inNscDatabase" class="w-5 h-5 text-blue-600 rounded">
+              <label
+                class="flex items-center space-x-3 cursor-pointer p-2 hover:bg-gray-50 rounded"
+              >
+                <input
+                  type="checkbox"
+                  v-model="inNscDatabase"
+                  class="w-5 h-5 text-blue-600 rounded"
+                />
                 <span class="text-gray-700">Appears in NSC database</span>
               </label>
-              <label class="flex items-center space-x-3 cursor-pointer p-2 hover:bg-gray-50 rounded">
-                <input type="checkbox" v-model="inNsldsDatabase" class="w-5 h-5 text-blue-600 rounded">
+              <label
+                class="flex items-center space-x-3 cursor-pointer p-2 hover:bg-gray-50 rounded"
+              >
+                <input
+                  type="checkbox"
+                  v-model="inNsldsDatabase"
+                  class="w-5 h-5 text-blue-600 rounded"
+                />
                 <span class="text-gray-700">Appears in NSLDS database</span>
               </label>
             </div>
@@ -70,33 +125,72 @@
 
         <!-- Output Section -->
         <div class="space-y-6">
-          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 min-h-[300px]">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800">Simulated Result</h2>
+          <div
+            class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 min-h-[300px]"
+          >
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">
+              Simulated Result
+            </h2>
 
             <div v-if="simulationResult" class="space-y-4">
               <div class="bg-blue-50 p-4 rounded-md border border-blue-100">
-                <h3 class="text-sm font-bold text-blue-800 uppercase tracking-wider mb-2">Data Sources Checked</h3>
+                <h3
+                  class="text-sm font-bold text-blue-800 uppercase tracking-wider mb-2"
+                >
+                  Data Sources Checked
+                </h3>
                 <ul class="list-disc list-inside text-blue-700">
-                  <li v-for="source in sourcesChecked" :key="source">{{ source }}</li>
+                  <li v-for="source in sourcesChecked" :key="source">
+                    {{ source }}
+                  </li>
                 </ul>
               </div>
 
-              <div v-if="sourcesNotChecked.length > 0" class="bg-red-50 p-4 rounded-md border border-red-100">
-                <h3 class="text-sm font-bold text-red-800 uppercase tracking-wider mb-2">Data Sources NOT Checked</h3>
+              <div
+                v-if="sourcesNotChecked.length > 0"
+                class="bg-red-50 p-4 rounded-md border border-red-100"
+              >
+                <h3
+                  class="text-sm font-bold text-red-800 uppercase tracking-wider mb-2"
+                >
+                  Data Sources NOT Checked
+                </h3>
                 <ul class="list-disc list-inside text-red-700">
-                  <li v-for="source in sourcesNotChecked" :key="source">{{ source }}</li>
+                  <li v-for="source in sourcesNotChecked" :key="source">
+                    {{ source }}
+                  </li>
                 </ul>
               </div>
 
               <div>
-                <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Response Payload</h3>
-                <pre class="bg-gray-900 text-gray-100 p-4 rounded-md overflow-x-auto text-sm font-mono">{{ JSON.stringify(simulationResult, null, 2) }}</pre>
+                <h3
+                  class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2"
+                >
+                  Response Payload
+                </h3>
+                <pre
+                  class="bg-gray-900 text-gray-100 p-4 rounded-md overflow-x-auto text-sm font-mono"
+                >
+{{ JSON.stringify(simulationResult, null, 2) }}</pre>
               </div>
             </div>
 
-            <div v-else class="flex flex-col items-center justify-center h-64 text-gray-400">
-              <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            <div
+              v-else
+              class="flex flex-col items-center justify-center h-64 text-gray-400"
+            >
+              <svg
+                class="w-16 h-16 mb-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                ></path>
               </svg>
               <p>Configure and run simulation to see results</p>
             </div>

@@ -2,20 +2,27 @@ const { createApp, ref, computed } = Vue;
 
 createApp({
   setup() {
-    const educationRequestInput = ref(JSON.stringify({
-      "educationRequest": {
-        "personGivenName": "Lillie",
-        "personSurName": "Venson",
-        "consent": {
-          "status": "not_provided",
-          "assertedAt": new Date().toISOString(),
-          "scope": ["enrollment_verification"]
+    const educationRequestInput = ref(
+      JSON.stringify(
+        {
+          educationRequest: {
+            personGivenName: "Lillie",
+            personSurName: "Venson",
+            consent: {
+              status: "not_provided",
+              assertedAt: new Date().toISOString(),
+              scope: ["enrollment_verification"],
+            },
+            terms: true,
+            termsAcceptedIndicator: true,
+            personSocialSecurityNumber: "999887777",
+            personBirthDate: "2001-09-23",
+          },
         },
-        "termsAcceptedIndicator": true,
-        "personSocialSecurityNumber": "999887777",
-        "personBirthDate": "2001-09-23"
-      }
-    }, null, 2));
+        null,
+        2,
+      ),
+    );
 
     const inNscDatabase = ref(true);
     const inNsldsDatabase = ref(true);
@@ -30,87 +37,93 @@ createApp({
       const assertedAt = new Date().toISOString();
       const scope = ["enrollment_verification"];
 
-      if (type === 'identity') {
+      if (type === "identity") {
         payload = {
-          "educationRequest": {
-            "personGivenName": "Lillie",
-            "personSurName": "Venson",
-            "consent": {
-              "status": "not_provided",
-              "assertedAt": assertedAt,
-              "scope": scope
+          educationRequest: {
+            personGivenName: "Lillie",
+            personSurName: "Venson",
+            consent: {
+              status: "not_provided",
+              assertedAt: assertedAt,
+              scope: scope,
             },
-            "termsAcceptedIndicator": true,
-            "personBirthDate": "2001-09-23"
-          }
+            terms: true,
+            termsAcceptedIndicator: true,
+            personBirthDate: "2001-09-23",
+          },
         };
-      } else if (type === 'ssnOnly') {
+      } else if (type === "ssnOnly") {
         payload = {
-          "educationRequest": {
-            "personSocialSecurityNumber": "999887777",
-            "consent": {
-              "status": "not_provided",
-              "assertedAt": assertedAt,
-              "scope": scope
+          educationRequest: {
+            personSocialSecurityNumber: "999887777",
+            consent: {
+              status: "not_provided",
+              assertedAt: assertedAt,
+              scope: scope,
             },
-            "termsAcceptedIndicator": true
-          }
+            terms: true,
+            termsAcceptedIndicator: true,
+          },
         };
-      } else if (type === 'ssnIdentity') {
+      } else if (type === "ssnIdentity") {
         payload = {
-          "educationRequest": {
-            "personGivenName": "Lillie",
-            "personSurName": "Venson",
-            "personSocialSecurityNumber": "999887777",
-            "consent": {
-              "status": "not_provided",
-              "assertedAt": assertedAt,
-              "scope": scope
+          educationRequest: {
+            personGivenName: "Lillie",
+            personSurName: "Venson",
+            personSocialSecurityNumber: "999887777",
+            consent: {
+              status: "not_provided",
+              assertedAt: assertedAt,
+              scope: scope,
             },
-            "termsAcceptedIndicator": true,
-            "personBirthDate": "2001-09-23"
-          }
+            terms: true,
+            termsAcceptedIndicator: true,
+            personBirthDate: "2001-09-23",
+          },
         };
-      } else if (type === 'identityConsent') {
+      } else if (type === "identityConsent") {
         payload = {
-          "educationRequest": {
-            "personGivenName": "Lillie",
-            "personSurName": "Venson",
-            "consent": {
-              "status": "granted",
-              "assertedAt": assertedAt,
-              "scope": scope
+          educationRequest: {
+            personGivenName: "Lillie",
+            personSurName: "Venson",
+            consent: {
+              status: "granted",
+              assertedAt: assertedAt,
+              scope: scope,
             },
-            "termsAcceptedIndicator": true,
-            "personBirthDate": "2001-09-23"
-          }
+            terms: true,
+            termsAcceptedIndicator: true,
+            personBirthDate: "2001-09-23",
+          },
         };
-      } else if (type === 'ssnOnlyConsent') {
+      } else if (type === "ssnOnlyConsent") {
         payload = {
-          "educationRequest": {
-            "personSocialSecurityNumber": "999887777",
-            "consent": {
-              "status": "granted",
-              "assertedAt": assertedAt,
-              "scope": scope
+          educationRequest: {
+            personSocialSecurityNumber: "999887777",
+            consent: {
+              status: "granted",
+              assertedAt: assertedAt,
+              scope: scope,
             },
-            "termsAcceptedIndicator": true
-          }
+            terms: true,
+            termsAcceptedIndicator: true,
+          },
         };
-      } else if (type === 'ssnIdentityConsent') {
+      } else if (type === "ssnIdentityConsent") {
         payload = {
-          "educationRequest": {
-            "personGivenName": "Lillie",
-            "personSurName": "Venson",
-            "personSocialSecurityNumber": "999887777",
-            "consent": {
-              "status": "granted",
-              "assertedAt": assertedAt,
-              "scope": scope
+          educationRequest: {
+            personGivenName: "Lillie",
+            personSurName: "Venson",
+            personSocialSecurityNumber: "999887777",
+            consent: {
+              status: "granted",
+              assertedAt: assertedAt,
+              scope: scope,
             },
-            "termsAcceptedIndicator": true,
-            "personBirthDate": "2001-09-23"
-          }
+            terms: true,
+            termsAcceptedIndicator: true,
+            personBirthDate: "2001-09-23",
+          },
         };
       }
       educationRequestInput.value = JSON.stringify(payload, null, 2);
@@ -142,10 +155,17 @@ createApp({
         return;
       }
 
+      if (educationRequest.terms !== true) {
+        error.value = "terms must be true to proceed.";
+        return;
+      }
+
       const hasSsn = !!educationRequest.personSocialSecurityNumber;
-      const hasIdentityInfo = !!(educationRequest.personGivenName && educationRequest.personBirthDate);
+      const hasIdentityInfo = !!(
+        educationRequest.personGivenName && educationRequest.personBirthDate
+      );
       const isSsnOnly = hasSsn && !hasIdentityInfo;
-      const isConsentGranted = educationRequest.consent?.status === 'granted';
+      const isConsentGranted = educationRequest.consent?.status === "granted";
 
       let hitNsc = false;
       let hitNslds = false;
@@ -160,27 +180,42 @@ createApp({
 
       // Short-circuit if NSLDS match is found
       if (hitNslds) {
-        sourcesNotChecked.value.push("NSC (Short-circuited: NSLDS match found)");
-        simulationResult.value = generateResponse(true, hasSsn, educationRequest, "NSLDS");
+        sourcesNotChecked.value.push(
+          "NSC (Short-circuited: NSLDS match found)",
+        );
+        simulationResult.value = generateResponse(
+          true,
+          hasSsn,
+          educationRequest,
+          "NSLDS",
+        );
         return;
       }
 
       // 2. Evaluate NSC
       if (hasIdentityInfo) {
         if (isSsnOnly && !isConsentGranted) {
-          sourcesNotChecked.value.push("NSC (Blocked: SSN-only requires consent status 'granted')");
+          sourcesNotChecked.value.push(
+            "NSC (Blocked: SSN-only requires consent status 'granted')",
+          );
         } else {
-          const label = hasSsn ? "NSC (Identity-based Fallback)" : "NSC (Identity-based)";
+          const label = hasSsn
+            ? "NSC (Identity-based Fallback)"
+            : "NSC (Identity-based)";
           sourcesChecked.value.push(label);
           hitNsc = inNscDatabase.value;
         }
       } else {
         if (isSsnOnly && isConsentGranted) {
-          const label = hasSsn ? "NSC (Identity-based Fallback)" : "NSC (Identity-based)";
+          const label = hasSsn
+            ? "NSC (Identity-based Fallback)"
+            : "NSC (Identity-based)";
           sourcesChecked.value.push(label);
           hitNsc = inNscDatabase.value;
         } else {
-          sourcesNotChecked.value.push("NSC (Bypassed: Missing Names/DOB, SSN-only requires consent status 'granted')");
+          sourcesNotChecked.value.push(
+            "NSC (Bypassed: Missing Names/DOB, SSN-only requires consent status 'granted')",
+          );
         }
       }
 
@@ -195,53 +230,63 @@ createApp({
         finalSource = "National Student Clearinghouse";
       }
 
-      simulationResult.value = generateResponse(hit, hasSsn, educationRequest, finalSource);
+      simulationResult.value = generateResponse(
+        hit,
+        hasSsn,
+        educationRequest,
+        finalSource,
+      );
     };
 
     const generateResponse = (hit, hasSsn, educationRequest, sourceName) => {
       const response = {
-        "educationResponse": {
-          "enrollmentFound": hit,
-          "dataSource": sourceName
-        }
+        educationResponse: {
+          enrollmentFound: hit,
+          dataSource: sourceName,
+        },
       };
 
       // Only include nscTransactionDetails for NSC source (NSLDS/Dept of Ed doesn't have this)
       if (sourceName === "National Student Clearinghouse") {
         response.educationResponse.nscTransactionDetails = {
-          "transactionId": "SIM-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
-          "orderId": "ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
-          "transactionStatusCode": "CNF",
-          "transactionFee": "1.00",
-          "salesTax": "0.03",
-          "transactionTotal": "1.03",
-          "requestedByText": "SIMULATOR",
-          "requestedDateTimeText": new Date().toISOString().replace('T', ' ').substr(0, 23)
+          transactionId:
+            "SIM-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
+          orderId:
+            "ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
+          transactionStatusCode: "CNF",
+          transactionFee: "1.00",
+          salesTax: "0.03",
+          transactionTotal: "1.03",
+          requestedByText: "SIMULATOR",
+          requestedDateTimeText: new Date()
+            .toISOString()
+            .replace("T", " ")
+            .substr(0, 23),
         };
       }
 
       if (hit) {
         if (!hasSsn) {
-           response.educationResponse.studentInfoProvided = {
-             "personSurName": educationRequest.personSurName,
-             "personGivenName": educationRequest.personGivenName,
-             "personBirthDate": educationRequest.personBirthDate
-           };
+          response.educationResponse.studentInfoProvided = {
+            personSurName: educationRequest.personSurName,
+            personGivenName: educationRequest.personGivenName,
+            personBirthDate: educationRequest.personBirthDate,
+          };
         }
 
         response.educationResponse.enrollmentDetails = [
           {
-            "officialSchoolName": "SIMULATED UNIVERSITY",
-            "schoolCode": "123456",
-            "enrollmentData": [
+            officialSchoolName: "SIMULATED UNIVERSITY",
+            schoolCode: "123456",
+            enrollmentData: [
               {
-                "enrollmentStatusCode": "F",
-                "termBeginDate": "2022-09-01",
-                "termEndDate": "2023-05-30",
-                "schoolCertifiedOnDate": "2023-06-01"
-              }
-            ]
-          }
+                enrollmentStatusCode: "F",
+                termBeginDate: "2022-09-01",
+                termEndDate: "2023-05-30",
+                schoolCertifiedOnDate: "2023-06-01",
+              },
+            ],
+          },
         ];
       }
       return response;
@@ -256,7 +301,7 @@ createApp({
       sourcesNotChecked,
       error,
       loadExample,
-      simulate
+      simulate,
     };
-  }
-}).mount('#app');
+  },
+}).mount("#app");
