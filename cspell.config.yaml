@@ -13,6 +13,12 @@ ignorePaths:
   - "**/*.png"
   - "**/*.emf"
   - "**/*.py"
+  - "**/*.toml"
+  - "**/*.sh"
+  - "**/*.json"
+  - "**/*.yml"
+  - "**/*.conf"
+  - Dockerfile
 words:
   - Dockerized
   - browsable
@@ -213,6 +219,12 @@ words:
   - Jggg
   - CMYK
   - PKCE
+  - uritemplate
+  - scaffolder
+  - Anull
+  - Pydantic
+  - pyproject
+  - supervisord
   - Aptos
   - Serv
   - Sftwr
